@@ -1,0 +1,203 @@
+{
+    "errno": 0,
+    "errmsg": "success",
+    "use": 10234,
+    "totalCount": 8110,
+    "pz": 20,
+    "cpage": 1,
+    "data": {
+        "count": 19,
+        "lists": [
+                  {
+                  "goods_name": "熏鸡麦饼被蛋卷一个,熏鸡法风烧饼",
+                  "goods_type": "1",
+                  "user_name": "徐长卿",
+                  "address": "弘高大厦",
+                  "create_time": "2016-09-06 08:30:39",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "19分钟"
+                  },
+                  {
+                  "goods_name": "麦当劳早餐3份",
+                  "goods_type": "1",
+                  "user_name": "花花",
+                  "address": "双合洗浴",
+                  "create_time": "2016-09-06 08:18:37",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "39分钟"
+                  },
+                  {
+                  "goods_name": "星巴克美式咖啡中杯,热的",
+                  "goods_type": "1",
+                  "user_name": "泡泡",
+                  "address": "儿研所",
+                  "create_time": "2016-09-06 08:16:23",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "39分钟"
+                  },
+                  {
+                  "goods_name": "包子,油条,馄饨",
+                  "goods_type": "202",
+                  "user_name": "萧十一郎",
+                  "address": "金年丰公寓",
+                  "create_time": "2016-09-06 08:05:00",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "34分钟"
+                  },
+                  {
+                  "goods_name": "麦当劳原味板烧鸡麦满分早餐2份",
+                  "goods_type": "1",
+                  "user_name": "雅典娜",
+                  "address": "西店",
+                  "create_time": "2016-09-06 07:51:49",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "43分钟"
+                  },
+                  {
+                  "goods_name": "常温矿泉水一瓶,纸巾一包,需塑料袋",
+                  "goods_type": "1",
+                  "user_name": "哈迪斯",
+                  "address": "中国中医科学院望京医院内",
+                  "create_time": "2016-09-06 07:50:38",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "31分钟"
+                  },
+                  {
+                  "goods_name": "油条四根,小笼包两笼肉的,一份豆腐脑,一份豆浆,豆浆不加糖",
+                  "goods_type": "10",
+                  "user_name": "黑凤凰",
+                  "address": "美域家园北区",
+                  "create_time": "2016-09-06 07:46:57",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "20分钟"
+                  },
+                  {
+                  "goods_name": "芙蓉王",
+                  "goods_type": "1",
+                  "user_name": "娜美",
+                  "address": "铁路巷",
+                  "create_time": "2016-09-06 07:20:04",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "17分钟"
+                  },
+                  {
+                  "goods_name": "油条5根,咸豆花2份,原味豆浆4杯,虾仁馄饨1份。",
+                  "goods_type": "200",
+                  "user_name": "史湘云",
+                  "address": "北京华侨城院",
+                  "create_time": "2016-09-06 07:12:54",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "54分钟"
+                  },
+                  {
+                  "goods_name": "一包软黄红梅烟",
+                  "goods_type": "4",
+                  "user_name": "周瑜",
+                  "address": "胡桃园内,吴裕泰附近米",
+                  "create_time": "2016-09-06 07:11:54",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "22分钟"
+                  },
+                  {
+                  "goods_name": "油条,豆浆,包子粥",
+                  "goods_type": "202",
+                  "user_name": "穆念慈",
+                  "address": "北京美中宜和妇儿医院(丽都院区)",
+                  "create_time": "2016-09-06 06:55:35",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "43分钟"
+                  },
+                  {
+                  "goods_name": "豆腐脑一碗,小笼包两笼,茶鸡蛋一个,油条一根,咸菜",
+                  "goods_type": "1",
+                  "user_name": "梅超风",
+                  "address": "青秀城西区",
+                  "create_time": "2016-09-06 06:43:52",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "57分钟"
+                  },
+                  {
+                  "goods_name": "中华",
+                  "goods_type": "1",
+                  "user_name": "张三丰",
+                  "address": "富力城C区",
+                  "create_time": "2016-09-06 06:12:06",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "31分钟"
+                  },
+                  {
+                  "goods_name": "早点",
+                  "goods_type": "1",
+                  "user_name": "张无忌",
+                  "address": "阳光上东",
+                  "create_time": "2016-09-06 06:01:07",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "35分钟"
+                  },
+                  {
+                  "goods_name": "豆泡汤两碗,烧饼夹肘子2个,烧饼夹牛肉一个",
+                  "goods_type": "1",
+                  "user_name": "展昭",
+                  "address": "四合欣园",
+                  "create_time": "2016-09-06 04:49:34",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "50分钟"
+                  },
+                  {
+                  "goods_name": "南京煊赫门2包",
+                  "goods_type": "1",
+                  "user_name": "小辣椒",
+                  "address": "弘善家园",
+                  "create_time": "2016-09-06 04:44:59",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "48分钟"
+                  },
+                  {
+                  "goods_name": "两包南京",
+                  "goods_type": "1",
+                  "user_name": "陈靖仇",
+                  "address": "望花路西里",
+                  "create_time": "2016-09-06 03:52:24",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "30分钟"
+                  },
+                  {
+                  "goods_name": "硬包中华2包",
+                  "goods_type": "4",
+                  "user_name": "林朝英",
+                  "address": "富锦嘉园-三区",
+                  "create_time": "2016-09-06 02:52:54",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "26分钟"
+                  },
+                  {
+                  "goods_name": "验孕棒",
+                  "goods_type": "6",
+                  "user_name": "赵飞燕",
+                  "address": "世茂国际中心",
+                  "create_time": "2016-09-06 02:12:29",
+                  "business_type": "1",
+                  "is_near": 0,
+                  "cost_time": "44分钟"
+                  }
+                  ]
+    }
+}

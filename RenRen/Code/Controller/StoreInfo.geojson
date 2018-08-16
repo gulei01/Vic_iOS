@@ -1,0 +1,24 @@
+{
+    "status" : 1,
+    "info" : {
+        "score" : 5,
+        "shipfee" : "0.00",
+        "notice" : "外卖郎开放夜市营业时间至晚上24点！",
+        "phone" : "0710-3757820",
+        "full_discount" : "暂无满减",
+        "mobile" : "13800138000",
+        "site_name" : "自营商品【枣阳】",
+        "first_discount" : "新用户立减5元",
+        "service_time_start" : "8:00",
+        "logo" : null,
+        "address" : "枣阳市财富广场",
+        "freeship_amount" : "9.0",
+        "site_id" : "38",
+        "service_time_end" : "21:00",
+        "send" : "0",
+        "time": "45分钟",
+        "site_id": "38",
+        "shop_sale": "3495",
+        "logo": "http://img.xyrr.com/Upload/logo/logo.png",
+    }
+}

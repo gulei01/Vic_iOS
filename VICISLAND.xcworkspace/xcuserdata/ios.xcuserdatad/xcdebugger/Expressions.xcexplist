@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "__39-[NetRepositories netConfirm:complete:]_block_invoke.19:NetRepositories.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[NetRepositories netConfirm:complete:]:NetRepositories.m">
+      </ContextState>
+      <ContextState
+         contextName = "-[MapLocation uploadLocationWithLat:lng:addresID:]:MapLocation.m">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

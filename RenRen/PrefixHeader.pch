@@ -1,0 +1,73 @@
+//
+//  PrefixHeader.pch
+//  KYRR
+//
+//  Created by kyjun on 15/10/29.
+//
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#import <UIKit/UIKit.h>
+#import "HeaderConstant.h"
+#import "HeaderTheme.h"
+#import "HeaderTip.h"
+#import "HeaderNotification.h"
+#import "HeaderEnum.h"
+#import "WMHelper.h"
+#import "Login.h"
+#import "UIViewController+RenRen.h"
+#import "NetRepositories.h"
+#import <AFNetworking/AFNetworking.h>
+#import <MJRefresh/MJRefresh.h>
+#import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
+#import <SDWebImage/UIImageView+WebCache.h>
+#import <SDWebImage/UIButton+WebCache.h>
+#import <IQKeyboardManager/IQKeyboardManager.h>
+#import <Reachability/Reachability.h>
+#import "JPUSHService.h"
+#import "NetRepositories.h"
+#import "NetRepositories+RandomBuy.h"
+#import "NetRepositories+Wang.h"
+/*
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKUI/ShareSDK+SSUI.h>
+#import <ShareSDKConnector/ShareSDKConnector.h>
+#import <TencentOpenAPI/TencentApiInterface.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+#import <TencentOpenAPI/TencentOAuth.h>
+ */
+#import <UMengSocialCOM/UMSocial.h>
+#import <UMengSocialCOM/UMSocialQQHandler.h>
+#import <UMengSocialCOM/UMSocialWechatHandler.h>
+#import <MAMapKit/MAMapKit.h>
+#import <AMapFoundationKit/AMapFoundationKit.h>
+#import <AMapSearchKit/AMapSearchKit.h>
+#import <AMapLocationKit/AMapLocationKit.h>
+
+#import <FMDB/FMDB.h>
+#import <FMDBHelper/FMDBHelper.h>
+
+#import <SVWebViewController/SVWebViewController.h>
+
+
+
+#define xianchang 110
+
+//支付宝支付
+#define AlipayPartner @"2088711803647319"
+#define AlipaySeller @"wmkj1123@163.com"
+#define AlipayPrivateKey @"MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAO3CWgfRRbegj/M3BzRPkyksRBn/o+UkkqwtQWa6FH3tI5bACUee3tsosL6G0BwekcILsGmHHXxhVYl5VwPuf5rTId6LjCLSZxz+Wd4DY6r0lbwKPLqJWBRrtN8oeX0VgDyeeq0QRHWoiQX31XNq47X/hEoNnMUJnRQt8d+QqeyHAgMBAAECgYAIttDZ7H+jpUzhWyj2b9wy7B5q3YXCRj7h9J6rBzLtEp31ToCIkXgVjD4+HW7POQealxcWJw+bmW2rJjlcOYePsQn722ZlNZXENEJvTc/XQwUMPHy/bN2TOmC6XGffL0dWbvyMduRYQ8CWgXoKyrpW9wlYgcHmcrPteFbn3neHwQJBAP1j9G3y/ez+tEExDjYCkQTqV+0+euOmzg5KMiD803kwVsjUPicytnA/QHGUFyxEjLdCb2elZetlpMn6BfLmh9cCQQDwNS+riHP6npK6Uf9PSELFN/Ch5b66sDL5Bmn6PxqsdM3tNKqnVMSJ1gAipzhaNhu07vw1lwDWxPO7UmtEumrRAkEAqY5PK5ukCwhM+iqnRcDl5ZIikCB0/wzJaYqAjM5hfAC6sdxEUtp+dhH9P4NHFlowhxivj31/+8qiQH1LqcRVNQJBANOatuzQHwNnj/Bs7ZFlIdTky6mDX3rMX4r6eH+H+bJ0jzfoTnFr/ltCVwov7zehNNU2Np3q8UVBaUjaeT6pThECQQCasA9nSoyTMwFxNwgKsqxV8o4TpHjhJs0JOsaqSuOk1xDVKK0XlOyO3oHyj4ri0IegJ7+vH4T52seX/y8BX3Eb"
+
+
+#define topToTop 40
+
+
+#define SelectedCityName @"SelectedCityName"
+
+#define FXLShoppingSelectingBtn @"FXLShoppingSelectingBtn"
+
+#endif /* PrefixHeader_pch */

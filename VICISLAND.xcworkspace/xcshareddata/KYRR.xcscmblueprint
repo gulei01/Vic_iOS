@@ -1,0 +1,25 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "89839eb8-f2f4-11e4-8aef-4557edb21b42++7392",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "89839eb8-f2f4-11e4-8aef-4557edb21b42++7392" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "89839eb8-f2f4-11e4-8aef-4557edb21b42++7392" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "AC0A2CAD-34D5-48B8-BF4D-2B9C81064740",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "89839eb8-f2f4-11e4-8aef-4557edb21b42++7392" : "Code\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "KYRR",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "KYRR\/KYRR.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "svn:\/\/192.168.1.2\/IOSApp",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "89839eb8-f2f4-11e4-8aef-4557edb21b42++7392"
+    }
+  ]
+}

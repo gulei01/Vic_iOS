@@ -1,0 +1,314 @@
+{
+    "errno": 0,
+    "errmsg": "success",
+    "data": {
+        "knight_nums": 52,
+        "sug_goods_name": "早上商品名称提示文案",
+        "header_icon_list": [
+                             {
+                             "business_type": 1,
+                             "title": "帮你买",
+                             "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_header_suiyigou.png",
+                             "goods_type": 1
+                             },
+                             {
+                             "business_type": 2,
+                             "title": "帮你送",
+                             "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_header_tongchengsong.png",
+                             "goods_type": 17
+                             },
+                             {
+                             "business_type": 3,
+                             "title": "帮你取",
+                             "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_header_bangniqu.png",
+                             "goods_type": 5
+                             },
+                             {
+                             "business_type": 0,
+                             "title": "敬请期待",
+                             "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_header_waiting.png",
+                             "goods_type": -1
+                             }
+                             ],
+        "banner_list": [
+                        {
+                        "id": 1,
+                        "title": "咖啡活动",
+                        "img_url": "http://s.waimai.baidu.com/suiyigou/huodong_kaifei.PNG",
+                        "redirect_url": "bdwm://native?pageName=webview&url=http%3A%2F%2Fwaimai.baidu.com%2Fhuodong%2Fgeneraldetail%3Fhuodong_id%3D1081%26from%3Dwebapp%26open_type%3Doutside",
+                        "sort": 1
+                        }
+                        ],
+        "business_type_list": {
+            "1": {
+                "business_type": 1,
+                "prompt": "帮你买,什么都能买",
+                "list": [
+                         {
+                         "id": "1",
+                         "title": "日常用品",
+                         "goods_type": 9,
+                         "prompt": "宅家不出门",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_suiyigou.png",
+                         "child_tag": [
+                                       "隐形眼镜",
+                                       "姨妈巾",
+                                       "充电线",
+                                       "网线",
+                                       "面膜",
+                                       "鲜花",
+                                       "扑克牌",
+                                       "尿不湿"
+                                       ]
+                         },
+                         {
+                         "id": "2",
+                         "title": "来包香烟",
+                         "goods_type": 4,
+                         "prompt": "减压又提神",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_baolu.png",
+                         "child_tag": [
+                                       "玉溪",
+                                       "中南海",
+                                       "黄鹤楼",
+                                       "万宝路",
+                                       "南京",
+                                       "苏烟",
+                                       "硬包",
+                                       "软包",
+                                       "爆珠"
+                                       ]
+                         },
+                         {
+                         "id": "3",
+                         "title": "常用药品",
+                         "goods_type": 6,
+                         "prompt": "生病不能扛",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_yaopin.png",
+                         "child_tag": [
+                                       "感冒",
+                                       "胃痛",
+                                       "止泻",
+                                       "止咳",
+                                       "止疼",
+                                       "避孕套",
+                                       "毓婷",
+                                       "万艾可胶囊",
+                                       "糖浆",
+                                       "膏药",
+                                       "云南白药",
+                                       "棉球",
+                                       "碘伏"
+                                       ]
+                         },
+                         {
+                         "id": "4",
+                         "title": "冰饮咖啡",
+                         "goods_type": 2,
+                         "prompt": "钟情星巴克",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_kaifei_01.png",
+                         "child_tag": [
+                                       "星巴克",
+                                       "costa",
+                                       "太平洋",
+                                       "摩卡",
+                                       "拿铁",
+                                       "美式",
+                                       "玛奇朵",
+                                       "大杯",
+                                       "西米露",
+                                       "小杯鲜芋仙",
+                                       "满记甜品",
+                                       "芋圆",
+                                       "仙草"
+                                       ]
+                         },
+                         {
+                         "id": "4",
+                         "title": "早餐夜宵",
+                         "goods_type": 10,
+                         "prompt": "早晚要吃饱",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_zaocan.png",
+                         "child_tag": [
+                                       "肉包",
+                                       "豆浆",
+                                       "油条",
+                                       "粥",
+                                       "馅饼",
+                                       "豆腐脑",
+                                       "羊肉串",
+                                       "板筋",
+                                       "鸭脖一个",
+                                       "两个",
+                                       "五个",
+                                       "一份",
+                                       "250g"
+                                       ]
+                         },
+                         {
+                         "id": "4",
+                         "title": "水果生鲜",
+                         "goods_type": 7,
+                         "prompt": "新鲜秒送达",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_caomei.png",
+                         "child_tag": [
+                                       "西瓜",
+                                       "火龙果",
+                                       "猪肉",
+                                       "牛肉",
+                                       "鸡腿",
+                                       "鲤鱼",
+                                       "大虾",
+                                       "西红柿",
+                                       "韭菜",
+                                       "大米半个",
+                                       "一个",
+                                       "五个",
+                                       "250g",
+                                       "500g"
+                                       ]
+                         }
+                         ]
+            },
+            "2": {
+                "business_type": 2,
+                "prompt": "帮你送,安全准时送达",
+                "list": [
+                         {
+                         "id": "5",
+                         "title": "文件",
+                         "goods_type": 11,
+                         "prompt": "合同 请帖",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_qingtie.png",
+                         "child_tag": [
+                                       "文件",
+                                       "饭菜",
+                                       "水果",
+                                       "电脑",
+                                       "钥匙",
+                                       "鲜花",
+                                       "礼品",
+                                       "衣服",
+                                       "包裹",
+                                       "贵重",
+                                       "易碎",
+                                       "需要餐箱"
+                                       ]
+                         },
+                         {
+                         "id": "6",
+                         "title": "美食",
+                         "goods_type": 12,
+                         "prompt": "饭菜 水果",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_shuiguo.png",
+                         "child_tag": [
+                                       "文件",
+                                       "饭菜",
+                                       "水果",
+                                       "电脑",
+                                       "钥匙",
+                                       "鲜花",
+                                       "礼品",
+                                       "衣服",
+                                       "包裹",
+                                       "贵重",
+                                       "易碎",
+                                       "需要餐箱"
+                                       ]
+                         },
+                         {
+                         "id": "7",
+                         "title": "其它",
+                         "goods_type": 13,
+                         "prompt": "鲜花 礼品",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_xianhua.png",
+                         "child_tag": [
+                                       "文件",
+                                       "饭菜",
+                                       "水果",
+                                       "电脑",
+                                       "钥匙",
+                                       "鲜花",
+                                       "礼品",
+                                       "衣服",
+                                       "包裹",
+                                       "贵重",
+                                       "易碎",
+                                       "需要餐箱"
+                                       ]
+                         }
+                         ]
+            },
+            "3": {
+                "business_type": 3,
+                "prompt": "帮你取,安全准时送达",
+                "has_more": 0,
+                "list": [
+                         {
+                         "id": "9",
+                         "title": "文件",
+                         "goods_type": 14,
+                         "prompt": "发票 证件",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_zhengjian.png",
+                         "child_tag": [
+                                       "文件",
+                                       "饭菜",
+                                       "水果",
+                                       "电脑",
+                                       "钥匙",
+                                       "鲜花",
+                                       "礼品",
+                                       "衣服",
+                                       "包裹",
+                                       "贵重",
+                                       "易碎",
+                                       "需要餐箱"
+                                       ]
+                         },
+                         {
+                         "id": "10",
+                         "title": "急用",
+                         "goods_type": 15,
+                         "prompt": "钥匙 电脑",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_jiyong.png",
+                         "child_tag": [
+                                       "文件",
+                                       "饭菜",
+                                       "水果",
+                                       "电脑",
+                                       "钥匙",
+                                       "鲜花",
+                                       "礼品",
+                                       "衣服",
+                                       "包裹",
+                                       "贵重",
+                                       "易碎",
+                                       "需要餐箱"
+                                       ]
+                         },
+                         {
+                         "id": "11",
+                         "title": "其它",
+                         "goods_type": 16,
+                         "prompt": "衣服 包裹",
+                         "icon_url": "http://s.waimai.baidu.com/suiyigou/icon_shiwu_yifu.png",
+                         "child_tag": [
+                                       "文件",
+                                       "饭菜",
+                                       "水果",
+                                       "电脑",
+                                       "钥匙",
+                                       "鲜花",
+                                       "礼品",
+                                       "衣服",
+                                       "包裹",
+                                       "贵重",
+                                       "易碎",
+                                       "需要餐箱"
+                                       ]
+                         }
+                         ]
+            }
+        }
+    }
+}
