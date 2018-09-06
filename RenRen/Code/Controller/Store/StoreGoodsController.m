@@ -71,7 +71,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
 - (void)viewDidLoad {
     [ThrowLineTool sharedTool].delegate = self;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(FXLShoppingButton:) name:FXLShoppingSelectingBtn object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFromCart:) name:NotificationUpdateGoodList object:nil];
     [super viewDidLoad];
     
     self.tasteTabViewArr = [[NSArray alloc]init];
@@ -164,6 +164,15 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
         [cell.contentView addSubview:_kindOfLable];
 
     }
+    if (myModel.is_cart) {
+        UILabel *nLabel = [[UILabel alloc]initWithFrame:CGRectMake(collectionCellWidth-15, 1, 10, 10)];
+        nLabel.layer.masksToBounds = YES;
+        nLabel.layer.cornerRadius = 5;
+        nLabel.backgroundColor = [UIColor redColor];
+        nLabel.textColor = [UIColor whiteColor];
+        
+        [cell.contentView addSubview:nLabel];
+    }
     
     UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, 49, collectionCellWidth, 1)];
     lineView.backgroundColor =  theme_line_color;
@@ -220,7 +229,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
 //自己更改分组数据
 -(void)queryData{
     
-    NSDictionary* arg = @{@"ince":@"get_shop_food_miao",@"sid":self.storeID,@"cate":@"0",@"price":@"0",@"order":@"0", @"fid":(self.goodsID==nil)?@"0":self.goodsID ,@"page":[WMHelper integerConvertToString:self.netPage.pageIndex]};
+    NSDictionary* arg = @{@"a":@"getStoreGoods",@"sid":self.storeID ,@"page":[WMHelper integerConvertToString:self.netPage.pageIndex]};
     
     NetRepositories* reposiories = [[NetRepositories alloc]init];
     
@@ -230,7 +239,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
             [self.arrayData removeAllObjects];
         }
         self.tasteTabViewArr = [NSArray arrayWithArray:groupArray];
-
+        NSLog(@"garfunkel_log:groupData:%@",groupArray);
 //        for (MyGroupModel *tempModel in _tasteTabViewArr) {
 //            
 //            NSLog(@"我的变态数组(%ld)（%@）",tempModel.saveKindArray.count,tempModel.title);
@@ -240,7 +249,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
         if(react == 1){
             [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 [self.arrayData addObject:obj];
-                
+                //NSLog(@"garfunkel_log:foodData:%@",self.arrayData);
             }];
 
             
@@ -250,9 +259,11 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
         }else{
             [self alertHUD:message];
         }
-        
-        [self.tableView reloadData];
-        [self.collectionView reloadData];
+        //去获取购物车的数据 然后购物车获取完数据再返回 updateFromCart 方法
+        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshShopCar object:nil];
+        //转到加载完购物车信息后再reload
+//        [self.tableView reloadData];
+//        [self.collectionView reloadData];
         
         if(self.netPage.pageCount<=self.netPage.pageIndex){
             [self.collectionView.mj_footer endRefreshingWithNoMoreData];
@@ -422,12 +433,50 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
 //    }];
 //
 //}
-
+-(void)updateFromCart:(NSNotification*)notification{
+    MCar* car = (MCar*)[notification object];
+//    for(int i=0; i<[car.arrayStore count];i++){
+//        MStore *store = car.arrayStore[i];
+//        for (int j=0; j < [store.arrayGoods count]; j++) {
+//            MGoods *goods = store.arrayGoods[j];
+//            NSLog(@"garfunkel_log:cartGoods:%@",goods.rowID);
+//        }
+//    }
+    //NSLog(@"garfunkel_log:updateFromCart:%@",car);
+    for(int i=0;i<[self.tasteTabViewArr count];i++){
+        MyGroupModel *model = self.tasteTabViewArr[i];
+        model.is_cart = false;
+        for(int j = 0; j < [model.saveKindArray count];j++){
+            MGoods *entity = model.saveKindArray[j];
+            BOOL isC = false;
+            for(int k=0; k<[car.arrayStore count];k++){
+                MStore *store = car.arrayStore[k];
+                for (int l=0; l < [store.arrayGoods count]; l++) {
+                    MGoods *goods = store.arrayGoods[l];
+                    if([goods.rowID isEqualToString:entity.rowID]){
+                        entity.quantity = goods.quantity;
+                        //NSLog(@"garfunkel_log:cartGoods:%@",goods.rowID);
+                        isC = true;
+                        //记录改分类中是否有在购物车中的商品
+                        model.is_cart = true;
+                    }
+                }
+            }
+            //如果购物车里没有改商品
+            if (!isC) {
+                entity.quantity = @"0";
+            }
+        }
+    }
+    //更新列表数据
+    [self.tableView reloadData];
+    [self.collectionView reloadData];
+}
 #pragma mark =====================================================  GoodsCell 协议实现
--(void)addToShopCar:(MGoods *)item{
-    
+-(void)addToShopCar:(MGoods *)item num:(NSString *)num{NSLog(@"garfunkel_log:addToshopcar");
     if(self.Identity.userInfo.isLogin){
-        NSDictionary* arg = @{@"ince":@"addcart",@"fid":item.rowID,@"uid":self.Identity.userInfo.userID,@"num":@"1"};
+        //NSDictionary* arg = @{@"ince":@"addcart",@"fid":item.rowID,@"uid":self.Identity.userInfo.userID,@"num":@"1"};
+        NSDictionary* arg = @{@"a":@"addCart",@"fid":item.rowID,@"uid":self.Identity.userInfo.userID,@"num":num};
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories updateShopCar:arg complete:^(NSInteger react, id obj, NSString *message) {
             if(react == 1){

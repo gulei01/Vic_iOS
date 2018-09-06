@@ -11,7 +11,7 @@
 #import "MyGroupModel2.h"
 
 ///Shop/shop_list
-NSString* const AppNetSubPath = @"mobile/Re/index";
+NSString* const AppNetSubPath = @"index.php?g=Api";
 NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 
@@ -174,7 +174,9 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
             
             
             if(![WMHelper isNULLOrnil:emptyDict]){
+                //NSArray* emptyArray = [foodDict objectForKey:@"goods_list"];
                 NSArray* emptyArray = [emptyDict objectForKey:@"foods"];
+                /////*****////
                 NSArray *groupArr = [emptyDict objectForKey:@"group"];
                 
                 if(![WMHelper isNULLOrnil:page]){
@@ -252,7 +254,7 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
         complete(flag,empty,message,group);
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        complete(400,nil,@"网络异常",[[NSMutableArray alloc] init]);
+        complete(400,nil,@"网络||异常",[[NSMutableArray alloc] init]);
     }];
 }
 
@@ -397,7 +399,6 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
         MOther* other = nil;
         if(flag == 1){
             message = @"";
-            
             empty =[[NSMutableArray alloc] init];
             NSArray* emptyArray = [responseObject objectForKey:@"list"];
             if(![WMHelper isNULLOrnil:page]){
@@ -850,7 +851,7 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryShopCar_V2:(NSDictionary *)arg complete:(void (^)(NSInteger, MCar *, NSString *))complete{
-    [[NetClient sharedClient] POST:@"mobile/Re/index" parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;

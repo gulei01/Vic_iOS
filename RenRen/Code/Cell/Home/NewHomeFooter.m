@@ -33,7 +33,7 @@
     self = [super initWithFrame:frame];
     if(self){
         advHeight = 10;
-        middleHeight = xianchang;
+        middleHeight = 0;//xianchang;
         bottomHeight= 50;
         [self layoutUI];
         [self layoutConstraints];
@@ -43,7 +43,8 @@
 
 #pragma mark =====================================================  user interface layout
 -(void)layoutUI{
-    NSArray* views = @[self.themeView,self.middleView,self.bottomView];
+    //NSArray* views = @[self.themeView,self.middleView,self.bottomView];
+    NSArray* views = @[self.themeView,self.bottomView];
     [views enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         UIView* empty = (UIView*)obj;
         empty.translatesAutoresizingMaskIntoConstraints = NO;
@@ -59,8 +60,8 @@
 
 -(void)layoutConstraints{
     //    饕餮
-    NSArray* formats = @[@"H:|-defEdge-[themeView]-defEdge-|",@"H:|-defEdge-[middleView]-defEdge-|",@"H:|-defEdge-[bottomView]-defEdge-|",
-                         @"V:|-topEdge-[themeView][middleView(==middleHeight)][bottomView(==bottomHeight)]-defEdge-|",
+    NSArray* formats = @[@"H:|-defEdge-[themeView]-defEdge-|",@"H:|-defEdge-[bottomView]-defEdge-|",
+                         @"V:|-topEdge-[themeView][bottomView(==bottomHeight)]-defEdge-|",
                          @"H:|-leftEdge-[leftLine]-leftEdge-[iconStore(==20)]-leftEdge-[labelStore(==80)]-leftEdge-[rightLine(leftLine)]-leftEdge-|",
                          @"V:[leftLine(==1)]", @"V:|-15-[iconStore(==20)]-15-|", @"V:|-defEdge-[labelStore]-defEdge-|", @"V:[rightLine(==1)]"
                          ];

@@ -108,8 +108,8 @@
 
 
 -(IBAction)addToShopCarTouch:(UIButton *)button{
-    if(self.delegate && [self.delegate respondsToSelector:@selector(addToShopCar:)]){
-        [self.delegate addToShopCar:self.entity];
+    if(self.delegate && [self.delegate respondsToSelector:@selector(addToShopCar:num:)]){
+        [self.delegate addToShopCar:self.entity num:@"1"];
     }
 }
 

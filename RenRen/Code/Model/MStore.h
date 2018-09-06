@@ -112,6 +112,15 @@
 @property(nonatomic,strong) NSMutableArray* arrayActive;
 @property(nonatomic,assign,readonly) NSInteger shopCarGoodsCount;
 @property(nonatomic,assign,readonly) float shopCarGoodsPrice;
-
+/**
+ * garfunkel add
+ * 店铺营业时间
+ */
+@property(nonatomic,strong) NSString* time;
+/**
+ * garfunkel add
+ * 打包费
+ */
+@property(nonatomic,strong) NSString* pack_fee;
 
 @end

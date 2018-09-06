@@ -341,7 +341,8 @@
     
     @try {
         self.allSelect = YES;
-        NSDictionary* arg = @{@"ince":@"getcart",@"zoneid":self.Identity.location.circleID,@"uid":self.Identity.userInfo.userID};
+        //NSDictionary* arg = @{@"ince":@"getcart",@"zoneid":self.Identity.location.circleID,@"uid":self.Identity.userInfo.userID};
+        NSDictionary* arg = @{@"a":@"getCart",@"uid":self.Identity.userInfo.userID};
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories queryShopCar:arg complete:^(NSInteger react, NSArray *list, NSString *message) {
             [self.arrayData removeAllObjects];
@@ -446,8 +447,8 @@
 
 
 -(void)addGoodsWithNum:(NSInteger)num{
-    NSDictionary* arg = @{@"ince":@"addcart",@"fid":self.emptyGoods.rowID,@"uid":self.Identity.userInfo.userID,@"num":[WMHelper integerConvertToString:num]};
-    
+    //NSDictionary* arg = @{@"ince":@"addcart",@"fid":self.emptyGoods.rowID,@"uid":self.Identity.userInfo.userID,@"num":[WMHelper integerConvertToString:num]};
+    NSDictionary* arg = @{@"a":@"addCart",@"fid":self.emptyGoods.rowID,@"uid":self.Identity.userInfo.userID,@"num":[WMHelper integerConvertToString:num]};
     [self showHUD];
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories updateShopCar:arg complete:^(NSInteger react, id obj, NSString *message) {

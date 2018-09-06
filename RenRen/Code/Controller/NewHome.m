@@ -284,7 +284,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 #pragma mark =====================================================  Data Source
 -(void)queryData{
     NetRepositories* repositories = [[NetRepositories alloc]init];
-    [repositories requestPost:@{ @"ince": @"get_index_full", @"zone_id":self.Identity.location.circleID} complete:^(NSInteger react, NSDictionary *response, NSString *message) {
+    [repositories requestPost:@{ @"long": @"-123.364257", @"lat":@"48.430707"} complete:^(NSInteger react, NSDictionary *response, NSString *message) {
         [self hidHUD];
         if(react ==1){
             NSDictionary* data = [response objectForKey: @"data"];
@@ -362,7 +362,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
                     [self.arrayStore addObject:obj];
                 }];
             }
-             self.collectionView.scrollEnabled = YES;
+            self.collectionView.scrollEnabled = YES;
             self.collectionView.backgroundView = nil;
             [self.collectionView reloadData];
             [self.collectionView.mj_header endRefreshing];
@@ -373,7 +373,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         }
     }];
 }
-
+//garfunkel 设置下拉刷新
 -(void)refreshDataSource{
     __weak typeof(self) weakSelf = self;
     MJRefreshNormalHeader* header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
@@ -407,11 +407,17 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     if(self.Identity.location.isOpen){
-        if(self.arrayCategory){
-        if(self.arrayStore.count>0){
+//        NSLog(@"garfunkel________log:%ld",self.arrayStore.count);
+//        if(self.arrayCategory){
+//        if(self.arrayStore.count>0){
+//            return self.arrayStore.count+1;
+//        }
+//        return 1;
+//        }else{
+//            return 0;
+//        }
+        if(self.arrayStore.count > 0){
             return self.arrayStore.count+1;
-        }
-        return 1;
         }else{
             return 0;
         }
@@ -429,7 +435,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath{
-    
+    NSLog(@"garfunkel_log:loadKind:%@",kind);
     if([kind isEqualToString:UICollectionElementKindSectionHeader]){
 //        设置置顶轮播图和五个商店按钮
         if(indexPath.section == 0){
@@ -444,6 +450,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
             NSString* str = [empty objectForKey: @"full_discount"];
 //            设置附近的商铺里面的值
             if([WMHelper isEmptyOrNULLOrnil:str]){
+                NSLog(@"garfunkel_log:NewHomeSection2");
                 UICollectionReusableView* reuseView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseSection2Identifier forIndexPath:indexPath];
                 NewHomeSection2* header = (NewHomeSection2*)reuseView;
                 header.delegate = self;
@@ -468,8 +475,8 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         }
         else{
             UICollectionReusableView* reuseView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:reuseSectionFooterIdentifier forIndexPath:indexPath];
+            
             return reuseView;
-            return NULL;
         }
     }
     
@@ -495,21 +502,22 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
     return 0.1;
 }
 
-//自己更改2
+//自己更改2 garfunkel collectionView中的元素高度
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     if(section == 0){
         CGFloat topHeight = SCREEN_WIDTH*7/15;
-        CGFloat locateHeight = 20;
-        CGFloat categoryHeight = 70;
+        CGFloat locateHeight = 0;//10
+        CGFloat categoryHeight = 0;//70
         if(self.dictNotice){
             return CGSizeMake(SCREEN_WIDTH, topHeight+locateHeight+categoryHeight+30);
         }else{
             return CGSizeMake(SCREEN_WIDTH, topHeight+locateHeight+categoryHeight);
         }
     }else{
+        //NSLog(@"llllllllll---%ld",section);
         NSDictionary* empty = self.arrayStore[section-1];
         NSArray *foods = [empty objectForKey: @"foods"];
-        CGFloat height = 80;
+        CGFloat height = 100;
         NSString* str = [empty objectForKey: @"full_discount"];
         if(![WMHelper isEmptyOrNULLOrnil:str]){
             height+=25;
@@ -530,9 +538,11 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section{
     if(section == 0){
         if(self.arrayTopic){
-            return CGSizeMake(SCREEN_WIDTH, 260);
+            //return CGSizeMake(SCREEN_WIDTH, 260);
+            return CGSizeMake(SCREEN_WIDTH, 150);
         }else{
-            return CGSizeMake(SCREEN_WIDTH, 170);
+            //return CGSizeMake(SCREEN_WIDTH, 170);
+            return CGSizeMake(SCREEN_WIDTH, 60);
         }
     }else{
         return CGSizeMake(SCREEN_WIDTH, 20);

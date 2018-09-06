@@ -65,30 +65,30 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    NSString* score =[NSString stringWithFormat:@"%.2f",0.00];
-    NSString* str = [NSString stringWithFormat:@"%@\n总体评价",score];
-    NSMutableAttributedString* attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
-    [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
-    self.labelToal.attributedText = attributeStr;
-    self.labelToal.textAlignment = NSTextAlignmentCenter;
-    
-    score =[NSString stringWithFormat:@"%.2f",0.00];
-    str = [NSString stringWithFormat:@"%@\n菜品口味",score];
-    attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
-    [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
-    self.labelFood.attributedText = attributeStr;
-    self.labelFood.textAlignment = NSTextAlignmentCenter;
-    
-    score =[NSString stringWithFormat:@"%.2f",0.00];
-    str = [NSString stringWithFormat:@"%@\n配送服务",score];
-    attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
-    [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
-    self.labelExpress.attributedText = attributeStr;
-    self.labelExpress.textAlignment = NSTextAlignmentCenter;
+//    NSString* score =[NSString stringWithFormat:@"%.2f",0.00];
+//    NSString* str = [NSString stringWithFormat:@"%@\n总体评价",score];
+//    NSMutableAttributedString* attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
+//    [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
+//    self.labelToal.attributedText = attributeStr;
+//    self.labelToal.textAlignment = NSTextAlignmentCenter;
+//
+//    score =[NSString stringWithFormat:@"%.2f",0.00];
+//    str = [NSString stringWithFormat:@"%@\n菜品口味",score];
+//    attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
+//    [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
+//    self.labelFood.attributedText = attributeStr;
+//    self.labelFood.textAlignment = NSTextAlignmentCenter;
+//
+//    score =[NSString stringWithFormat:@"%.2f",0.00];
+//    str = [NSString stringWithFormat:@"%@\n配送服务",score];
+//    attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
+//    [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
+//    self.labelExpress.attributedText = attributeStr;
+//    self.labelExpress.textAlignment = NSTextAlignmentCenter;
     
     [self.btnAll setTitle:[NSString stringWithFormat:@"全部(%@)",@"0"] forState:UIControlStateNormal];
-    [self.btnBest setTitle:[NSString stringWithFormat:@"好评(%@)",@"0"] forState:UIControlStateNormal];
-    [self.btnGood setTitle:[NSString stringWithFormat:@"中评(%@)",@"0"] forState:UIControlStateNormal];
+//    [self.btnBest setTitle:[NSString stringWithFormat:@"好评(%@)",@"0"] forState:UIControlStateNormal];
+    [self.btnGood setTitle:[NSString stringWithFormat:@"好评(%@)",@"0"] forState:UIControlStateNormal];
     [self.btnBad setTitle:[NSString stringWithFormat:@"差评(%@)",@"0"] forState:UIControlStateNormal];
     
     
@@ -101,22 +101,23 @@
 
 #pragma mark =====================================================  User interface layout
 -(void)layoutUI{
-    self.headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 130.f);
+    self.headerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 50.f);
     self.tableView.tableHeaderView  = self.headerView;
     
-    [self.headerView addSubview:self.topView];
+//    [self.headerView addSubview:self.topView];
     [self.headerView addSubview:self.bottomView];
     
-    [self.topView addSubview:self.labelToal];
-    [self.topView addSubview:self.labelFood];
-    [self.topView addSubview:self.labelExpress];
+//    [self.topView addSubview:self.labelToal];
+//    [self.topView addSubview:self.labelFood];
+//    [self.topView addSubview:self.labelExpress];
     
     [self.bottomView addSubview:self.btnAll];
-    [self.bottomView addSubview:self.btnBest];
+    //[self.bottomView addSubview:self.btnBest];
     [self.bottomView addSubview:self.btnGood];
     [self.bottomView addSubview:self.btnBad];
     
-    self.arrayBtn = @[self.btnAll,self.btnBad,self.btnGood,self.btnBest];
+//    self.arrayBtn = @[self.btnAll,self.btnBad,self.btnGood,self.btnBest];
+    self.arrayBtn = @[self.btnAll,self.btnBad,self.btnGood];
     
     self.tableView.emptyDataSetDelegate = self;
     self.tableView.emptyDataSetSource = self;
@@ -126,57 +127,57 @@
 }
 
 -(void)layoutConstraints{
-    self.topView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.labelToal.translatesAutoresizingMaskIntoConstraints = NO;
-    self.labelFood.translatesAutoresizingMaskIntoConstraints = NO;
-    self.labelExpress.translatesAutoresizingMaskIntoConstraints = NO;
+//    self.topView.translatesAutoresizingMaskIntoConstraints = NO;
+//    self.labelToal.translatesAutoresizingMaskIntoConstraints = NO;
+//    self.labelFood.translatesAutoresizingMaskIntoConstraints = NO;
+//    self.labelExpress.translatesAutoresizingMaskIntoConstraints = NO;
     
     self.bottomView.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnAll.translatesAutoresizingMaskIntoConstraints = NO;
-    self.btnBest.translatesAutoresizingMaskIntoConstraints = NO;
+//    self.btnBest.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnGood.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnBad.translatesAutoresizingMaskIntoConstraints = NO;
     
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.topView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:80.f]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.topView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
-    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.topView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.headerView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
-    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.topView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.headerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
-    
-    [self.labelToal addConstraint:[NSLayoutConstraint constraintWithItem:self.labelToal attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelToal attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.f]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelToal attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelToal attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
-    
-    [self.labelFood addConstraint:[NSLayoutConstraint constraintWithItem:self.labelFood attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelFood attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.f]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelFood attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelFood attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.labelToal attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.f]];
-    
-    [self.labelExpress addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpress attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpress attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.f]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpress attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
-    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpress attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.f]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.topView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:80.f]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.topView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
+//    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.topView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.headerView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
+//    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.topView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.headerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
+
+//    [self.labelToal addConstraint:[NSLayoutConstraint constraintWithItem:self.labelToal attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelToal attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.f]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelToal attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelToal attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
+//
+//    [self.labelFood addConstraint:[NSLayoutConstraint constraintWithItem:self.labelFood attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelFood attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.f]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelFood attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelFood attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.labelToal attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.f]];
+//
+//    [self.labelExpress addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpress attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpress attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.f]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpress attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
+//    [self.topView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpress attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.f]];
     
     [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:50.f]];
     [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
-    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.headerView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
     [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.bottomView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.headerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
     
-    CGFloat width = (SCREEN_WIDTH-50)/4;
+    CGFloat width = (SCREEN_WIDTH-40)/3;
     
     [self.btnAll addConstraint:[NSLayoutConstraint constraintWithItem:self.btnAll attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width]];
     [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnAll attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.bottomView attribute:NSLayoutAttributeTop multiplier:1.0 constant:10.f]];
     [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnAll attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.bottomView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
     [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnAll attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.bottomView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-10.f]];
     
-    [self.btnBest addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBest attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width]];
-    [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBest attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.bottomView attribute:NSLayoutAttributeTop multiplier:1.0 constant:10.f]];
-    [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBest attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.btnAll attribute:NSLayoutAttributeRight multiplier:1.0 constant:10.f]];
-    [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBest attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.bottomView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-10.f]];
+//    [self.btnBest addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBest attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width]];
+//    [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBest attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.bottomView attribute:NSLayoutAttributeTop multiplier:1.0 constant:10.f]];
+//    [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBest attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.btnAll attribute:NSLayoutAttributeRight multiplier:1.0 constant:10.f]];
+//    [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBest attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.bottomView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-10.f]];
     
     [self.btnGood addConstraint:[NSLayoutConstraint constraintWithItem:self.btnGood attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width]];
     [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnGood attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.bottomView attribute:NSLayoutAttributeTop multiplier:1.0 constant:10.f]];
-    [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnGood attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.btnBest attribute:NSLayoutAttributeRight multiplier:1.0 constant:10.f]];
+    [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnGood attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.btnAll attribute:NSLayoutAttributeRight multiplier:1.0 constant:10.f]];
     [self.bottomView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnGood attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.bottomView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-10.f]];
     
     [self.btnBad addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBad attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:width]];
@@ -189,7 +190,10 @@
 #pragma mark =====================================================  Data Source
 -(void)queryData{
     
-    NSDictionary* arg = @{@"ince":@"get_shop_comment_new",@"sid":self.storeID,@"type":self.typeID, @"page":[WMHelper integerConvertToString:self.page.pageIndex]};
+    //NSDictionary* arg = @{@"ince":@"get_shop_comment_new",@"sid":self.storeID,@"type":self.typeID, @"page":[WMHelper integerConvertToString:self.page.pageIndex]};
+    //NSLog(@"garfunkel_log:type:%@",self.typeID);
+    //type 0 全部 3好 2中 1差
+    NSDictionary* arg = @{@"a":@"getCommentByStore",@"sid":self.storeID,@"type":self.typeID,};
     
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories queryComment:arg page:self.page complete:^(NSInteger react, NSArray *list, id model, NSString *message) {
@@ -302,31 +306,31 @@
 #pragma mark =====================================================  private method
 -(void)loadData:(MOther *)item{
     if(item){
-        NSString* score =[NSString stringWithFormat:@"%.1f",[item.totalComment floatValue]];
-        NSString* str = [NSString stringWithFormat:@"%@\n总体评价",score];
-        NSMutableAttributedString* attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
-        [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
-        self.labelToal.attributedText = attributeStr;
-        self.labelToal.textAlignment = NSTextAlignmentCenter;
-        
-        score =[NSString stringWithFormat:@"%.1f",[item.foodComment floatValue]];
-        str = [NSString stringWithFormat:@"%@\n商品评价",score];
-        attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
-        [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
-        self.labelFood.attributedText = attributeStr;
-        self.labelFood.textAlignment = NSTextAlignmentCenter;
-        
-        score =[NSString stringWithFormat:@"%.1f",[item.shipComment floatValue]];
-        str = [NSString stringWithFormat:@"%@\n配送服务",score];
-        attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
-        [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
-        self.labelExpress.attributedText = attributeStr;
-        self.labelExpress.textAlignment = NSTextAlignmentCenter;
+//        NSString* score =[NSString stringWithFormat:@"%.1f",[item.totalComment floatValue]];
+//        NSString* str = [NSString stringWithFormat:@"%@\n总体评价",score];
+//        NSMutableAttributedString* attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
+//        [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
+//        self.labelToal.attributedText = attributeStr;
+//        self.labelToal.textAlignment = NSTextAlignmentCenter;
+//
+//        score =[NSString stringWithFormat:@"%.1f",[item.foodComment floatValue]];
+//        str = [NSString stringWithFormat:@"%@\n商品评价",score];
+//        attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
+//        [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
+//        self.labelFood.attributedText = attributeStr;
+//        self.labelFood.textAlignment = NSTextAlignmentCenter;
+//
+//        score =[NSString stringWithFormat:@"%.1f",[item.shipComment floatValue]];
+//        str = [NSString stringWithFormat:@"%@\n配送服务",score];
+//        attributeStr  = [[NSMutableAttributedString alloc]initWithString:str];
+//        [attributeStr addAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:24.f],NSForegroundColorAttributeName:[UIColor colorWithRed:248/255.f green:159/255.f blue:39/255.f alpha:1.0]} range:[str rangeOfString:score]];
+//        self.labelExpress.attributedText = attributeStr;
+//        self.labelExpress.textAlignment = NSTextAlignmentCenter;
         
         
         [self.btnAll setTitle:[NSString stringWithFormat:@"全部(%@)",item.totalNum] forState:UIControlStateNormal];
-        [self.btnBest setTitle:[NSString stringWithFormat:@"好评(%@)",item.bestNum] forState:UIControlStateNormal];
-        [self.btnGood setTitle:[NSString stringWithFormat:@"中评(%@)",item.goodNum] forState:UIControlStateNormal];
+//        [self.btnBest setTitle:[NSString stringWithFormat:@"好评(%@)",item.bestNum] forState:UIControlStateNormal];
+        [self.btnGood setTitle:[NSString stringWithFormat:@"好评(%@)",item.goodNum] forState:UIControlStateNormal];
         [self.btnBad setTitle:[NSString stringWithFormat:@"差评(%@)",item.badNum] forState:UIControlStateNormal];
     }
 }

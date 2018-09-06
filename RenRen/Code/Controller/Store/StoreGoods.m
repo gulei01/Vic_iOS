@@ -118,7 +118,7 @@
     self.labelSumPrice.backgroundColor = [UIColor blackColor];
     self.labelSumPrice.alpha=0.7f;
     self.labelSumPrice.textColor = [UIColor whiteColor];
-    self.labelSumPrice.text =@"共￥0.00 元  ";
+    self.labelSumPrice.text =@"共$0.00 元  ";
     self.labelSumPrice.textAlignment = NSTextAlignmentRight;
     self.labelSumPrice.font = [UIFont systemFontOfSize:15.f];
     [self.bottomView addSubview:self.labelSumPrice];

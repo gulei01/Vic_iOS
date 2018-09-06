@@ -11,6 +11,9 @@
 
 #define NotificatonWXLoginAuthorization @"NotificatonWXLoginAuthorization"//微信登录授权成功回调
 
+//garfunkel add
+#define NotificationRegSuuccess @"NotificationRegSuuccess" //注册成功返回
+
 #define NotificationPaySuccess @"NotificationPaySuccess" //支付成功
 
 #define NotificationPayUserCancel @"NotificationPayUserCancel" //用户取消支付
@@ -24,6 +27,8 @@
 #define NotificationSelectedAddres @"NotificationSelectedAddres" //选择收货地址
 
 #define NotificationSelecteMapAddress @"NotificationSelecteMapAddress"
+
+#define NotificationUpdateGoodList @"NotificationUpdateGoodList"
 
 #define NotificationGoClearing @"NotificationGoClearing" //去结算 修改FirstLoad 为YES 用于刷新数据
 

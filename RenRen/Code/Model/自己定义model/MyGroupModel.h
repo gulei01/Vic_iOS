@@ -17,6 +17,9 @@
 @property(nonatomic,copy) NSString* sid;
 @property(nonatomic,copy) NSString* title;
 
+//garfunkel add
+@property(nonatomic,assign) BOOL is_cart;
+
 @property(nonatomic,copy) NSMutableArray *saveKindArray;
 
 @end

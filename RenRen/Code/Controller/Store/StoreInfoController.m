@@ -80,7 +80,7 @@
         [icon setImage:[UIImage imageNamed:@"icon-lock"]];
         NSString* star =[NSString stringWithFormat:@"%ld:00",[self.entity.servicTimeBegin integerValue]/60];
          NSString* end =[NSString stringWithFormat:@"%ld:00",[self.entity.serviceTimerEnd integerValue]/60];
-        label.text = [NSString stringWithFormat:@"配送时间 : %@-%@",star,end];
+        label.text = [NSString stringWithFormat:@"配送时间 : %@",self.entity.time];
     }else if (indexPath.row == 1){
         [icon setImage:[UIImage imageNamed:@"icon-boll"]];
         label.text = [NSString stringWithFormat:@"商家电话 : %@",[WMHelper isEmptyOrNULLOrnil:self.entity.phone]?self.entity.mobile:self.entity.phone];
@@ -108,8 +108,9 @@
         label1.frame =CGRectMake(CGRectGetMaxX(label.frame), 2, 60, 20.f);
         label1.layer.cornerRadius = 5.f;
         label1.layer.masksToBounds = YES;
-        if([self.entity.send isEqualToString:@"0"]){
-            label1.text =@"外卖郎骑士";
+        //garfunkel modify
+        if(self.entity.send){
+            label1.text =@"平台配送";
         }else{
             label1.text =@"商家";
         }

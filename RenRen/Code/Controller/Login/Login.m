@@ -9,6 +9,7 @@
 #import "Login.h"
 #import "WXApi.h"
 #import "MMember.h"
+#import "Reg.h"
 
 #import "AppDelegate.h"
 
@@ -23,6 +24,17 @@
 @property(nonatomic,strong) UIImageView *backView;
 
 @property(nonatomic,strong) UIView *myView;
+//garfunkel add
+@property(nonatomic,strong) UIView *inputView;
+
+@property(nonatomic,strong) UILabel *mobileLabel;
+@property(nonatomic,strong) UILabel *passwordLabel;
+@property(nonatomic,strong) UITextField *mobileText;
+@property(nonatomic,strong) UITextField *passwordText;
+
+@property(nonatomic,strong) UIButton *loginBtn;
+@property(nonatomic,strong) UIButton *regBtn;
+
 
 @end
 
@@ -42,6 +54,7 @@
     [self layoutUIConstains];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(weChatLoginAuthorization:) name:NotificatonWXLoginAuthorization object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(regReturn) name:NotificationRegSuuccess object:nil];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -115,6 +128,54 @@
     
     [_myView addSubview:_btnWeChat];
     
+    _inputView = [[UIView alloc] initWithFrame:CGRectMake(0, SCREEN_HEIGHT/3, SCREEN_WIDTH, SCREEN_HEIGHT/5)];
+    _inputView.backgroundColor = [UIColor clearColor];
+    _inputView.userInteractionEnabled = YES;
+    [_backView addSubview:_inputView];
+    
+    //_mobileLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 60, 30)];
+    _mobileLabel = [[UILabel alloc] init];
+    _mobileLabel.text = @"手机号:";
+    _mobileLabel.textAlignment = NSTextAlignmentRight;
+    _mobileLabel.textColor = [UIColor whiteColor];
+    
+    _passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 50, 60, 30)];
+    _passwordLabel.text = @"密   码:";
+    _passwordLabel.textAlignment = NSTextAlignmentRight;
+    _passwordLabel.textColor = [UIColor whiteColor];
+    
+    _mobileText = [[UITextField alloc] initWithFrame:CGRectMake(75, 10, 200, 30)];
+    _mobileText.placeholder = @"请输入手机号";
+    _mobileText.layer.borderWidth = 1.0f;
+    _mobileText.layer.cornerRadius = 5;
+    _mobileText.layer.borderColor = [UIColor grayColor].CGColor;
+    _mobileText.backgroundColor = [UIColor whiteColor];
+    
+    _passwordText = [[UITextField alloc] initWithFrame:CGRectMake(75, 50, 200, 30)];
+    _passwordText.placeholder = @"请输入密码";
+    _passwordText.secureTextEntry = YES;
+    _passwordText.layer.borderWidth = 1.0f;
+    _passwordText.layer.cornerRadius = 5;
+    _passwordText.layer.borderColor = [UIColor grayColor].CGColor;
+    _passwordText.backgroundColor = [UIColor whiteColor];
+    
+    [_inputView addSubview:_mobileLabel];
+    [_inputView addSubview:_passwordLabel];
+    [_inputView addSubview:_mobileText];
+    [_inputView addSubview:_passwordText];
+    
+    _loginBtn = [[UIButton alloc] init];
+    [_loginBtn setTitle:@"登录" forState:UIControlStateNormal];
+    [_loginBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_loginBtn addTarget:self action:@selector(loginTouch:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _regBtn = [[UIButton alloc] init];
+    [_regBtn setTitle:@"注册" forState:UIControlStateNormal];
+    [_regBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_regBtn addTarget:self action:@selector(regTouch:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [_inputView addSubview:_loginBtn];
+    [_inputView addSubview:_regBtn];
 }
 
 - (void)layoutUIConstains {
@@ -122,18 +183,53 @@
     self.btnQQ.translatesAutoresizingMaskIntoConstraints =NO ;
     self.btnWeChat.translatesAutoresizingMaskIntoConstraints = NO;
     
-    
     [self.btnQQ addConstraint:[NSLayoutConstraint constraintWithItem:self.btnQQ attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
     [self.btnQQ addConstraint:[NSLayoutConstraint constraintWithItem:self.btnQQ attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
     [self.myView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnQQ attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.myView attribute:NSLayoutAttributeTop multiplier:1.0 constant:20.f]];
     [self.myView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnQQ attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.myView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:SCREEN_WIDTH/2-100]];
     
-    
-    
     [self.btnWeChat addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeChat attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
     [self.btnWeChat addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeChat attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
     [self.myView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeChat attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.myView attribute:NSLayoutAttributeTop multiplier:1.0 constant:20.f]];
     [self.myView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeChat attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.myView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-SCREEN_WIDTH/2+100]];
+    
+    self.mobileLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.passwordLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.mobileText.translatesAutoresizingMaskIntoConstraints = NO;
+    self.passwordText.translatesAutoresizingMaskIntoConstraints = NO;
+
+    [self.mobileLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
+    [self.mobileLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:20.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:30.f]];
+    
+    [self.passwordLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
+    [self.passwordLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:60.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:30.f]];
+    
+    [self.mobileText addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:200.f]];
+    [self.mobileText addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:20.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:100.f]];
+    
+    [self.passwordText addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:200.f]];
+    [self.passwordText addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:60.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:100.f]];
+    
+    self.loginBtn.translatesAutoresizingMaskIntoConstraints = NO;
+    self.regBtn.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.loginBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
+    [self.loginBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:110.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:100.f]];
+    
+    [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
+    [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:110.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-100.f]];
 }
 
 #pragma mark =====================================================  通知
@@ -154,7 +250,7 @@
 }
 
 
--(IBAction)QQLoginTouch:(id)sender{
+-(IBAction)QQLoginTouch:(id)sender{NSLog(@"garfunkel_log:loadQQLogin");
     [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
             self.tencentOAuth= [[TencentOAuth alloc] initWithAppId:kQQAPP_ID andDelegate:self];
@@ -181,10 +277,12 @@
 }
 #pragma mark =====================================================  TencentSessionDelegate 协议实现
 - (void)tencentDidLogin{
+    NSLog(@"garfunkel_log:intoQQLogin");
     [self.tencentOAuth getUserInfo];
 }
 
 - (void)tencentDidNotLogin:(BOOL)cancelled{
+    NSLog(@"garfunkel_log:loginReturn:%d",cancelled);
     if (cancelled)
     {
         [self alertHUD:@"用户取消登陆"];
@@ -212,7 +310,72 @@
         [self alertHUD:@"授权失败"];
     }
 }
+-(BOOL)checkPhoneNum:(NSString*)num{//验证手机号
+    NSString* str = @"[0-9]{5,20}";
+    NSPredicate *phoneTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", str];
+    return [phoneTest evaluateWithObject:num];
+}
 
+-(void)regTouch:(id)sender{
+    //Reg* reg = [[Reg alloc] init];
+    UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Reg alloc]init]];
+    nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [self.parentViewController presentViewController:nav animated:YES completion:nil];
+}
+
+-(void)regReturn{
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)loginTouch:(id)sender{
+    [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
+        if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
+            self.HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
+            [self.view.window addSubview:self.HUD];
+            self.HUD.delegate = self;
+            self.HUD.minSize = CGSizeMake(135.f, 135.f);
+            [self.HUD setLabelFont:[UIFont systemFontOfSize:14.f]];
+            
+            if(![self checkPhoneNum:_mobileText.text]){
+                [self alertHUD:@"请输入正确的手机号"];
+            }else{
+                if([_passwordText.text length] < 6){
+                    [self alertHUD:@"密码不能少于六位"];
+                }else{
+                    NSString *mobile = _mobileText.text;
+                    NSString *password = _passwordText.text;
+                    self.HUD.labelText = @"正在登录!";
+                    [self.HUD show:YES];
+                    
+                    NSDictionary* arg = @{@"a":@"userLogin",@"userName":mobile,@"password":password};
+                    NetRepositories* repositories = [[NetRepositories alloc]init];
+                    [repositories login:arg complete:^(NSInteger react, id obj, NSString *message) {
+                        if(react == 1){
+                            MMember* entity = (MMember*)obj;
+                            entity.isLogin = YES;
+                            Boolean flag= [NSKeyedArchiver archiveRootObject:entity toFile:[WMHelper archiverPath]];
+                            if(flag){
+                                NSUserDefaults* config = [NSUserDefaults standardUserDefaults];
+                                [config setObject:@(YES) forKey:kisBindingJPushTag];
+                                [config synchronize];
+                                [self registerTagsWithAlias:self.Identity.userInfo.userID];
+                                [[NSNotificationCenter defaultCenter]postNotificationName:NotificationLoginSuccess object:nil];
+                            }else{
+                                // NSLog(@"%@",@"归档失败!");
+                            }
+                            [self hidHUD:@"登录成功" success:YES];
+                            [self dismissViewControllerAnimated:YES completion:nil];
+                        }else if(react == 400){
+                            [self hidHUD:message];
+                        }else{
+                            [self hidHUD:message];
+                        }
+                    }];
+                }
+            }
+        }
+    }];
+}
 #pragma mark =====================================================  绑定极光推送
 
 -(void)registerTagsWithAlias:(NSString*)userID{
@@ -262,6 +425,7 @@
 }
 #pragma mark =====================================================  私有方法
 -(void)thirdPartyLogin:(NSString*)nick openID:(NSString*)openID face:(NSString*)face type:(NSInteger)type{
+    NSLog(@"garfunkel______________________log");
     self.HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
     [self.view.window addSubview:self.HUD];
     self.HUD.delegate = self;
@@ -271,8 +435,9 @@
     [self.HUD show:YES];
     
     
-    NSDictionary* arg = @{@"ince":@"the_third_reg",@"nickname":nick,@"openid":openID,@"face_pic":face,@"type":[WMHelper integerConvertToString:type]};
-    
+    //NSDictionary* arg = @{@"ince":@"the_third_reg",@"nickname":nick,@"openid":openID,@"face_pic":face,@"type":[WMHelper integerConvertToString:type]};
+    NSDictionary* arg = @{@"a":@"user_third_Login"};
+    NSLog(@"garfunkel_log:loginArg:%@",arg);
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories login:arg complete:^(NSInteger react, id obj, NSString *message) {
         if(react == 1){

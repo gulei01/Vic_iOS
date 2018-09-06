@@ -17,7 +17,7 @@
         self.rowID = [item objectForKey:@"id"];
         self.sid  = [item objectForKey:@"sid"];
         self.title = [item objectForKey:@"title"];
-
+        self.is_cart = false;
     }
     return self;
 }
@@ -42,7 +42,7 @@
         }else if ([key isEqualToString:@"sid"]){
             _sid = value;
         }
-    
+        _is_cart = false;
     }
 }
 

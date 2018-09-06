@@ -10,6 +10,6 @@
 
 @protocol GoodsCellDelegate <NSObject>
 @optional
--(void)addToShopCar:(MGoods*)item;
+-(void)addToShopCar:(MGoods*)item num:(NSString *) num;
 -(void)didSelectGoodPhoto:(MGoods*)item;
 @end

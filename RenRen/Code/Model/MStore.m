@@ -94,6 +94,10 @@
             _freeShip = value;
         }else if ([key isEqualToString:@"shipfee"]){
             _shipFee = value;
+        }else if([key isEqualToString:@"time"]){//garfunkel add
+            _time = value;
+        }else if([key isEqualToString:@"pack_fee"]){//garfunkel add
+            _pack_fee = value;
         }else if ([key isEqualToString:@"shop_sale"]){
             _sale = value;
         }else if ([key isEqualToString:@"shop_category"]){

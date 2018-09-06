@@ -8,7 +8,7 @@
 
 #import "NetClient.h"
 
-static NSString * const AFAppDotNetAPIBaseURLString = @"http://mytu.ca/";
+static NSString * const AFAppDotNetAPIBaseURLString = @"http://www.vicisland.ca/";
 #warning TODO: //  注意切换生成/发布模式
 static NSString * const AFAppDotNetAPIBaseURLStringTest = @"http://wm.wm0530.com/";
 

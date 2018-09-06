@@ -38,6 +38,7 @@
 
 @property(nonatomic,assign) float sumPrice;
 @property(nonatomic,assign) NSInteger sumNum;
+@property(nonatomic,assign) MCar* entity;
 
 @end
 
@@ -56,7 +57,8 @@
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    [self queryData];
+    //garfunkel modify
+    //[self queryData];
     
 }
 
@@ -134,11 +136,16 @@
 
 #pragma mark =====================================================  DataSource
 -(void)queryData{
-    if(self.Identity.userInfo.isLogin){        
-         NSDictionary* arg = @{@"ince":@"getcart",@"zoneid":self.Identity.location.circleID,@"uid":self.Identity.userInfo.userID};
+    if(self.Identity.userInfo.isLogin){
+        NSLog(@"garfunkel_log:getCartData");
+//        NSDictionary* arg = @{@"ince":@"getcart",@"zoneid":self.Identity.location.circleID,@"uid":self.Identity.userInfo.userID};
+        NSDictionary* arg = @{@"a":@"getCart",@"uid":self.Identity.userInfo.userID};
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories queryShopCar_V2:arg complete:^(NSInteger react, MCar *entity, NSString *message) {
             if(react == 1){
+                //garfunkel add
+                self.entity = entity;
+                //
                 [self.arrayShopCar removeAllObjects];
                 self.sumPrice = [entity.sumMoney floatValue];
                 self.sumNum = [entity.sumNum integerValue];
@@ -155,9 +162,11 @@
                             self.btnBuy.hidden = YES;
                             self.labelOtherPrice.text =[NSString stringWithFormat:@"差%.2f元送货",[@"9.00" floatValue] - self.sumPrice];
                         }
-                        self.labelSumPrice.text = [NSString stringWithFormat:@"共￥%.2f元",self.sumPrice];
+                        self.labelSumPrice.text = [NSString stringWithFormat:@"共$%.2f元",self.sumPrice];
                     }];
                 });
+                //garfunkel add
+                [[NSNotificationCenter defaultCenter]postNotificationName:NotificationUpdateGoodList object:self.entity];
             }else{
                 self.labelNum.text =@"0";
                 self.labelSumPrice.text =@"共￥0.00 元  ";

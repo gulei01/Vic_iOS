@@ -207,7 +207,7 @@
 
 #pragma mark =====================================================  DataSource
 -(void)queryData{
-    NSDictionary* arg = @{@"ince":@"get_shop_info",@"sid":self.entity.rowID};
+    NSDictionary* arg = @{@"a":@"getStore",@"sid":self.entity.rowID};
     
     NetRepositories* reposistories = [[NetRepositories alloc]init];
     [reposistories searchStore:arg complete:^(NSInteger react, id obj, NSString *message) {
@@ -226,6 +226,8 @@
             self.entity.send = item.send;
             self.entity.storeScore = item.storeScore;
             self.entity.sale = item.sale;
+            self.entity.time = item.time;
+            self.entity.pack_fee = item.pack_fee;
             self.entity.arrayActive = item.arrayActive;
             
             [self loadData:self.entity];
@@ -271,7 +273,7 @@
     self.labelNavTitle.text = item.storeName;
     [self.storeLogo sd_setImageWithURL:[NSURL URLWithString:item.logo] placeholderImage:[UIImage imageNamed:kDefStoreLogo]];
     self.labelStoreName.text = item.storeName;
-    self.labelShip.text = [NSString stringWithFormat:@"起步价 ￥%@ | 配送费 ￥%@ ",item.freeShip,item.shipFee];
+    self.labelShip.text = [NSString stringWithFormat:@"配送费:$%@ | 打包费:$%@",item.shipFee,item.pack_fee];
     self.labelNotice.text = item.notice;
     
     self.storeInfoCotroller.entity = item;
@@ -279,7 +281,7 @@
     self.labelName.text = item.storeName;
     NSString* starTime =[NSString stringWithFormat:@"%ld:00",[item.servicTimeBegin integerValue]/60];
     NSString* endTime =[NSString stringWithFormat:@"%ld:00",[item.serviceTimerEnd integerValue]/60];
-    self.labelSale.text =  [NSString stringWithFormat: @"月售单量: %@单 营业时间: %@-%@",item.sale,starTime,endTime];
+    self.labelSale.text =  [NSString stringWithFormat: @"月售单量: %@单 营业时间: %@",item.sale,item.time];
     self.labelNotices.text = [NSString stringWithFormat: @"☆ %@",item.notice];
     NSInteger star = [item.storeScore integerValue];
     [self.starService setScore:star/5.0f withAnimation:YES];
@@ -615,6 +617,8 @@
         StoreCommentController* controller = [[StoreCommentController alloc]initWithStoreID:self.entity.rowID];
         [self addChildViewController:controller];
         _commentView = controller.view;
+        //garfunkel modify
+        //_commentView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
         _commentView.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _commentView;

@@ -50,8 +50,8 @@ static NSString* const cellIdentifier =  @"HomeCategoryCell";
 -(void)layoutUI{
     
     topHeight = SCREEN_WIDTH*7/15;
-    locationHeight = 10;
-    categoryHeight = 70;
+    locationHeight = 0;//10
+    categoryHeight = 0;//70
     self.bannerView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, topHeight) imageURLStringsGroup:nil];
     self.bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     self.bannerView.delegate = self;
@@ -162,6 +162,7 @@ static NSString* const cellIdentifier =  @"HomeCategoryCell";
     [self.bannerView setImageURLStringsGroup:photos];
     
     self.arrayCategory = category;
+    NSLog(@"garfunkel_log:category:%@",self.arrayCategory);
 //    self.labelLocate.text = location;
     
     if(notice){

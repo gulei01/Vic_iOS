@@ -26,6 +26,13 @@
 @property(nonatomic,strong) UIImageView* lineSale;
 @property(nonatomic,strong) UILabel* labelSale;
 
+//garfunkel add
+@property(nonatomic,strong) UILabel* labelDistance;
+
+@property(nonatomic,strong) UIView* deliView;
+@property(nonatomic,strong) UILabel* labelDelivery;
+@property(nonatomic,strong) UILabel* labelPacking;
+
 @property(nonatomic,strong) UIView* contentView;
 @property(nonatomic,strong) UIView* topView;
 @property(nonatomic,strong) UIImageView* storeLogo;
@@ -62,10 +69,15 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
     
     [self.shipView addSubview:self.labelShip];
     [self.shipView addSubview:self.labelShipTime];
+    [self.shipView addSubview:self.labelDistance];
     
     [self.rightView addSubview:self.saleView];
     [self.saleView addSubview:self.starView];
     [self.saleView addSubview:self.labelSale];
+    
+    [self.rightView addSubview:self.deliView];
+    [self.deliView addSubview:self.labelDelivery];
+    [self.deliView addSubview:self.labelPacking];
     
     [self.contentView addSubview:self.imgRecommend];
     [self.contentView addSubview:self.subCollectionView];
@@ -87,20 +99,24 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
                          @"H:|-defEdge-[topView]-defEdge-|",@"H:|-defEdge-[subCollectionView]-defEdge-|",
                          @"V:|-defEdge-[topView(==topHeight)][subCollectionView]-defEdge-|",
                          @"H:|-leftEdge-[storeLogo(==90)]-leftEdge-[rightView]-defEdge-|", @"V:|-topEdge-[storeLogo]-topEdge-|", @"V:|-topEdge-[rightView]-topEdge-|",
-                         @"H:|-defEdge-[labelStoreName]-50-|",@"H:|-defEdge-[shipView]-defEdge-|",@"H:|-defEdge-[saleView]-defEdge-|",
-                         @"V:|-defEdge-[labelStoreName][shipView][saleView]-defEdge-|",
-                         @"H:|-defEdge-[labelShip(==60)]-leftEdge-[labelShipTime]-defEdge-|", @"V:|-5-[labelShip]-5-|", @"V:|-defEdge-[labelShipTime]-defEdge-|",
+                         @"H:|-defEdge-[labelStoreName]-50-|",@"H:|-defEdge-[shipView]-defEdge-|",@"H:|-defEdge-[saleView]-defEdge-|",@"H:|-defEdge-[deliView]-defEdge-|",
+                         @"V:|-defEdge-[labelStoreName][shipView][saleView]-2-[deliView]-defEdge-|",
+                         @"H:|-defEdge-[labelShip(==60)]",@"H:[labelShipTime][labelDistance]-leftEdge-|",
+                         @"V:|-5-[labelShip]-5-|", @"V:|-defEdge-[labelShipTime]-defEdge-|",@"V:|-defEdge-[labelDistance]-defEdge-|",
+                         @"H:|-defEdge-[labelDelivery][labelPacking]-defEdge-|",
+                         @"V:|-defEdge-[labelDelivery]-defEdge-|",@"V:|-defEdge-[labelPacking]-defEdge-|",
                          @"H:|-defEdge-[starView(==60)][labelSale]-defEdge-|", @"V:|-3-[starView]-defEdge-|", @"V:|-defEdge-[labelSale]-defEdge-|",
                          @"H:[line(==1)]-leftEdge-[shopCar(==carSize)]-leftEdge-|", @"V:|-defEdge-[shopCar(==carSize)]", @"V:|-defEdge-[line(==carSize)]"
                          ];
-    NSDictionary* metrics = @{ @"defEdge":@(0), @"leftEdge":@(10), @"topEdge":@(10), @"topHeight":@(80),  @"carSize":@(20)};
+    NSDictionary* metrics = @{ @"defEdge":@(0), @"leftEdge":@(10), @"topEdge":@(10), @"topHeight":@(100),  @"carSize":@(20)};
     NSDictionary* views = @{ @"contentView":self.contentView,
                              @"imgRecommend":self.imgRecommend,
                              @"topView":self.topView,  @"subCollectionView":self.subCollectionView,
                              @"storeLogo":self.storeLogo, @"rightView":self.rightView,
-                             @"labelStoreName":self.labelStoreName, @"shipView":self.shipView, @"saleView":self.saleView,
-                             @"labelShip":self.labelShip, @"labelShipTime":self.labelShipTime,
+                             @"labelStoreName":self.labelStoreName, @"shipView":self.shipView, @"saleView":self.saleView,@"deliView":self.deliView,
+                             @"labelShip":self.labelShip, @"labelShipTime":self.labelShipTime,@"labelDistance":self.labelDistance,
                              @"starView":self.starView, @"labelSale":self.labelSale,
+                             @"labelDelivery":self.labelDelivery,@"labelPacking":self.labelPacking,
                              @"line":self.line, @"shopCar":self.shopCar
                              };
     
@@ -162,9 +178,15 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
         _item = item;
         [self.storeLogo sd_setImageWithURL:[NSURL URLWithString:[item objectForKey: @"logo"]] placeholderImage:[UIImage imageNamed:kDefStoreLogo]];
         self.labelStoreName.text = [item objectForKey: @"site_name"];
-        self.labelShip.text = [item objectForKey: @"send"];
-        self.labelShipTime.text = [item objectForKey: @"time"];
+        if((BOOL)[item objectForKey:@"delivery_system"]){
+            self.labelShip.text = @"平台配送";
+        }
+        //self.labelShip.text = @"平台配送";//[item objectForKey: @"send"];
+        self.labelShipTime.text = [NSString stringWithFormat:@"%@分钟",[item objectForKey: @"time"]];
+        self.labelDistance.text = [NSString stringWithFormat:@" | %@",[item objectForKey:@"range"]];
         self.labelSale.text = [NSString stringWithFormat: @" | 月售%@单",[item objectForKey: @"shop_sale"]];
+        self.labelDelivery.text = [NSString stringWithFormat:@"配送费:$%@",[item objectForKey:@"delivery_money"]];
+        self.labelPacking.text = [NSString stringWithFormat:@" | 打包费:$%@",[item objectForKey:@"pack_fee"]];
         NSInteger star = [[item objectForKey: @"score"] integerValue];
         for (UIButton *btn in self.arrayStar) {
             if(btn.tag< star){
@@ -227,6 +249,13 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
         _rightView.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _rightView;
+}
+-(UIView *)deliView{
+    if(!_deliView){
+        _deliView = [[UIView alloc]init];
+        _deliView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _deliView;
 }
 
 -(UILabel *)labelStoreName{
@@ -320,6 +349,36 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
         _labelSale.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelSale;
+}
+
+-(UILabel *)labelDistance{
+    if(!_labelDistance){
+        _labelDistance = [[UILabel alloc]init];
+        _labelDistance.textColor = [UIColor grayColor];
+        _labelDistance.font = [UIFont systemFontOfSize:12.f];
+        _labelDistance.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _labelDistance;
+}
+
+-(UILabel *)labelDelivery{
+    if(!_labelDelivery){
+        _labelDelivery = [[UILabel alloc]init];
+        _labelDelivery.textColor = [UIColor grayColor];
+        _labelDelivery.font = [UIFont systemFontOfSize:12.f];
+        _labelDelivery.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _labelDelivery;
+}
+
+-(UILabel *)labelPacking{
+    if(!_labelPacking){
+        _labelPacking = [[UILabel alloc]init];
+        _labelPacking.textColor = [UIColor grayColor];
+        _labelPacking.font = [UIFont systemFontOfSize:12.f];
+        _labelPacking.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _labelPacking;
 }
 
 -(UIImageView *)imgRecommend{

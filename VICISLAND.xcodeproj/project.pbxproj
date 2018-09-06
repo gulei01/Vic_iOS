@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0AA60570D86BA43F436008E2 /* libPods-RenRen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B99693D1CC2686376872EB /* libPods-RenRen.a */; };
+		32F88B6E2135354C0007C6CD /* Reg.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F88B6D2135354C0007C6CD /* Reg.m */; };
 		6101FA321D90E9BA009E8393 /* HRAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6101FA311D90E9BA009E8393 /* HRAdView.m */; };
 		61070D231D9216DC00EFA36C /* RandomShowOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61070D221D9216DC00EFA36C /* RandomShowOrderCell.m */; };
 		61070D261D92353400EFA36C /* RandomShowOrderHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 61070D251D92353400EFA36C /* RandomShowOrderHeader.m */; };
@@ -542,6 +543,8 @@
 /* Begin PBXFileReference section */
 		21111BFEBC14EBA10CC2B551 /* Pods-RenRen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RenRen.release.xcconfig"; path = "Pods/Target Support Files/Pods-RenRen/Pods-RenRen.release.xcconfig"; sourceTree = "<group>"; };
 		3274052A212567CB00579642 /* vicisland.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vicisland.entitlements; sourceTree = "<group>"; };
+		32F88B6C2135354C0007C6CD /* Reg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reg.h; sourceTree = "<group>"; };
+		32F88B6D2135354C0007C6CD /* Reg.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reg.m; sourceTree = "<group>"; };
 		6101FA301D90E9BA009E8393 /* HRAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRAdView.h; sourceTree = "<group>"; };
 		6101FA311D90E9BA009E8393 /* HRAdView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HRAdView.m; sourceTree = "<group>"; };
 		61070D211D9216DC00EFA36C /* RandomShowOrderCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomShowOrderCell.h; sourceTree = "<group>"; };
@@ -2481,6 +2484,8 @@
 			children = (
 				F7A80B181BE70917007BF777 /* Login.h */,
 				F7A80B191BE70917007BF777 /* Login.m */,
+				32F88B6C2135354C0007C6CD /* Reg.h */,
+				32F88B6D2135354C0007C6CD /* Reg.m */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -3407,6 +3412,7 @@
 				619585FA1D5D9E7B00D471F3 /* MapLocationAddressCell.m in Sources */,
 				61848A421D8E473100E921B7 /* RandomOrderInfoFooter.m in Sources */,
 				F785147F1BE88CDB00AC8B73 /* AddressCell.m in Sources */,
+				32F88B6E2135354C0007C6CD /* Reg.m in Sources */,
 				F7C24A1E1CC0C548005F1E56 /* StoreCommentCell.m in Sources */,
 				F7A596281BE1E1A40013BBF2 /* LocationSection.m in Sources */,
 				F7A5962E1BE1E1A40013BBF2 /* SearchGoods.m in Sources */,
