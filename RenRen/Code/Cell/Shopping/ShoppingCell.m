@@ -16,6 +16,9 @@
 @property(nonatomic,strong) UILabel* labelTitle;
 @property(nonatomic,strong) UILabel* labelPrice;
 
+//garfunkel add
+@property(nonatomic,strong) UILabel* labelDesc;
+
 @property(nonatomic,strong) UIButton* btnAdd;
 @property(nonatomic,strong) UIButton* btnSub;
 @property(nonatomic,strong) UILabel* labelCount;
@@ -69,6 +72,11 @@
     self.labelPrice.font = [UIFont systemFontOfSize:14.f];
     [self.contentView addSubview:self.labelPrice];
     
+    self.labelDesc = [[UILabel alloc]init];
+    self.labelDesc.textColor = [UIColor grayColor];
+    self.labelDesc.font = [UIFont systemFontOfSize:12.f];
+    [self.contentView addSubview:self.labelDesc];
+    
     self.labelStock = [[UILabel alloc]init];
     self.labelStock.textColor = [UIColor redColor];
     self.labelStock.font = [UIFont systemFontOfSize:17.f];
@@ -98,6 +106,7 @@
     self.photoGoods.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelTitle.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelPrice.translatesAutoresizingMaskIntoConstraints = NO;
+    self.labelDesc.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelStock.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelCount.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnAdd.translatesAutoresizingMaskIntoConstraints = NO;
@@ -124,10 +133,15 @@
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPrice attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.photoGoods attribute:NSLayoutAttributeRight multiplier:1.0 constant:5.f]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTitle attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     
+    [self.labelDesc addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDesc attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDesc attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.photoGoods attribute:NSLayoutAttributeRight multiplier:1.0 constant:5.f]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDesc attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-5.f]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDesc attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
     [self.labelStock addConstraint:[NSLayoutConstraint constraintWithItem:self.labelStock attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:90.f]];
     [self.labelStock addConstraint:[NSLayoutConstraint constraintWithItem:self.labelStock attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelStock attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.photoGoods attribute:NSLayoutAttributeRight multiplier:1.0 constant:5.f]];
-    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelStock attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelStock attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDesc attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     
     [self.btnAdd addConstraint:[NSLayoutConstraint constraintWithItem:self.btnAdd attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:25.f]];
     [self.btnAdd addConstraint:[NSLayoutConstraint constraintWithItem:self.btnAdd attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:25.f]];
@@ -181,6 +195,9 @@
         self.labelTitle.text = entity.goodsName;
         self.labelPrice.text = [NSString stringWithFormat:@"￥%@",entity.price];
         self.labelCount.text = entity.quantity;
+        if(!([entity.spec_desc isEqualToString:@""] && [entity.proper_desc isEqualToString:@""]))
+            self.labelDesc.text = [NSString stringWithFormat:@"(%@ %@)",entity.spec_desc,entity.proper_desc];
+        
         self.btnSelected.selected = entity.shopCarSelected;
         
     }

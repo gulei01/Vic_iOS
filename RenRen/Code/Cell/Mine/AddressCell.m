@@ -146,7 +146,7 @@
     if(entity){
         _entity = entity;
         self.labelNamePhone.text = [NSString stringWithFormat:@"%@ %@",entity.userName,entity.phoneNum];
-        self.labelAddress.text = [NSString stringWithFormat:@"%@ %@ %@ %@",[MSingle shareAuhtorization].location.cityName,entity.areaName,entity.zoneName,entity.address];
+        self.labelAddress.text = [NSString stringWithFormat:@"%@ %@ %@ %@ %@,%@",[MSingle shareAuhtorization].location.cityName,entity.areaName,entity.zoneName,entity.address,entity.mapLocation,entity.mapNumber];
         self.btnDefault.selected =entity.isDefault;
         self.btnDefault.tag = [entity.rowID integerValue];
         self.btnEdit.tag = [entity.rowID integerValue];

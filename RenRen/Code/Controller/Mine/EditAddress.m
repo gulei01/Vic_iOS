@@ -20,6 +20,7 @@
 @property(nonatomic,strong) UILabel* labelMapAddress;
 @property(nonatomic,strong) UIImageView* arrow;
 @property(nonatomic,strong) UITextField* txtMapNumber;
+@property(nonatomic,strong) UITextField* txtZipcode;
 @property(nonatomic,strong) UITextField* txtUserName;
 @property(nonatomic,strong) UITextField* txtPhone;
 
@@ -69,7 +70,8 @@
     [super viewWillAppear:animated];
     if(self.entity && self.firstLoad){
         self.labelMapAddress.text = self.entity.mapAddress;
-        self.txtMapNumber.text = self.entity.mapNumber;
+        self.txtMapNumber.text = self.entity.mapLocation;
+        self.txtZipcode.text = self.entity.mapNumber;
         self.txtUserName.text = self.entity.userName;
         self.txtPhone.text = self.entity.phoneNum;
         self.mapName = self.entity.mapAddress;
@@ -99,6 +101,7 @@
     [self.btnArea addSubview:self.labelMapAddress];
     [self.btnArea addSubview:self.arrow];
     [self.headerView addSubview:self.txtMapNumber];
+    [self.headerView addSubview:self.txtZipcode];
     [self.headerView addSubview:self.txtUserName];
     [self.headerView addSubview:self.txtPhone];
     [self.headerView addSubview:self.btnConfirm];
@@ -111,12 +114,13 @@
     NSArray* formats = @[ @"H:|-0-[titleView(==titleWidth)]",
                           @"H:[titleView]-0-[btnArea]-0-|",
                           @"H:|-0-[txtMapNumber]-0-|",
+                          @"H:|-0-[txtZipcode]-0-|",
                           @"H:|-0-[txtUserName]-0-|",
                           @"H:|-0-[txtPhone]-0-|",
                           @"H:[btnConfirm(==confirmWidth)]",
                           @"V:|-0-[titleView(==titleHeight)]",
                           @"V:|-0-[btnArea(==titleView)]",
-                          @"V:[btnArea(==titleView)]-1-[txtMapNumber(==titleView)]-1-[txtUserName(==titleView)]-1-[txtPhone(==titleView)]-20-[btnConfirm(==confirmHeight)]",
+                          @"V:[btnArea(==titleView)]-1-[txtMapNumber(==titleView)]-1-[txtZipcode(==titleView)]-1-[txtUserName(==titleView)]-1-[txtPhone(==titleView)]-20-[btnConfirm(==confirmHeight)]",
                           @"H:|-0-[iconLocation(==20)]-0-[labelMapAddress]-0-[arrow(==8)]-10-|",
                           @"V:|-10-[iconLocation]-10-|",
                           @"V:|-0-[labelMapAddress]-0-|",
@@ -124,7 +128,7 @@
                           ];
     
     NSDictionary* metorics = @{ @"titleWidth": @(80.f), @"titleHeight":@(40.f), @"confirmWidth":@(SCREEN_WIDTH/2), @"confirmHeight":@(40.f)};
-    NSDictionary* views = @{ @"titleView":self.labelTitle, @"btnArea":self.btnArea, @"txtMapNumber":self.txtMapNumber, @"txtUserName":self.txtUserName, @"txtPhone":self.txtPhone, @"btnConfirm":self.btnConfirm, @"iconLocation":self.iconLocation, @"labelMapAddress":self.labelMapAddress, @"arrow":self.arrow};
+    NSDictionary* views = @{ @"titleView":self.labelTitle, @"btnArea":self.btnArea, @"txtMapNumber":self.txtMapNumber,@"txtZipcode":self.txtZipcode, @"txtUserName":self.txtUserName, @"txtPhone":self.txtPhone, @"btnConfirm":self.btnConfirm, @"iconLocation":self.iconLocation, @"labelMapAddress":self.labelMapAddress, @"arrow":self.arrow};
     
     for (NSString* format in formats) {
         NSArray* constraints = [NSLayoutConstraint constraintsWithVisualFormat:format options:0 metrics:metorics views:views];
@@ -138,6 +142,7 @@
 
 #pragma mark =====================================================  SEL
 -(IBAction)btnConfirmTouch:(id)sender{
+    [self showHUD];
     if([self checkForm]){
         [self editAddress];
     }
@@ -183,7 +188,9 @@
     [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
             if([self checkForm]){
-                NSMutableDictionary* arg = [[NSMutableDictionary alloc]initWithDictionary:@{@"ince":@"add_user_addr_ince_map",@"uid":self.Identity.userInfo.userID,@"uname":self.txtUserName.text,@"phone":self.txtPhone.text, @"map_addr":self.mapName, @"map_number":self.txtMapNumber.text, @"lat": self.mapLat, @"lng": self.mapLng, @"map_location":self.mapLocation}];
+                //NSMutableDictionary* arg = [[NSMutableDictionary alloc]initWithDictionary:@{@"ince":@"add_user_addr_ince_map",@"uid":self.Identity.userInfo.userID,@"uname":self.txtUserName.text,@"phone":self.txtPhone.text, @"map_addr":self.mapName, @"map_number":self.txtZipcode.text, @"lat": self.mapLat, @"lng": self.mapLng, @"map_location":self.mapLocation}];
+                NSString *de = [NSString stringWithFormat:@"%@",self.entity.isDefault ? @"1" : @"0"];
+                NSMutableDictionary* arg = [[NSMutableDictionary alloc]initWithDictionary:@{@"a":@"addUserAddress",@"uid":self.Identity.userInfo.userID,@"uname":self.txtUserName.text,@"phone":self.txtPhone.text, @"map_addr":self.mapName, @"map_number":self.txtZipcode.text, @"lat": self.mapLat, @"lng": self.mapLng, @"map_location":self.txtMapNumber.text, @"default":de}];
                 if (self.entity) {
                     [arg setObject:self.entity.rowID forKey:@"itemid"];
                 }else{
@@ -192,6 +199,7 @@
                 NetRepositories* repositories = [[NetRepositories alloc]init];
                 [repositories updateAddres:arg complete:^(NSInteger react, id obj, NSString *message) {
                     if(react == 1){
+                        [self hidHUD];
                         [self alertHUD: @"操作成功" complete:^{
                             [self.navigationController popViewControllerAnimated:YES];
                         }];
@@ -208,15 +216,23 @@
 
 -(BOOL)checkForm{
     if([WMHelper isEmptyOrNULLOrnil:self.txtMapNumber.text]){
+        [self hidHUD];
         [self alertHUD:@"收货地址不能为空"];
         return NO;
+    }else if([WMHelper isEmptyOrNULLOrnil:self.txtZipcode.text]){
+        [self hidHUD];
+        [self alertHUD:@"邮编不能为空"];
+        return NO;
     }else if ([WMHelper isEmptyOrNULLOrnil:self.txtUserName.text]){
+        [self hidHUD];
         [self alertHUD:@"收货人不能为空"];
         return NO;
     }else if (![WMHelper isValidateMobile:self.txtPhone.text]){
+        [self hidHUD];
         [self alertHUD:@"手机号输入有误!"];
         return NO;
     }else if ([WMHelper isEmptyOrNULLOrnil:self.labelMapAddress.text]){
+        [self hidHUD];
         [self alertHUD:@"收货地址不能为空"];
         return NO;
     }
@@ -291,6 +307,21 @@
         _txtMapNumber.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _txtMapNumber;
+}
+
+-(UITextField *)txtZipcode{
+    if(!_txtZipcode){
+        _txtZipcode = [[UITextField alloc]init];
+        _txtZipcode.backgroundColor = theme_default_color;
+        _txtZipcode.borderStyle = UITextBorderStyleNone;
+        _txtZipcode.leftView = [self leftView:@"    邮编"];
+        _txtZipcode.leftViewMode = UITextFieldViewModeAlways;
+        _txtZipcode.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        _txtZipcode.placeholder = @"邮政编码";
+        _txtZipcode.font = [UIFont systemFontOfSize:14.f];
+        _txtZipcode.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _txtZipcode;
 }
 
 -(UITextField *)txtUserName{

@@ -12,7 +12,7 @@
 #import "AddressCell.h"
 #import "AppDelegate.h"
 
-@interface SelectAddres ()<DZNEmptyDataSetSource,DZNEmptyDataSetDelegate>
+@interface SelectAddres ()<DZNEmptyDataSetSource,DZNEmptyDataSetDelegate,AddressCellDelegate>
 
 @property(nonatomic,strong) UIView* headerView;
 @property(nonatomic,strong) UIButton* btnAdd;
@@ -118,7 +118,8 @@
 #pragma mark =====================================================  数据源
 -(void)queryData{
     
-    NSDictionary* arg = @{@"ince":@"get_user_addr_ince",@"uid":self.Identity.userInfo.userID,@"is_default":@"0"};
+    //NSDictionary* arg = @{@"ince":@"get_user_addr_ince",@"uid":self.Identity.userInfo.userID,@"is_default":@"0"};
+    NSDictionary* arg = @{@"a":@"getUserAddress",@"uid":self.Identity.userInfo.userID};
    
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories queryAddress:arg complete:^(NSInteger react, NSArray *list, NSString *message) {
@@ -173,14 +174,44 @@
     
     cell.entity = self.arrayData[indexPath.row];
     [cell disabledDelegate];
+    //cell.delegate = self; garfunkel 之前需要使用代理
     
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     MAddress* item =self.arrayData[indexPath.row];
     [self setDefaultAddress:item];
-    [[NSNotificationCenter defaultCenter]postNotificationName:NotificationSelectedAddres object:item];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    //garfunkel modify
+//    [[NSNotificationCenter defaultCenter]postNotificationName:NotificationSelectedAddres object:item];
+//    [self dismissViewControllerAnimated:YES completion:nil];
+}
+//garfunkel add
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+/**
+ *  左滑cell时出现什么按钮
+ */
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewRowAction *action0 = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"编辑" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        tableView.editing = YES;
+        [self.tableView setEditing:YES animated:YES];
+        
+        [self editAddress:self.arrayData[indexPath.row]];
+        // 收回左滑出现的按钮(退出编辑模式)
+        //tableView.editing = NO;
+    }];
+    
+    UITableViewRowAction *action1 = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"删除" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        [self delAddress:self.arrayData[indexPath.row]];
+//        [self.arrayData removeObjectAtIndex:indexPath.row];
+//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }];
+    
+    return @[action1, action0];
 }
 
 #pragma mark =====================================================  AddressCell 协议shixian
@@ -238,7 +269,8 @@
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
             [self showHUD];
            
-            NSDictionary* arg = @{@"ince":@"delete_user_addr",@"uid":self.Identity.userInfo.userID,@"itemid":self.emptyItem.rowID};
+//            NSDictionary* arg = @{@"ince":@"delete_user_addr",@"uid":self.Identity.userInfo.userID,@"itemid":self.emptyItem.rowID};
+            NSDictionary* arg = @{@"a":@"delUserAddress",@"uid":self.Identity.userInfo.userID,@"itemid":self.emptyItem.rowID};
                         NetRepositories* repositories = [[NetRepositories alloc]init];
             [repositories updateAddres:arg complete:^(NSInteger react, id obj, NSString *message) {
                 if(react == 1){
@@ -260,12 +292,15 @@
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
            // [self showHUD];
            
-            NSDictionary* arg = @{@"ince":@"set_default",@"uid":self.Identity.userInfo.userID,@"itemid":item.rowID};
+//            NSDictionary* arg = @{@"ince":@"set_default",@"uid":self.Identity.userInfo.userID,@"itemid":item.rowID};
+            NSDictionary* arg = @{@"a":@"setDefaultAdr",@"uid":self.Identity.userInfo.userID,@"itemid":item.rowID};
                       
             NetRepositories* repositories = [[NetRepositories alloc]init];
             [repositories updateAddres:arg complete:^(NSInteger react, id obj, NSString *message) {
                 if(react == 1){
-                    
+                    //数据传输完成后 关闭当前页面
+                    [[NSNotificationCenter defaultCenter]postNotificationName:NotificationSelectedAddres object:item];
+                    [self dismissViewControllerAnimated:YES completion:nil];
                    // [self alertHUD: @"操作成功"];
                 }else if (react == 400){
                     [self alertHUD:message];

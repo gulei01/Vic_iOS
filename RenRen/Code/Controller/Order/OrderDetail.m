@@ -148,12 +148,12 @@
     
     [self.labelPackge addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackge attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelPackge addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackge attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/4]];
-    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackge attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackge attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:10.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackge attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
     
     [self.labelPackgeFee addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackgeFee attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelPackgeFee addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackgeFee attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/4]];
-    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackgeFee attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackgeFee attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:10.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackgeFee attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
     [self.labelShip addConstraint:[NSLayoutConstraint constraintWithItem:self.labelShip attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
@@ -206,7 +206,8 @@
 #pragma mark =====================================================  DataSource
 -(void)queryData{
    
-    NSDictionary* arg = @{@"ince":@"get_order_detail",@"order_id":self.orderNO};
+    //NSDictionary* arg = @{@"ince":@"get_order_detail",@"order_id":self.orderNO};
+    NSDictionary* arg = @{@"a":@"getOrderDetail",@"order_id":self.orderNO};
       
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories netConfirm:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {

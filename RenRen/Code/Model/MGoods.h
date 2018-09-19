@@ -183,5 +183,11 @@
 //口味分组
 @property(nonatomic,copy) NSString* group_id;
 
+//是否有规划或属性选择 garfunkel add
+@property(nonatomic,assign) BOOL has_format;
 
+@property(nonatomic,copy) NSString* spec;
+@property(nonatomic,copy) NSString* proper;
+@property(nonatomic,copy) NSString* spec_desc;
+@property(nonatomic,copy) NSString* proper_desc;
 @end

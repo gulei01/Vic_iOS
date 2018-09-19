@@ -12,4 +12,5 @@
 @optional
 -(void)addToShopCar:(MGoods*)item num:(NSString *) num;
 -(void)didSelectGoodPhoto:(MGoods*)item;
+-(void)addToCartOfSpec:(MGoods *)item num:(NSString *)num spec:(NSString *)spec proper:(NSString *)properc;
 @end

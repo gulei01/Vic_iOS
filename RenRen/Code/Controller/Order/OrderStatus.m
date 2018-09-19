@@ -67,7 +67,8 @@
 #pragma mark =====================================================  data source
 -(void)queryData{
     
-    NSDictionary* arg = @{@"ince":@"get_order_status",@"order_id":self.orderID};
+    //NSDictionary* arg = @{@"ince":@"get_order_status",@"order_id":self.orderID};
+    NSDictionary* arg = @{@"a":@"getOrderStatus",@"order_id":self.orderID};
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories queryOrderStatus:arg complete:^(NSInteger react, NSArray *list,NSDictionary* dict, NSString *message) {
         if(react == 1){

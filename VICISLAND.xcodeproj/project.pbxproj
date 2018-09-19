@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0AA60570D86BA43F436008E2 /* libPods-RenRen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B99693D1CC2686376872EB /* libPods-RenRen.a */; };
+		32874D0B214E55BE0009F127 /* GoodsSpecController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32874D0A214E55BE0009F127 /* GoodsSpecController.m */; };
+		32874D0D214E90160009F127 /* icon-close-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 32874D0C214E90160009F127 /* icon-close-gray.png */; };
 		32F88B6E2135354C0007C6CD /* Reg.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F88B6D2135354C0007C6CD /* Reg.m */; };
 		6101FA321D90E9BA009E8393 /* HRAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6101FA311D90E9BA009E8393 /* HRAdView.m */; };
 		61070D231D9216DC00EFA36C /* RandomShowOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61070D221D9216DC00EFA36C /* RandomShowOrderCell.m */; };
@@ -543,6 +545,9 @@
 /* Begin PBXFileReference section */
 		21111BFEBC14EBA10CC2B551 /* Pods-RenRen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RenRen.release.xcconfig"; path = "Pods/Target Support Files/Pods-RenRen/Pods-RenRen.release.xcconfig"; sourceTree = "<group>"; };
 		3274052A212567CB00579642 /* vicisland.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vicisland.entitlements; sourceTree = "<group>"; };
+		32874D09214E55BE0009F127 /* GoodsSpecController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsSpecController.h; sourceTree = "<group>"; };
+		32874D0A214E55BE0009F127 /* GoodsSpecController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsSpecController.m; sourceTree = "<group>"; };
+		32874D0C214E90160009F127 /* icon-close-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-close-gray.png"; sourceTree = "<group>"; };
 		32F88B6C2135354C0007C6CD /* Reg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reg.h; sourceTree = "<group>"; };
 		32F88B6D2135354C0007C6CD /* Reg.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reg.m; sourceTree = "<group>"; };
 		6101FA301D90E9BA009E8393 /* HRAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRAdView.h; sourceTree = "<group>"; };
@@ -1782,6 +1787,7 @@
 				81D5BC521ED800D400FDDA0B /* icon-buynow.png */,
 				81D5BC531ED800D400FDDA0B /* icon-car-gay@2x.png */,
 				81D5BC541ED800D400FDDA0B /* icon-car.png */,
+				32874D0C214E90160009F127 /* icon-close-gray.png */,
 				81D5BC551ED800D400FDDA0B /* icon-close-white.png */,
 				81D5BC561ED800D400FDDA0B /* icon-comment-default.png */,
 				81D5BC571ED800D400FDDA0B /* icon-comment-enter.png */,
@@ -2579,6 +2585,8 @@
 				F7C24A1A1CC0B469005F1E56 /* StoreInfoController.m */,
 				F7A595C41BE1E1A40013BBF2 /* StoreList.h */,
 				F7A595C51BE1E1A40013BBF2 /* StoreList.m */,
+				32874D09214E55BE0009F127 /* GoodsSpecController.h */,
+				32874D0A214E55BE0009F127 /* GoodsSpecController.m */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -3013,6 +3021,7 @@
 				81D5BDB31ED800D400FDDA0B /* Icon@2x.png in Resources */,
 				81D5BDD01ED800D500FDDA0B /* tab-order-default@3x.png in Resources */,
 				81D5BDC41ED800D500FDDA0B /* search_back@2x.png in Resources */,
+				32874D0D214E90160009F127 /* icon-close-gray.png in Resources */,
 				81D5BDA21ED800D400FDDA0B /* icon-store@2x.png in Resources */,
 				81D5BD621ED800D400FDDA0B /* icon-mine-bg.png in Resources */,
 				81992A801EEAA42E000E702E /* 01-568h@2x.png in Resources */,
@@ -3463,6 +3472,7 @@
 				F7A536B31BE9AF2700654077 /* ShoppingCell.m in Sources */,
 				81C25BFA1EECF5D3008F5007 /* MyGroupModel.m in Sources */,
 				61CFDFC91D8931CB00CDA7BA /* PayWayCell.m in Sources */,
+				32874D0B214E55BE0009F127 /* GoodsSpecController.m in Sources */,
 				F794358E1BE3370700CE37E2 /* GoodsHeader.m in Sources */,
 				F7A595741BE1E1330013BBF2 /* main.m in Sources */,
 				F7AE86AB1D13C6F3004819BD /* FightGroupItemHeader.m in Sources */,

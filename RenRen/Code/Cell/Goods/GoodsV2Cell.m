@@ -17,6 +17,8 @@
 @property(nonatomic,strong) UIButton* btnAdd;
 @property(nonatomic,strong) UILabel* addNumLabel;
 @property(nonatomic,strong) UIButton* btnSub;
+@property(nonatomic,strong) UIButton* btnSelect;
+@property(nonatomic,strong) UILabel* specSelectNum;
 
 @end
 
@@ -48,6 +50,8 @@
     [self addSubview:self.btnAdd];
     [self addSubview:self.addNumLabel];
     [self addSubview:self.btnSub];
+    [self addSubview:self.btnSelect];
+    [self addSubview:self.specSelectNum];
    
     
     
@@ -57,11 +61,12 @@
                          @"H:[imgDefault]-padding-[labelTitle]-padding-|",@"H:[imgDefault]-padding-[labelMiaoSha(==30)]",@"H:[imgDefault]-padding-[labelPrice]-defEdge-|",@"V:|-padding-[labelTitle(==30)]-(-2)-[labelMiaoSha(==16)]-2-[labelPrice(==18)]-padding-|",
                          @"H:|-90-[imgRecommend(==30)]",@"V:|-defEdge-[imgRecommend(==30)]",
                           @"H:[btnSub(==iconSize)][addNumLabel(==30)][btnAdd(==iconSize)]-padding-|", @"V:[btnAdd(==iconSize)]-padding-|",
-                         @"V:[btnSub(==iconSize)]-padding-|",@"V:[addNumLabel(==iconSize)]-padding-|"
+                         @"V:[btnSub(==iconSize)]-padding-|",@"V:[addNumLabel(==iconSize)]-padding-|",
+                         @"H:[btnSelect(==selectSize)]-padding-|",@"V:[btnSelect(==iconSize)]-padding-|",
+                         @"H:[specSelectNum(==16)]-2-|",@"V:[specSelectNum(==16)]-25-|"
                          ];
-    NSDictionary* metrics = @{ @"defEdge":@(0),@"spaceEdge":@(SCREEN_WIDTH-90-80), @"leftEdge":@(10),  @"padding":@(7),@"topEdge":@(10), @"imgSize":@(imgSize),
-                               @"iconSize":@(25)};
-    NSDictionary* views = @{ @"imgDefault":self.imgDefault, @"imgRecommend":self.imgRecommend, @"btnAdd":self.btnAdd,@"btnSub":self.btnSub,@"addNumLabel":self.addNumLabel, @"labelTitle":self.labelTitle, @"labelMiaoSha":self.labelMiaoSha, @"labelPrice":self.labelPrice};
+    NSDictionary* metrics = @{ @"defEdge":@(0),@"spaceEdge":@(SCREEN_WIDTH-90-80), @"leftEdge":@(10),  @"padding":@(7),@"topEdge":@(10), @"imgSize":@(imgSize),@"iconSize":@(25),@"selectSize":@(70)};
+    NSDictionary* views = @{ @"imgDefault":self.imgDefault, @"imgRecommend":self.imgRecommend, @"btnAdd":self.btnAdd,@"btnSub":self.btnSub,@"addNumLabel":self.addNumLabel, @"labelTitle":self.labelTitle, @"labelMiaoSha":self.labelMiaoSha, @"labelPrice":self.labelPrice, @"btnSelect":self.btnSelect,@"specSelectNum":self.specSelectNum};
     
     [formats enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         //NSLog( @"%@ %@",[self class],obj);
@@ -93,6 +98,11 @@
     }
 }
 
+-(void)selectTouch:(UIButton *)button{
+//    [[NSNotificationCenter defaultCenter]postNotificationName:NotificationOpenSpec object:(self.entity)];
+    [[NSNotificationCenter defaultCenter]postNotificationName:NotificationOpenSpec object:@{@"item":self.entity,@"btn":button}];
+}
+
 //-(IBAction)tapPhotoTouch:(id)sender{
 //    if(self.delegate && [self.delegate respondsToSelector:@selector(didSelectGoodPhoto:)]){
 //        [self.delegate didSelectGoodPhoto:self.entity];
@@ -110,13 +120,16 @@
         self.imgRecommend.hidden = price>=maketPrice;
         if([entity.storeStatus integerValue]==1){
             if([entity.stock integerValue]>0){
+                self.btnSelect.userInteractionEnabled = YES;
                 self.btnAdd.userInteractionEnabled = YES;
                 [self.btnAdd setImage:[UIImage imageNamed:@"icon-add"] forState:UIControlStateNormal];
             }else {
+                self.btnSelect.userInteractionEnabled = NO;
                 self.btnAdd.userInteractionEnabled = NO;
                 [self.btnAdd setImage:[UIImage imageNamed:@"icon-nothing"] forState:UIControlStateNormal];
             }
         }else{
+            self.btnSelect.userInteractionEnabled = NO;
             self.btnAdd.userInteractionEnabled = NO;
             [self.btnAdd setImage:[UIImage imageNamed:@"icon-off"] forState:UIControlStateNormal];
         }
@@ -125,14 +138,29 @@
         }else{
             self.labelMiaoSha.hidden = YES;
         }
-        NSLog(@"garfunkel_log:showQuantity:%@",entity.quantity);
-        if ([entity.quantity isEqualToString:@"0"]) {
+        //NSLog(@"garfunkel_log:showQuantity:%@",entity.quantity);
+        if(entity.has_format){
+            self.btnAdd.hidden = YES;
             self.addNumLabel.hidden = YES;
             self.btnSub.hidden = YES;
+            self.btnSelect.hidden = NO;
+            if (![entity.quantity isEqualToString:@"0"]) {
+                self.specSelectNum.hidden = NO;
+                self.specSelectNum.text = entity.quantity;
+            }else{
+                self.specSelectNum.hidden = YES;
+            }
         }else{
-            self.addNumLabel.hidden = NO;
-            self.btnSub.hidden = NO;
-            self.addNumLabel.text = entity.quantity;
+            self.btnSelect.hidden = YES;
+            self.specSelectNum.hidden = YES;
+            if ([entity.quantity isEqualToString:@"0"]) {
+                self.addNumLabel.hidden = YES;
+                self.btnSub.hidden = YES;
+            }else{
+                self.addNumLabel.hidden = NO;
+                self.btnSub.hidden = NO;
+                self.addNumLabel.text = entity.quantity;
+            }
         }
     }
 }
@@ -226,6 +254,36 @@
         _btnSub.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _btnSub;
+}
+
+-(UIButton *)btnSelect{
+    if(!_btnSelect){
+        _btnSelect = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_btnSelect setTitle:@"可选规格" forState:UIControlStateNormal];
+        _btnSelect.titleLabel.font = [UIFont systemFontOfSize:14.0];
+        [_btnSelect setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        _btnSelect.layer.cornerRadius = 5.0;
+        _btnSelect.layer.borderWidth = 1.0f;
+        _btnSelect.layer.borderColor = [UIColor grayColor].CGColor;
+        [_btnSelect addTarget:self action:@selector(selectTouch:) forControlEvents:UIControlEventTouchUpInside];
+        _btnSelect.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _btnSelect;
+}
+
+-(UILabel *)specSelectNum{
+    if(!_specSelectNum){
+        _specSelectNum = [[UILabel alloc]init];
+        _specSelectNum.textColor = [UIColor whiteColor];
+        _specSelectNum.layer.masksToBounds = YES;
+        _specSelectNum.layer.cornerRadius = 8;
+        _specSelectNum.backgroundColor = [UIColor redColor];
+        _specSelectNum.textAlignment = NSTextAlignmentCenter;
+        _specSelectNum.font = [UIFont systemFontOfSize:12.f];
+        
+        _specSelectNum.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _specSelectNum;
 }
 
 @end

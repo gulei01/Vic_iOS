@@ -394,6 +394,8 @@
                     
                 }
                 self.tableView.tableFooterView = self.footerView;
+                //garfunkel modify 加载购物车后加载地址
+                [self queryDefaultAddress];
             }else if(react == 400){
                 self.tableView.tableFooterView = [[UIView alloc]init];
                 [self alertHUD:message];
@@ -406,16 +408,17 @@
     } @catch (NSException *exception) {
         NSLog( @"%@",exception.description);
     } @finally {
-        [self.tableView reloadData];
-        [self.tableView.mj_header endRefreshing];
+        //[self.tableView reloadData];
+        //[self.tableView.mj_header endRefreshing];
     }
     
 }
 -(void)queryDefaultAddress{
     NSDictionary* arg;
-    if (arg == nil) {
-        arg = @{@"ince":@"get_user_addr_ince",@"is_default":@"1",@"uid":self.Identity.userInfo.userID};
-    }
+    //if (arg == nil) {
+        //arg = @{@"ince":@"get_user_addr_ince",@"is_default":@"1",@"uid":self.Identity.userInfo.userID};
+        arg = @{@"a":@"getUserDefaultAddress",@"uid":self.Identity.userInfo.userID};
+    //}
     
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories searchAddres:arg complete:^(NSInteger react, id obj, NSString *message) {
@@ -448,7 +451,8 @@
 
 -(void)addGoodsWithNum:(NSInteger)num{
     //NSDictionary* arg = @{@"ince":@"addcart",@"fid":self.emptyGoods.rowID,@"uid":self.Identity.userInfo.userID,@"num":[WMHelper integerConvertToString:num]};
-    NSDictionary* arg = @{@"a":@"addCart",@"fid":self.emptyGoods.rowID,@"uid":self.Identity.userInfo.userID,@"num":[WMHelper integerConvertToString:num]};
+    NSDictionary* arg = @{@"a":@"addCart",@"fid":self.emptyGoods.rowID,@"uid":self.Identity.userInfo.userID,@"num":[WMHelper integerConvertToString:num],@"spec":self.emptyGoods.spec,@"proper":self.emptyGoods.proper};
+    NSLog(@"garfunkel_log:%@ %@",self.emptyGoods.spec,self.emptyGoods.proper);
     [self showHUD];
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories updateShopCar:arg complete:^(NSInteger react, id obj, NSString *message) {
@@ -469,7 +473,7 @@
     __weak typeof(self) weakSelf = (id)self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf queryData];
-        [weakSelf queryDefaultAddress];
+        //[weakSelf queryDefaultAddress];
     }];
     
 }
@@ -546,16 +550,18 @@
         cell = [[ShoppingCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ShoppingCell"];
     cell.delegate = self;
     MStore* item = self.arrayData[indexPath.section];
-    MGoods* entity = item.arrayGoods[indexPath.row];
+    //MGoods* entity = item.arrayGoods[indexPath.row];
+    
+    cell.entity = item.arrayGoods[indexPath.row];
     if([item.status integerValue] == 0){
-        entity.shopCarSelected = NO;
+        cell.entity.shopCarSelected = NO;
     }
-    cell.entity = entity;
+    
     cell.storeItem = item;
     cell.labelStock.text = @"";
     [self.arrayStock enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSDictionary* empty = (NSDictionary*)obj;
-        if([entity.rowID isEqualToString:[empty objectForKey:@"fid"]]){
+        if([cell.entity.rowID isEqualToString:[empty objectForKey:@"fid"]]){
             cell.labelStock.text = [empty objectForKey:@"message"];
         }
     }];
@@ -746,50 +752,64 @@
             for (MStore* item in self.arrayData) {
                 for (MGoods* subItem in item.arrayGoods) {
                     if(subItem.shopCarSelected)
-                        [emptyCarList addObject:@{@"fid":subItem.rowID,@"stock":subItem.quantity}];
+                        [emptyCarList addObject:@{@"fid":subItem.rowID,@"stock":subItem.quantity,@"spec":subItem.spec,@"proper":subItem.proper}];
                 }
             }
             if(emptyCarList.count>0 && self.defaultAddress){
                 if ([NSJSONSerialization isValidJSONObject:emptyCarList])
                 {
+//                    NSError *error;
+//                    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:emptyCarList options:NSJSONWritingPrettyPrinted error:&error];
+//                    NSString *json =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//
+//                    [self showHUD];
+//
+//                    NSDictionary* arg = @{@"ince":@"submit_check_out",@"addr_item_id":self.defaultAddress.rowID,@"uid":self.Identity.userInfo.userID,@"cart_list":json};
+//
+//
+//                    NetRepositories* repositories = [[NetRepositories alloc]init];
+//                    [repositories submitShopCarCheck:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
+//                        if(react == 1){
+//                            [self hidHUD];
+//                            GenerateOrder* controller = [[GenerateOrder alloc]init];
+//                            controller.hidesBottomBarWhenPushed = YES;
+//                            controller.carJson = json;
+//
+//                            UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
+//                            [nav.navigationBar setBackgroundColor:theme_navigation_color];
+//                            [nav.navigationBar setBarTintColor:theme_navigation_color];
+//                            [nav.navigationBar setTintColor:theme_default_color];
+//                            [self presentViewController:nav animated:YES completion:nil];
+//
+//                        }else if(react == 400){
+//                            [self hidHUD:message];
+//                        }else{
+//                            NSArray* empty =[response objectForKey:@"foodinfo"];
+//                            [empty enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                                [self.arrayStock addObject:obj];
+//                            }];
+//                            empty = [response objectForKey:@"shopinfo"];
+//                            [empty enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//                                [self.arrayStoreRest addObject:obj];
+//                            }];
+//                            [self.tableView reloadData];
+//                            [self hidHUD];
+//                        }
+//                    }];
+                    
                     NSError *error;
                     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:emptyCarList options:NSJSONWritingPrettyPrinted error:&error];
                     NSString *json =[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
                     
-                    [self showHUD];
+                    GenerateOrder* controller = [[GenerateOrder alloc]init];
+                    controller.hidesBottomBarWhenPushed = YES;
+                    controller.carJson = json;
                     
-                    NSDictionary* arg = @{@"ince":@"submit_check_out",@"addr_item_id":self.defaultAddress.rowID,@"uid":self.Identity.userInfo.userID,@"cart_list":json};
-                    
-                    
-                    NetRepositories* repositories = [[NetRepositories alloc]init];
-                    [repositories submitShopCarCheck:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
-                        if(react == 1){
-                            [self hidHUD];
-                            GenerateOrder* controller = [[GenerateOrder alloc]init];
-                            controller.hidesBottomBarWhenPushed = YES;
-                            controller.carJson = json;
-                            
-                            UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
-                            [nav.navigationBar setBackgroundColor:theme_navigation_color];
-                            [nav.navigationBar setBarTintColor:theme_navigation_color];
-                            [nav.navigationBar setTintColor:theme_default_color];
-                            [self presentViewController:nav animated:YES completion:nil];
-                            
-                        }else if(react == 400){
-                            [self hidHUD:message];
-                        }else{
-                            NSArray* empty =[response objectForKey:@"foodinfo"];
-                            [empty enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                                [self.arrayStock addObject:obj];
-                            }];
-                            empty = [response objectForKey:@"shopinfo"];
-                            [empty enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                                [self.arrayStoreRest addObject:obj];
-                            }];
-                            [self.tableView reloadData];
-                            [self hidHUD];
-                        }
-                    }];
+                    UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
+                    [nav.navigationBar setBackgroundColor:theme_navigation_color];
+                    [nav.navigationBar setBarTintColor:theme_navigation_color];
+                    [nav.navigationBar setTintColor:theme_default_color];
+                    [self presentViewController:nav animated:YES completion:nil];
                 }else{
                     NSLog(@"json 格式错误");
                 }

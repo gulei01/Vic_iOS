@@ -448,13 +448,15 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
         model.is_cart = false;
         for(int j = 0; j < [model.saveKindArray count];j++){
             MGoods *entity = model.saveKindArray[j];
+            //刷新的时候先清一下零
+            entity.quantity = @"0";
             BOOL isC = false;
             for(int k=0; k<[car.arrayStore count];k++){
                 MStore *store = car.arrayStore[k];
                 for (int l=0; l < [store.arrayGoods count]; l++) {
                     MGoods *goods = store.arrayGoods[l];
                     if([goods.rowID isEqualToString:entity.rowID]){
-                        entity.quantity = goods.quantity;
+                        entity.quantity = [NSString stringWithFormat:@"%ld",[entity.quantity integerValue] + [goods.quantity integerValue]];
                         //NSLog(@"garfunkel_log:cartGoods:%@",goods.rowID);
                         isC = true;
                         //记录改分类中是否有在购物车中的商品
@@ -473,7 +475,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
     [self.collectionView reloadData];
 }
 #pragma mark =====================================================  GoodsCell 协议实现
--(void)addToShopCar:(MGoods *)item num:(NSString *)num{NSLog(@"garfunkel_log:addToshopcar");
+-(void)addToShopCar:(MGoods *)item num:(NSString *)num{
     if(self.Identity.userInfo.isLogin){
         //NSDictionary* arg = @{@"ince":@"addcart",@"fid":item.rowID,@"uid":self.Identity.userInfo.userID,@"num":@"1"};
         NSDictionary* arg = @{@"a":@"addCart",@"fid":item.rowID,@"uid":self.Identity.userInfo.userID,@"num":num};
@@ -498,7 +500,22 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
     }
 }
 
-
+-(void)addToCartOfSpec:(MGoods *)item num:(NSString *)num spec:(NSString *)spec proper:(NSString *)proper{
+    //NSLog(@"garfunkel_log:addToCartOfSpec %@ %@ %@ %@",item.goodsName,num,spec,proper);
+    NSDictionary* arg = @{@"a":@"addCartAndSpec",@"fid":item.rowID,@"uid":self.Identity.userInfo.userID,@"num":num,@"spec":spec,@"proper":proper};
+    NetRepositories* repositories = [[NetRepositories alloc]init];
+    [repositories updateShopCar:arg complete:^(NSInteger react, id obj, NSString *message) {
+        if(react == 1){
+            [self alertHUD:@"操作成功!"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshShopCar object:nil];
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationUpdateSpecList object:nil];
+        }else if(react == 400){
+            [self alertHUD:message];
+        }else{
+            [self alertHUD:message];
+        }
+    }];
+}
 #pragma mark ==========================================================自己更改
 
 //自己更改添加购物车动画

@@ -13,6 +13,7 @@
 #import "StoreInfoController.h"
 #import "TQStarRatingView.h"
 #import "WXApi.h"
+#import "GoodsSpecController.h"
 
 @interface Store ()<UMSocialUIDelegate>
 @property(nonatomic,strong) UIView* topView;
@@ -39,6 +40,8 @@
 @property(nonatomic,strong) UIView* commentView;
 @property(nonatomic,strong) UIView* storeInfoView;
 @property(nonatomic,strong) StoreInfoController* storeInfoCotroller;
+@property(nonatomic,strong) UIView* specView;
+@property(nonatomic,strong) GoodsSpecController* goodsSpecController;
 
 @property(nonatomic,strong) UIView* noticeView;
 @property(nonatomic,strong) UILabel* labelName;
@@ -79,6 +82,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openSpecView:) name:NotificationOpenSpec object:(nil)];
     // Do any additional setup after loading the view.
     UIImage *image = [UIImage imageNamed:@"lALO0RuFbcy-zQKA_640_190.png_620x10000q90g.jpg"];
     UIImageView *bgView = [[UIImageView alloc]initWithImage:image];
@@ -327,7 +332,12 @@
     }
 }
 
-
+-(void)openSpecView:(NSNotification *)obj{
+    UIView* tView = [self specView:obj.object[@"item"] btn:obj.object[@"btn"]];
+    
+    [self.navigationController.view addSubview:tView];
+//    NSLog(@"garfunkel_log:%@",[[obj object] storeName]);
+}
 #pragma mark =====================================================  <UMSocialUIDelegate>
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
@@ -635,7 +645,17 @@
     return _storeInfoView;
 }
 
-
+-(UIView *)specView:(MGoods *)entity btn:(UIButton *)btn{
+    GoodsSpecController* controller = [[GoodsSpecController alloc]initWithItem:entity];
+    _goodsSpecController = controller;
+    //[self addChildViewController:controller];
+    _specView = controller.view;
+    controller.mainBtn = btn;
+    
+    _goodsSpecController.delegate = (id)self.goodsController;
+    
+    return _specView;
+}
 -(UIView *)noticeView{
     if(!_noticeView){
         _noticeView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];

@@ -196,7 +196,8 @@
 #pragma mark =====================================================  数据源
 -(void)queryData{
     
-    NSDictionary* arg = @{@"ince":@"get_user_order",@"uid":self.Identity.userInfo.userID,@"page":[WMHelper integerConvertToString:self.netPage.pageIndex],@"status":self.orderStatus};
+    //NSDictionary* arg = @{@"ince":@"get_user_order",@"uid":self.Identity.userInfo.userID,@"page":[WMHelper integerConvertToString:self.netPage.pageIndex],@"status":self.orderStatus};
+    NSDictionary* arg = @{@"a":@"getOrderList",@"uid":self.Identity.userInfo.userID,@"page":[WMHelper integerConvertToString:self.netPage.pageIndex],@"status":self.orderStatus};
     
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories queryOrder:arg page:self.netPage complete:^(NSInteger react, NSArray *list, NSString *message) {
