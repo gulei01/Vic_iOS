@@ -168,7 +168,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
         UILabel *nLabel = [[UILabel alloc]initWithFrame:CGRectMake(collectionCellWidth-15, 1, 10, 10)];
         nLabel.layer.masksToBounds = YES;
         nLabel.layer.cornerRadius = 5;
-        nLabel.backgroundColor = [UIColor redColor];
+        nLabel.backgroundColor = theme_navigation_color;
         nLabel.textColor = [UIColor whiteColor];
         
         [cell.contentView addSubview:nLabel];
@@ -260,8 +260,14 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
             [self alertHUD:message];
         }
         //去获取购物车的数据 然后购物车获取完数据再返回 updateFromCart 方法
-        [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshShopCar object:nil];
-        //转到加载完购物车信息后再reload
+        if(self.Identity.userInfo.isLogin){
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshShopCar object:nil];
+            //转到加载完购物车信息后再reload
+        }else{
+            [self.tableView reloadData];
+            [self.collectionView reloadData];
+        }
+        
 //        [self.tableView reloadData];
 //        [self.collectionView reloadData];
         
@@ -482,7 +488,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories updateShopCar:arg complete:^(NSInteger react, id obj, NSString *message) {
             if(react == 1){
-                [self alertHUD:@"添加成功!"];
+                //[self alertHUD:@"添加成功!"];
                 [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshShopCar object:nil];
             }else if(react == 400){
                 [self alertHUD:message];
@@ -490,7 +496,6 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
                 [self alertHUD:message];
             }
         }];
-        
     }else{
         UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Login alloc]init]];
         [nav.navigationBar setBackgroundColor:theme_navigation_color];
@@ -506,7 +511,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories updateShopCar:arg complete:^(NSInteger react, id obj, NSString *message) {
         if(react == 1){
-            [self alertHUD:@"操作成功!"];
+            //[self alertHUD:@"操作成功!"];
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationRefreshShopCar object:nil];
             [[NSNotificationCenter defaultCenter] postNotificationName:NotificationUpdateSpecList object:nil];
         }else if(react == 400){

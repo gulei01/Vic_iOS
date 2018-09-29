@@ -13,6 +13,7 @@
 #import "EmptyController.h"
 #import "MapLocationCurrentCell.h"
 #import "CityViewController.h"
+#import <GooglePlaces/GooglePlaces.h>
 
 @interface MapLocation ()<AMapLocationManagerDelegate,UITableViewDelegate,UITableViewDataSource,UISearchDisplayDelegate,UISearchBarDelegate,AMapSearchDelegate>
 @property(nonatomic,strong) AMapLocationManager* locationManager;
@@ -42,6 +43,7 @@
 
 @property(nonatomic,strong) UIButton *selectBtn;
 
+@property(nonatomic,strong) GMSPlacesClient* placesClient;
 @end
 
 @implementation MapLocation
@@ -49,7 +51,7 @@
 //自己更改5
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    _placesClient = [GMSPlacesClient sharedClient];
     [self createMySelectedCity];
 
 //
@@ -66,6 +68,8 @@
     [self startLocationing];
     [self configLocationManager];
     [self queryAddress];
+    //garfunkel add
+    [self getAddressByGoogle];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -73,6 +77,23 @@
         [_selectBtn removeFromSuperview];
     }
     [self createMySelectedCity];
+}
+
+-(void)getAddressByGoogle{
+    [_placesClient currentPlaceWithCallback:^(GMSPlaceLikelihoodList * _Nullable likelihoodList, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Current Place error %@", [error localizedDescription]);
+            return;
+        }
+        
+        for (GMSPlaceLikelihood *likelihood in likelihoodList.likelihoods) {
+            GMSPlace* place = likelihood.place;
+            NSLog(@"Current Place name %@ at likelihood %g", place.name, likelihood.likelihood);
+            NSLog(@"Current Place address %@", place.formattedAddress);
+            NSLog(@"Current Place attributions %@", place.attributions);
+            NSLog(@"Current PlaceID %@", place.placeID);
+        }
+    }];
 }
 
 - (void)selectedMyCity {
@@ -538,7 +559,8 @@
             [self stopLocationIng];
             [self showHUD];
         }
-        NSDictionary* arg = @{@"ince":@"get_user_addr_lat",@"uid":self.Identity.userInfo.userID,@"is_default":@"0"};
+//        NSDictionary* arg = @{@"ince":@"get_user_addr_lat",@"uid":self.Identity.userInfo.userID,@"is_default":@"0"};
+        NSDictionary* arg = @{@"a":@"getUserAddress",@"uid":self.Identity.userInfo.userID,@"is_default":@"0"};
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories queryAddress:arg complete:^(NSInteger react, NSArray *list, NSString *message) {
             [self.arrayAddress removeAllObjects];

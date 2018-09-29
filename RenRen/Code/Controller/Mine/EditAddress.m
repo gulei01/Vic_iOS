@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "EditAddressMap.h"
 #import "EmptyAddressMap.h"
+#import <GooglePlaces/GooglePlaces.h>
 
 @interface EditAddress ()
 @property(nonatomic,strong) UIView* headerView;
@@ -84,7 +85,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.title =self.entity ? @"编辑地址": @"新增地址";
+    self.navigationItem.title =self.entity ? Localized(@"Edit_address"): Localized(@"Add_address");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -171,14 +172,14 @@
 
 #pragma mark =====================================================  Notification
 -(void)editAddressMap:(NSNotification*)notification{
-    AMapPOI* item = (AMapPOI*)[notification object];
+    GMSPlace* item = (GMSPlace*)[notification object];
     dispatch_async(dispatch_get_main_queue(), ^{
         self.mapName = item.name;
         self.mapAddress =  @"";
         self.mapNumber =  @"";
-        self.mapLocation = item.address;
-        self.mapLat = [[NSString alloc]initWithFormat: @"%.6f",item.location.latitude];
-        self.mapLng = [NSString stringWithFormat: @"%.6f",item.location.longitude];
+        self.mapLocation = item.formattedAddress;
+        self.mapLat = [[NSString alloc]initWithFormat: @"%.6f",item.coordinate.latitude];
+        self.mapLng = [NSString stringWithFormat: @"%.6f",item.coordinate.longitude];
         self.labelMapAddress.text = item.name;
     });
 }
@@ -200,7 +201,7 @@
                 [repositories updateAddres:arg complete:^(NSInteger react, id obj, NSString *message) {
                     if(react == 1){
                         [self hidHUD];
-                        [self alertHUD: @"操作成功" complete:^{
+                        [self alertHUD: Localized(@"Success_txt") complete:^{
                             [self.navigationController popViewControllerAnimated:YES];
                         }];
                     }else if(react == 400){
@@ -217,23 +218,23 @@
 -(BOOL)checkForm{
     if([WMHelper isEmptyOrNULLOrnil:self.txtMapNumber.text]){
         [self hidHUD];
-        [self alertHUD:@"收货地址不能为空"];
+        [self alertHUD:Localized(@"Address_not_empty")];
         return NO;
     }else if([WMHelper isEmptyOrNULLOrnil:self.txtZipcode.text]){
         [self hidHUD];
-        [self alertHUD:@"邮编不能为空"];
+        [self alertHUD:Localized(@"Zipcode_not_empty")];
         return NO;
     }else if ([WMHelper isEmptyOrNULLOrnil:self.txtUserName.text]){
         [self hidHUD];
-        [self alertHUD:@"收货人不能为空"];
+        [self alertHUD:Localized(@"Rece_person_not_empty")];
         return NO;
     }else if (![WMHelper isValidateMobile:self.txtPhone.text]){
         [self hidHUD];
-        [self alertHUD:@"手机号输入有误!"];
+        [self alertHUD:Localized(@"Phone_error")];
         return NO;
     }else if ([WMHelper isEmptyOrNULLOrnil:self.labelMapAddress.text]){
         [self hidHUD];
-        [self alertHUD:@"收货地址不能为空"];
+        [self alertHUD:Localized(@"Rece_addr_not_empty")];
         return NO;
     }
     return YES;
@@ -245,7 +246,7 @@
 -(UILabel *)labelTitle{
     if(!_labelTitle){
         _labelTitle = [[UILabel alloc]init];
-        _labelTitle.text =  @"    收货地址";
+        _labelTitle.text = [NSString stringWithFormat:@"    %@",Localized(@"Rece_addr_not_empty")] ;
         _labelTitle.font = [UIFont systemFontOfSize:14.f];
         _labelTitle.textColor = theme_Fourm_color;
         _labelTitle.backgroundColor = [UIColor whiteColor];
@@ -299,10 +300,10 @@
         _txtMapNumber = [[UITextField alloc]init];
         _txtMapNumber.backgroundColor = theme_default_color;
         _txtMapNumber.borderStyle = UITextBorderStyleNone;
-        _txtMapNumber.leftView = [self leftView: @"    详细地址"];
+        _txtMapNumber.leftView = [self leftView:[NSString stringWithFormat:@"    %@",Localized(@"Address_detail")]];
         _txtMapNumber.leftViewMode =UITextFieldViewModeAlways;
         _txtMapNumber.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
-        _txtMapNumber.placeholder = @"小区、楼层、门牌号";
+        _txtMapNumber.placeholder = @"";
         _txtMapNumber.font = [UIFont systemFontOfSize:14.f];
         _txtMapNumber.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -314,10 +315,10 @@
         _txtZipcode = [[UITextField alloc]init];
         _txtZipcode.backgroundColor = theme_default_color;
         _txtZipcode.borderStyle = UITextBorderStyleNone;
-        _txtZipcode.leftView = [self leftView:@"    邮编"];
+        _txtZipcode.leftView = [self leftView:[NSString stringWithFormat:@"    %@",Localized(@"Zipcode_txt")]];
         _txtZipcode.leftViewMode = UITextFieldViewModeAlways;
         _txtZipcode.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        _txtZipcode.placeholder = @"邮政编码";
+        _txtZipcode.placeholder = Localized(@"Zipcode_txt");
         _txtZipcode.font = [UIFont systemFontOfSize:14.f];
         _txtZipcode.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -329,10 +330,10 @@
         _txtUserName = [[UITextField alloc]init];
         _txtUserName .backgroundColor = theme_default_color;
         _txtUserName.borderStyle = UITextBorderStyleNone;
-        _txtUserName.leftView = [self leftView: @"    收货人"];
+        _txtUserName.leftView = [self leftView:[NSString stringWithFormat:@"    %@",Localized(@"Receiver_txt")]];
         _txtUserName.leftViewMode =UITextFieldViewModeAlways;
         _txtUserName.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
-        _txtUserName.placeholder = @"姓名 (限6个字)";
+        _txtUserName.placeholder = Localized(@"Name_txt");
         _txtUserName.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _txtUserName;
@@ -343,10 +344,10 @@
         _txtPhone = [[UITextField alloc]init];
         _txtPhone.backgroundColor = theme_default_color;
         _txtPhone.borderStyle = UITextBorderStyleNone;
-        _txtPhone.leftView = [self leftView: @"    手机号码"];
+        _txtPhone.leftView = [self leftView:[NSString stringWithFormat:@"    %@",Localized(@"Mobile_num")]];
         _txtPhone.leftViewMode =UITextFieldViewModeAlways;
         _txtPhone.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
-        _txtPhone.placeholder = @"请输入手机";
+        _txtPhone.placeholder = Localized(@"Mobile_num");
         _txtPhone.keyboardType = UIKeyboardTypeNumberPad;
         _txtPhone.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -358,7 +359,7 @@
         _btnConfirm = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnConfirm.backgroundColor =theme_navigation_color;
         [_btnConfirm setTitleColor:theme_default_color forState:UIControlStateNormal];
-        [_btnConfirm setTitle:@"保存" forState:UIControlStateNormal];
+        [_btnConfirm setTitle:Localized(@"Save_txt") forState:UIControlStateNormal];
         _btnConfirm.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         [_btnConfirm addTarget:self action:@selector(btnConfirmTouch:) forControlEvents:UIControlEventTouchUpInside];
         _btnConfirm.translatesAutoresizingMaskIntoConstraints = NO;

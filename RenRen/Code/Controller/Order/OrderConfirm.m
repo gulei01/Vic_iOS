@@ -78,11 +78,11 @@
         price = [self.entity.fightGroup.tuanPrice floatValue];
         
     }
-    self.labelGoodsPrice.text = [NSString stringWithFormat: @"￥%.2f",price];
+    self.labelGoodsPrice.text = [NSString stringWithFormat: @"$%.2f",price];
     CGFloat shipFee =[self.entity.shipFee floatValue];
     self.totalPrice = price+shipFee;
-    self.labelShipFee.text = [NSString stringWithFormat: @"￥%.2f",shipFee];
-    self.labelTotal.text = [NSString stringWithFormat: @"￥%.2f",price+shipFee];
+    self.labelShipFee.text = [NSString stringWithFormat: @"$%.2f",shipFee];
+    self.labelTotal.text = [NSString stringWithFormat: @"$%.2f",price+shipFee];
     
     [self btnPayWay:self.btnWeXinPay];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(paySuccessNotification:) name:NotificationPaySuccess object:nil];
@@ -92,7 +92,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelTouch:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:Localized(@"Cancel_txt") style:UIBarButtonItemStylePlain target:self action:@selector(cancelTouch:)];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -249,7 +249,7 @@
     
     if(self.btnWeXinPay.selected){
         if(![WXApi isWXAppInstalled]){
-            [self alertHUD:@"您的手机不支持微信支付"];
+            [self alertHUD:Localized(@"Not_weixin_payment")];
             return;
         }
     }
@@ -397,7 +397,7 @@
         [_btnPayWay setImage:[UIImage imageNamed:@"icon-store"] forState:UIControlStateNormal];
         [_btnPayWay setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
         _btnPayWay.titleLabel.font = [UIFont systemFontOfSize:14.f];
-        [_btnPayWay setTitle:@"支付方式" forState:UIControlStateNormal];
+        [_btnPayWay setTitle:Localized(@"Payment_method") forState:UIControlStateNormal];
         _btnPayWay.backgroundColor = [UIColor whiteColor];
         CALayer* border = [[CALayer alloc]init];
         border.frame = CGRectMake(0, 29.f, SCREEN_WIDTH, 1.f);
@@ -416,7 +416,7 @@
         _btnWeXinPay.titleEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 0);
         [_btnWeXinPay setImage:[UIImage imageNamed:@"icon-wechat-pay"] forState:UIControlStateNormal];
         [_btnWeXinPay setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
-        [_btnWeXinPay setTitle:@"微信支付" forState:UIControlStateNormal];
+        [_btnWeXinPay setTitle:Localized(@"Wexin_payment") forState:UIControlStateNormal];
         _btnWeXinPay.titleLabel.font = [UIFont systemFontOfSize:14.f];
         [_btnWeXinPay addTarget:self action:@selector(btnPayWay:) forControlEvents:UIControlEventTouchUpInside];
         _btnWeXinPay.backgroundColor = [UIColor whiteColor];
@@ -445,7 +445,7 @@
         _btnAlipay.titleEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 0);
         [_btnAlipay setImage:[UIImage imageNamed:@"icon-alipay"] forState:UIControlStateNormal];
         [_btnAlipay setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
-        [_btnAlipay setTitle:@"支付宝支付" forState:UIControlStateNormal];
+        [_btnAlipay setTitle:Localized(@"Alipay_payment") forState:UIControlStateNormal];
         _btnAlipay.titleLabel.font = [UIFont systemFontOfSize:14.f];
         [_btnAlipay addTarget:self action:@selector(btnPayWay:) forControlEvents:UIControlEventTouchUpInside];
         _btnAlipay.backgroundColor = [UIColor whiteColor];
@@ -479,7 +479,7 @@
 -(UILabel *)labelGoodsPriceTitle{
     if(!_labelGoodsPriceTitle){
         _labelGoodsPriceTitle = [[UILabel alloc]init];
-        _labelGoodsPriceTitle.text =  @"商品金额:";
+        _labelGoodsPriceTitle.text = [NSString stringWithFormat:@"%@:",Localized(@"Product_price")];
         _labelGoodsPriceTitle.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelGoodsPriceTitle;
@@ -497,7 +497,7 @@
 -(UILabel *)labelShipFeeTitle{
     if(!_labelShipFeeTitle){
         _labelShipFeeTitle = [[UILabel alloc]init];
-        _labelShipFeeTitle.text =  @"配送费:";
+        _labelShipFeeTitle.text = [NSString stringWithFormat:@"%@:",Localized(@"Delivery_fee")];
         _labelShipFeeTitle.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelShipFeeTitle;
@@ -516,7 +516,7 @@
 -(UILabel *)labelTotalTitle{
     if(!_labelTotalTitle){
         _labelTotalTitle = [[UILabel alloc]init];
-        _labelTotalTitle.text =  @"应付总金额:";
+        _labelTotalTitle.text =  [NSString stringWithFormat:@"%@:",Localized(@"Subtotal_price")];
         _labelTotalTitle.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelTotalTitle;
@@ -536,7 +536,7 @@
     if(!_btnPay){
         _btnPay = [UIButton buttonWithType:UIButtonTypeCustom];
         [_btnPay setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_btnPay setTitle:@"提交订单" forState:UIControlStateNormal];
+        [_btnPay setTitle:Localized(@"Submit_order") forState:UIControlStateNormal];
         _btnPay.backgroundColor = [UIColor colorWithRed:46/255. green:152/255.f blue:52/255.f alpha:1.0];
         [_btnPay addTarget:self action:@selector(btnPayTouch:) forControlEvents:UIControlEventTouchUpInside];
         _btnPay.layer.masksToBounds = YES;

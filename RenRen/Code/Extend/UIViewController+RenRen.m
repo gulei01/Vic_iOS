@@ -11,6 +11,8 @@
 
 static char const * const rrHUD =  "HUD";
 static char const * const rrFirstLoad =  "firstLoad";
+static NSBundle *bundle = nil;
+
 
 @implementation UIViewController (RenRen)
 @dynamic HUD,Identity;
@@ -150,7 +152,7 @@ static char const * const rrFirstLoad =  "firstLoad";
     
     [[AFNetworkReachabilityManager sharedManager]setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
         if(status == AFNetworkReachabilityStatusNotReachable)
-            [self alertHUD:@"网络异常!"];
+            [self alertHUD:Localized(@"Net_anomaly")];
         complete(status);
     }];
 }

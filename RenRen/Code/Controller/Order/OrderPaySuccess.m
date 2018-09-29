@@ -33,7 +33,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.title = @"支付成功";
+    self.navigationItem.title = Localized(@"Payment_success");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -117,7 +117,7 @@
         _labelSuccess.textColor = [UIColor redColor];
         _labelSuccess.textAlignment = NSTextAlignmentCenter;
         _labelSuccess.contentMode = UIViewContentModeCenter;
-        _labelSuccess.text = @"\n\n支付成功!\n success!";
+        _labelSuccess.text = [NSString stringWithFormat: @"\n\n%@\n",Localized(@"Payment_success")];
         _labelSuccess.numberOfLines = 0;
         _labelSuccess.font = [UIFont systemFontOfSize:20.f];
     }
@@ -129,7 +129,7 @@
         _btnGoOrder = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnGoOrder.backgroundColor = [UIColor colorWithRed:248/255.f green:248/255.f blue:248/255.f alpha:1.0];
         [_btnGoOrder setTitleColor:[UIColor colorWithRed:68/255.f green:68/255.f blue:68/255.f alpha:1.0] forState:UIControlStateNormal];
-        [_btnGoOrder setTitle:@"查看订单" forState:UIControlStateNormal];
+        [_btnGoOrder setTitle:Localized(@"Check_order") forState:UIControlStateNormal];
         [_btnGoOrder addTarget:self action:@selector(goOrderTouch:) forControlEvents:UIControlEventTouchUpInside];
         _btnGoOrder.layer.masksToBounds = YES;
         _btnGoOrder.layer.cornerRadius = 5.f;
@@ -145,7 +145,7 @@
         _btnGoShopping = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnGoShopping.backgroundColor = [UIColor colorWithRed:248/255.f green:248/255.f blue:248/255.f alpha:1.0];
         [_btnGoShopping setTitleColor:[UIColor colorWithRed:68/255.f green:68/255.f blue:68/255.f alpha:1.0] forState:UIControlStateNormal];
-        [_btnGoShopping setTitle:@"查看订单" forState:UIControlStateNormal];
+        [_btnGoShopping setTitle:Localized(@"Check_order") forState:UIControlStateNormal];
         [_btnGoShopping addTarget:self action:@selector(goShoppingTouch:) forControlEvents:UIControlEventTouchUpInside];
         _btnGoShopping.layer.masksToBounds = YES;
         _btnGoShopping.layer.cornerRadius = 5.f;

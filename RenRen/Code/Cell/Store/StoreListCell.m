@@ -80,16 +80,16 @@
         NSInteger status = [entity.status integerValue];
         if(status==1){//开启
             self.labelStatus.backgroundColor =theme_navigation_color;;
-            self.labelStatus.text = @"营业中";
+            self.labelStatus.text = Localized(@"In_operation");
             self.labelServiceTime.hidden = NO;
         }else{//休息
             self.labelStatus.backgroundColor =[UIColor colorWithRed:181/255.f green:181/255.f blue:181/255.f alpha:1.0];
-            self.labelStatus.text = @"休息中";
+            self.labelStatus.text = Localized(@"Resting_txt");
             self.labelServiceTime.hidden = YES;
         }
-        self.labelServiceTime.text = [NSString stringWithFormat:@"营业时间:%@ - %@",entity.servicTimeBegin,entity.serviceTimerEnd];
-        self.labelSale.text = [NSString stringWithFormat:@"月售%@",entity.sale];
-        self.labelShip.text = [NSString stringWithFormat:@"起送￥%@ 配送￥%@",entity.freeShip,entity.shipFee];
+        self.labelServiceTime.text = [NSString stringWithFormat:@"%@:%@ - %@",Localized(@"Business_time"),entity.servicTimeBegin,entity.serviceTimerEnd];
+        self.labelSale.text = [NSString stringWithFormat:@"%@ %@",Localized(@"Month_sale_num"),entity.sale];
+        self.labelShip.text = [NSString stringWithFormat:@"起送$%@ 配送$%@",entity.freeShip,entity.shipFee];
         self.photoSender.hidden = [entity.shipUnit integerValue]==1;
         [self.activeTableView reloadData];
     }

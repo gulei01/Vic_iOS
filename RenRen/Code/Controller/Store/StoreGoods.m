@@ -118,7 +118,7 @@
     self.labelSumPrice.backgroundColor = [UIColor blackColor];
     self.labelSumPrice.alpha=0.7f;
     self.labelSumPrice.textColor = [UIColor whiteColor];
-    self.labelSumPrice.text =@"共$0.00 元  ";
+    self.labelSumPrice.text = [NSString stringWithFormat:@"%@ $0.00",Localized(@"Subtotal_txt")] ;
     self.labelSumPrice.textAlignment = NSTextAlignmentRight;
     self.labelSumPrice.font = [UIFont systemFontOfSize:15.f];
     [self.bottomView addSubview:self.labelSumPrice];
@@ -127,7 +127,7 @@
     self.labelOtherPrice.backgroundColor = [UIColor darkGrayColor];
     self.labelOtherPrice.alpha=0.7f;
     self.labelOtherPrice.textColor = [UIColor whiteColor];
-    self.labelOtherPrice.text =@"差9.00元送货";
+    self.labelOtherPrice.text =[NSString stringWithFormat:@"%@ $9.00",Localized(@"Still_need_num")] ;
     self.labelOtherPrice.textAlignment = NSTextAlignmentCenter;
     self.labelOtherPrice.font = [UIFont systemFontOfSize:15.f];
     self.labelOtherPrice.hidden = NO;
@@ -137,7 +137,7 @@
     self.btnBuy.backgroundColor = [UIColor redColor];
     self.btnBuy.alpha = 0.7f;
     [self.btnBuy setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.btnBuy setTitle:@"去结算" forState:UIControlStateNormal];
+    [self.btnBuy setTitle:Localized(@"Settlement") forState:UIControlStateNormal];
     self.btnBuy.titleLabel.font = [UIFont systemFontOfSize:14.f];
     self.btnBuy.hidden = YES;
     self.btnBuy.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
@@ -173,7 +173,7 @@
     self.topView = [[UIView alloc]initWithFrame:CGRectMake(0,0, SCREEN_WIDTH, 35.f)];
     self.topView.backgroundColor = theme_dropdown_bg_color;
     [self.view addSubview:self.topView];
-    NSArray* arrayEmpty = @[@"全部商品",@"综合排序",@"筛选"];
+    NSArray* arrayEmpty = @[Localized(@"All_product"),Localized(@"Integrated_sort"),Localized(@"Filter_txt")];
     float emptyWidth = SCREEN_WIDTH/3;
     for (int i =0 ; i<3; i++) {
         UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -331,9 +331,9 @@
                             self.labelSumPrice.frame = CGRectMake(0, 0, SCREEN_WIDTH/2-10, 45.f);
                             self.labelOtherPrice.hidden = NO;
                             self.btnBuy.hidden = YES;
-                            self.labelOtherPrice.text =[NSString stringWithFormat:@"差%.2f元送货",[@"9.00" floatValue] - sumPrice];
+                            self.labelOtherPrice.text =[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),[@"9.00" floatValue] - sumPrice];
                         }
-                        self.labelSumPrice.text = [NSString stringWithFormat:@"共￥%.2f元",sumPrice];
+                        self.labelSumPrice.text = [NSString stringWithFormat:@"%@ $%.2f",Localized(@"Subtotal_txt"),sumPrice];
                     }];
                 });
                 
@@ -348,11 +348,11 @@
 }
 -(void)loadShopCar:(NSInteger)sumCount sumPrice:(float)sumPrice{
     self.labelSumCount.text =[WMHelper integerConvertToString:sumCount];
-    self.labelSumPrice.text =[NSString stringWithFormat:@"共￥%.2f 元  ",sumPrice];
+    self.labelSumPrice.text =[NSString stringWithFormat:@"%@ $%.2f   ",Localized(@"Subtotal_txt"),sumPrice];
     self.labelSumPrice.frame = CGRectMake(0, 0, SCREEN_WIDTH/2-10, 45.f);
     self.labelOtherPrice.hidden = NO;
     self.btnBuy.hidden = YES;
-    self.labelOtherPrice.text =@"差9.00元送货";
+    self.labelOtherPrice.text =[NSString stringWithFormat:@"%@ $9.00",Localized(@"Still_need_num")];
 }
 
 -(void)querySubCategory{
@@ -465,7 +465,7 @@
                 NetRepositories* repositories = [[NetRepositories alloc]init];
                 [repositories updateShopCar:arg complete:^(NSInteger react, id obj, NSString *message) {
                     if(react == 1){
-                        [self alertHUD:@"添加成功!"];
+                        //[self alertHUD:@"添加成功!"];
                         [self queryShopCar];
                     }else if(react == 400){
                         [self alertHUD:message];
@@ -653,20 +653,20 @@
 -(NSMutableArray *)arrayPrice{
     if(!_arrayPrice){
         _arrayPrice = [[NSMutableArray alloc]init];
-        [_arrayPrice addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"0",@"cate_name" : @"默认",@"num" :@"0" }]];
-        [_arrayPrice addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"1",@"cate_name" : @"0-10元",@"num" :@"0" }]];
-        [_arrayPrice addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"2",@"cate_name" : @"10-100元",@"num" :@"0" }]];
-        [_arrayPrice addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"3",@"cate_name" : @"100元以上",@"num" :@"0" }]];
+        [_arrayPrice addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"0",@"cate_name" : Localized(@"Default_txt"),@"num" :@"0" }]];
+        [_arrayPrice addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"1",@"cate_name" : @"$0-$10",@"num" :@"0" }]];
+        [_arrayPrice addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"2",@"cate_name" : @"$10-$100",@"num" :@"0" }]];
+        [_arrayPrice addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"3",@"cate_name" : @"$100+",@"num" :@"0" }]];
     }
     return _arrayPrice;
 }
 -(NSMutableArray *)arrayOrder{
     if(!_arrayOrder){
         _arrayOrder = [[NSMutableArray alloc]init];
-        [_arrayOrder addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"1",@"cate_name" : @"默认",@"num" :@"0" }]];
-        [_arrayOrder addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"2",@"cate_name" : @"销售降序",@"num" :@"0" }]];
-        [_arrayOrder addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"3",@"cate_name" : @"价格降序",@"num" :@"0" }]];
-        [_arrayOrder addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"4",@"cate_name" : @"价格升序",@"num" :@"0" }]];
+        [_arrayOrder addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"1",@"cate_name" : Localized(@"Default_txt"),@"num" :@"0" }]];
+        [_arrayOrder addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"2",@"cate_name" : Localized(@"Sales_desc"),@"num" :@"0" }]];
+        [_arrayOrder addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"3",@"cate_name" : Localized(@"Price_desc"),@"num" :@"0" }]];
+        [_arrayOrder addObject:[[MSubType alloc]initWithItem:@{@"cate_id" : @"4",@"cate_name" : Localized(@"Price_asc"),@"num" :@"0" }]];
     }
     return _arrayOrder;
 }

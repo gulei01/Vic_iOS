@@ -39,7 +39,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"注册";
+    self.title = Localized(@"Register_txt");
     [self layoutUI];
     [self layoutUIConstains];
 }
@@ -55,7 +55,7 @@
     [self.navigationController.view addSubview:_backView];
     
     UIButton *btn =  [[UIButton alloc]initWithFrame:CGRectMake(15, 25, 40, 20)];
-    [btn setTitle:@"登录" forState:UIControlStateNormal];
+    [btn setTitle:Localized(@"Log_in") forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:15];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(closeView:) forControlEvents:UIControlEventTouchUpInside];
@@ -68,41 +68,41 @@
     [_backView addSubview:_inputView];
     
     _mobileLabel = [[UILabel alloc] init];
-    _mobileLabel.text = @"手机号:";
+    _mobileLabel.text = [NSString stringWithFormat:@"%@:",Localized(@"Mobile_num")];
     _mobileLabel.textAlignment = NSTextAlignmentRight;
     _mobileLabel.textColor = [UIColor whiteColor];
     
     _passwordLabel = [[UILabel alloc] init];
-    _passwordLabel.text = @"密   码:";
+    _passwordLabel.text = [NSString stringWithFormat:@"%@:",Localized(@"Password_txt")];
     _passwordLabel.textAlignment = NSTextAlignmentRight;
     _passwordLabel.textColor = [UIColor whiteColor];
     
     _vcodeLabel = [[UILabel alloc] init];
-    _vcodeLabel.text = @"验证码:";
+    _vcodeLabel.text = [NSString stringWithFormat:@"%@:",Localized(@"Veri_code")];
     _vcodeLabel.textAlignment = NSTextAlignmentRight;
     _vcodeLabel.textColor = [UIColor whiteColor];
     
     _confirmPLabel = [[UILabel alloc] init];
-    _confirmPLabel.text = @"确认密码:";
+    _confirmPLabel.text = [NSString stringWithFormat:@"%@:",Localized(@"Confirm_password")];
     _confirmPLabel.textAlignment = NSTextAlignmentRight;
     _confirmPLabel.textColor = [UIColor whiteColor];
     
     _mobileText = [[UITextField alloc] init];
-    _mobileText.placeholder = @"请输入手机号";
+    _mobileText.placeholder = Localized(@"Please_enter_mobile");
     _mobileText.layer.borderWidth = 1.0f;
     _mobileText.layer.cornerRadius = 5;
     _mobileText.layer.borderColor = [UIColor grayColor].CGColor;
     _mobileText.backgroundColor = [UIColor whiteColor];
     
     _vcodeText = [[UITextField alloc] init];
-    _vcodeText.placeholder = @"验证码";
+    _vcodeText.placeholder = Localized(@"Veri_code");
     _vcodeText.layer.borderWidth = 1.0f;
     _vcodeText.layer.cornerRadius = 5;
     _vcodeText.layer.borderColor = [UIColor grayColor].CGColor;
     _vcodeText.backgroundColor = [UIColor whiteColor];
     
     _confirmPText = [[UITextField alloc] init];
-    _confirmPText.placeholder = @"请再次输入密码";
+    _confirmPText.placeholder = Localized(@"Again_enter_password");
     _confirmPText.secureTextEntry = YES;
     _confirmPText.layer.borderWidth = 1.0f;
     _confirmPText.layer.cornerRadius = 5;
@@ -110,7 +110,7 @@
     _confirmPText.backgroundColor = [UIColor whiteColor];
     
     _passwordText = [[UITextField alloc] init];
-    _passwordText.placeholder = @"请输入密码";
+    _passwordText.placeholder = Localized(@"Please_enter_password");
     _passwordText.secureTextEntry = YES;
     _passwordText.layer.borderWidth = 1.0f;
     _passwordText.layer.cornerRadius = 5;
@@ -127,12 +127,12 @@
     [_inputView addSubview:_passwordText];
     
     _regBtn = [[UIButton alloc] init];
-    [_regBtn setTitle:@"注册" forState:UIControlStateNormal];
+    [_regBtn setTitle:Localized(@"Register_txt") forState:UIControlStateNormal];
     [_regBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_regBtn addTarget:self action:@selector(regTouch:) forControlEvents:UIControlEventTouchUpInside];
     
     _sendcodeBtn = [[UIButton alloc] init];
-    [_sendcodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
+    [_sendcodeBtn setTitle:Localized(@"Get_veri_code") forState:UIControlStateNormal];
     [_sendcodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_sendcodeBtn addTarget:self action:@selector(sendCode:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -228,16 +228,16 @@
     [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
             if(![self checkPhoneNum:_mobileText.text]){
-                [self alertHUD:@"请输入正确的手机号"];
+                [self alertHUD:Localized(@"Phone_error")];
             }else{
                 if([self.vcodeText.text length] < 6){
-                    [self alertHUD:@"请输入正确的验证码"];
+                    [self alertHUD:Localized(@"Please_corr_veri_code")];
                 }else{
                     if ([self.passwordText.text length] < 6) {
-                        [self alertHUD:@"密码不能少于六位"];
+                        [self alertHUD:Localized(@"Password_six")];
                     }else{
                         if (![self.passwordText.text isEqualToString:self.confirmPText.text]) {
-                            [self alertHUD:@"两次输入的密码不一致"];
+                            [self alertHUD:Localized(@"Inconsistent_password")];
                         }else{
                             self.HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
                             [self.view.window addSubview:self.HUD];
@@ -245,7 +245,7 @@
                             self.HUD.minSize = CGSizeMake(135.f, 135.f);
                             [self.HUD setLabelFont:[UIFont systemFontOfSize:14.f]];
                             
-                            self.HUD.labelText = @"正在注册";
+                            self.HUD.labelText = Localized(@"Register_now");
                             [self.HUD show:YES];
                             
                             NSDictionary* arg = @{@"a":@"userReg",@"phone":self.mobileText.text,@"password":self.passwordText.text,@"vcode":self.vcodeText.text};
@@ -262,7 +262,7 @@
                                     }else{
                                         // NSLog(@"%@",@"归档失败!");
                                     }
-                                    [self hidHUD:@"注册成功，并登录" success:YES];
+                                    [self hidHUD:Localized(@"Register_success") success:YES];
                                     //关闭当前
                                     [self.navigationController dismissViewControllerAnimated:YES completion:nil];
                                     //通知登录页面
@@ -285,7 +285,7 @@
     [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
             if(![self checkPhoneNum:_mobileText.text]){
-                [self alertHUD:@"请输入正确的手机号"];
+                [self alertHUD:Localized(@"Phone_error")];
             }else{
                 self.HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
                 [self.view.window addSubview:self.HUD];
@@ -293,7 +293,7 @@
                 self.HUD.minSize = CGSizeMake(135.f, 135.f);
                 [self.HUD setLabelFont:[UIFont systemFontOfSize:14.f]];
                 
-                self.HUD.labelText = @"正在发送验证码";
+                self.HUD.labelText = Localized(@"Send_veri_code_now");
                 [self.HUD show:YES];
                 
                 NSDictionary* arg = @{@"a":@"getVerificationCode",@"phone":_mobileText.text};
@@ -301,7 +301,7 @@
                 [repositories requestPost:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
                     NSLog(@"garfunkel_log:msg:%@",message);
                     if(react == 1){
-                        [self hidHUD:@"发送成功" success:YES];
+                        [self hidHUD:Localized(@"Send_success") success:YES];
                         self.sendcodeBtn.hidden = true;
                         [self initTimer];
                     }else if(react == 400){

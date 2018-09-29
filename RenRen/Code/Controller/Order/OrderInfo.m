@@ -85,7 +85,7 @@
             [self changeOption:self.btnDetail];
         }
     }
-    self.navigationItem.title = @"订单详情";
+    self.navigationItem.title = Localized(@"Order_detail");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -243,7 +243,7 @@
         _btnDetail = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnDetail.tag = 1;
         [_btnDetail setTitleColor:theme_navigation_color forState:UIControlStateNormal];
-        [_btnDetail setTitle:@"订单详情" forState:UIControlStateNormal];
+        [_btnDetail setTitle:Localized(@"Order_detail") forState:UIControlStateNormal];
         [_btnDetail addTarget:self action:@selector(changeOption:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _btnDetail;
@@ -254,7 +254,7 @@
         _btnExpress =[UIButton buttonWithType:UIButtonTypeCustom];
         _btnExpress.tag = 0;
         [_btnExpress setTitleColor:theme_navigation_color forState:UIControlStateNormal];
-        [_btnExpress setTitle:@"订单状态" forState:UIControlStateNormal];
+        [_btnExpress setTitle:Localized(@"Order_status") forState:UIControlStateNormal];
         /*  CALayer* border = [[CALayer alloc]init];
          border.frame = CGRectMake(SCREEN_WIDTH/2-1, 10.f, 1.f, 20.f);
          border.backgroundColor = [UIColor colorWithRed:207/255.f green:207/255.f blue:207/255.f alpha:1.0].CGColor;
@@ -301,7 +301,7 @@
         _btnComplaints.layer.borderColor = [UIColor colorWithRed:207/255.f green:207/255.f blue:207/255.f alpha:1.0].CGColor;
         _btnComplaints.layer.borderWidth = 1.f;
         [_btnComplaints setTitleColor:[UIColor colorWithRed:84/255.f green:84/255.f blue:84/255.f alpha:1.0] forState:UIControlStateNormal];
-        [_btnComplaints setTitle:@"订单投诉" forState:UIControlStateNormal];
+        [_btnComplaints setTitle:Localized(@"Order_complaint") forState:UIControlStateNormal];
         _btnComplaints.titleLabel.font = [UIFont systemFontOfSize:14.f];
         [_btnComplaints addTarget:self action:@selector(complaintsToutch:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -315,7 +315,7 @@
         _btnComment.layer.masksToBounds = YES;
         _btnComment.layer.cornerRadius = 5.f;
         [_btnComment setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_btnComment setTitle:@"去评价" forState:UIControlStateNormal];
+        [_btnComment setTitle:Localized(@"To_comment") forState:UIControlStateNormal];
         _btnComment.titleLabel.font = [UIFont systemFontOfSize:14.f];
         [_btnComment addTarget:self action:@selector(commentTouch:) forControlEvents:UIControlEventTouchUpInside];
     }

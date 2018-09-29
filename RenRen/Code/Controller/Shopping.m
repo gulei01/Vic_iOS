@@ -71,7 +71,7 @@
     if(self){
         [self.tabBarItem setImage:[UIImage imageNamed:@"tab-shopping-default"]];
         [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"tab-shopping-enter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        [self.tabBarItem setTitle:@"购物车"];
+        [self.tabBarItem setTitle:Localized(@"Cart_txt")];
         self.tabBarItem.tag=1;
     }
     return self;
@@ -88,7 +88,7 @@
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:_deleteBtn];
     
     [super viewDidLoad];
-    self.title = @"购物车";
+    self.title = Localized(@"Cart_txt");
     self.allSelect = YES;
     [self layoutUI];
     [self layoutConstraints];
@@ -177,7 +177,7 @@
     
     self.btnAdd = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.btnAdd setTitleColor:theme_title_color forState:UIControlStateNormal];
-    [self.btnAdd setTitle:@"+添加新地址" forState:UIControlStateNormal];
+    [self.btnAdd setTitle:[NSString stringWithFormat:@"+ %@",Localized(@"Add_new_address")] forState:UIControlStateNormal];
     self.btnAdd.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     self.btnAdd.titleLabel.font = [UIFont systemFontOfSize:25.f];
     [self.btnAdd addTarget:self action:@selector(btnAddAddressTouch:) forControlEvents:UIControlEventTouchUpInside];
@@ -202,7 +202,7 @@
     [self.footerView addSubview:self.btnSelectAll];
     
     self.labelSelectAll = [[UILabel alloc]init];
-    self.labelSelectAll.text = @"选择";
+    self.labelSelectAll.text = Localized(@"Select_txt");
     [self.footerView addSubview:self.labelSelectAll];
     
     self.labelSum = [[UILabel alloc]init];
@@ -211,7 +211,7 @@
     self.btnConfrim = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnConfrim.backgroundColor = [UIColor colorWithRed:229/255.f green:0/255.f blue:71/255.f alpha:1.0];
     [self.btnConfrim setTitleColor:theme_default_color forState:UIControlStateNormal];
-    [self.btnConfrim setTitle:@"去结算" forState:UIControlStateNormal];
+    [self.btnConfrim setTitle:Localized(@"Settlement") forState:UIControlStateNormal];
     [self.btnConfrim addTarget:self action:@selector(generateOrderTouch:) forControlEvents:UIControlEventTouchUpInside];
     self.btnConfrim.layer.masksToBounds = YES;
     self.btnConfrim.layer.cornerRadius=5.f;
@@ -374,11 +374,11 @@
                 }
                 
                 self.payPrice = emptySumPrice;
-                NSString* str =[NSString stringWithFormat:@"已选商品数: %ld 总计: %.2f ",emptySum,emptySumPrice];
+                NSString* str =[NSString stringWithFormat:@"%@: %ld %@: %.2f ",Localized(@"Selected_items"),emptySum,Localized(@"Subtotal_txt"),emptySumPrice];
                 NSMutableAttributedString* attributeStr = [[NSMutableAttributedString alloc]initWithString:str];
                 [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor redColor]} range:NSMakeRange(0, str.length)];
-                [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]} range:NSMakeRange(0, @"已选商品数:".length)];
-                [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]} range:[str rangeOfString:@"总计:"]];
+                [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]} range:NSMakeRange(0, [NSString stringWithFormat:@"%@:",Localized(@"Selected_items")].length)];
+                [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]} range:[str rangeOfString:[NSString stringWithFormat:@"%@:",Localized(@"Subtotal_txt")]]];
                 self.labelSum.attributedText = attributeStr;
                 self.btnSelectAll.selected = self.allSelect;
                 self.btnConfrim.enabled = YES;
@@ -386,11 +386,11 @@
                 if(self.payPrice<[@"9.00" floatValue]){
                     self.btnConfrim.backgroundColor = [UIColor lightGrayColor];
                     self.btnConfrim.enabled = NO;
-                    [self.btnConfrim setTitle:[NSString stringWithFormat:@"差%.2f元送货",([@"9.00" floatValue]-self.payPrice)] forState:UIControlStateNormal];
+                    [self.btnConfrim setTitle:[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),([@"9.00" floatValue]-self.payPrice)] forState:UIControlStateNormal];
                 }else{
                     self.btnConfrim.enabled = YES;
-                    self.btnConfrim.backgroundColor = [UIColor redColor];
-                    [self.btnConfrim setTitle:@"去结算" forState:UIControlStateNormal];
+                    self.btnConfrim.backgroundColor = theme_navigation_color;
+                    [self.btnConfrim setTitle:Localized(@"Settlement") forState:UIControlStateNormal];
                     
                 }
                 self.tableView.tableFooterView = self.footerView;
@@ -430,8 +430,8 @@
             self.btnAdd.alpha=0.1;
             [self.btnAdd setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
             self.photoLociation.image = [UIImage imageNamed:@"icon-address"];
-            self.labelUserName.text = [NSString stringWithFormat:@"收货人:%@ %@",self.defaultAddress.userName,self.defaultAddress.phoneNum];
-            self.labelAddress.text = [NSString stringWithFormat:@"收货地址:%@ %@ %@ %@",[MSingle shareAuhtorization].location.cityName,self.defaultAddress.areaName,self.defaultAddress.zoneName,self.defaultAddress.address];
+            self.labelUserName.text = [NSString stringWithFormat:@"%@:%@ %@",Localized(@"Receiver_txt"),self.defaultAddress.userName,self.defaultAddress.phoneNum];
+            self.labelAddress.text = [NSString stringWithFormat:@"%@:%@ %@ %@ %@",Localized(@"Shipping_address"),[MSingle shareAuhtorization].location.cityName,self.defaultAddress.areaName,self.defaultAddress.zoneName,self.defaultAddress.address];
             
         }else if(react == 400){
             [self alertHUD:message];
@@ -457,7 +457,7 @@
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories updateShopCar:arg complete:^(NSInteger react, id obj, NSString *message) {
         if(react == 1){
-            [self hidHUD:num>0? @"添加成功!":@"操作成功" ];
+            //[self hidHUD:num>0? @"添加成功!":@"操作成功" ];
             // [self.tableView.mj_header beginRefreshing];
             [self queryData];
         }else if(react == 400){
@@ -532,7 +532,7 @@
     
     if([item.status integerValue] == 0){
         [btnSection setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [btnSection setTitle:[NSString stringWithFormat:@"%@     %@",item.storeName,@"店铺休息中!"] forState:UIControlStateNormal];
+        [btnSection setTitle:[NSString stringWithFormat:@"%@     %@",item.storeName,Localized(@"Shop_break")] forState:UIControlStateNormal];
         self.btnSelectAll.selected = NO;
     }
     
@@ -608,21 +608,21 @@
     }
     self.payPrice = emptySumPrice;
     self.btnSelectAll.selected = self.allSelect;
-    NSString* str =[NSString stringWithFormat:@"已选商品数: %ld 总计: %.2f ",(long)emptySum,emptySumPrice];
+    NSString* str =[NSString stringWithFormat:@"%@: %ld %@: %.2f ",Localized(@"Selected_items"),(long)emptySum,Localized(@"Subtotal_txt"),emptySumPrice];
     NSMutableAttributedString* attributeStr = [[NSMutableAttributedString alloc]initWithString:str];
     [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor redColor]} range:NSMakeRange(0, str.length)];
-    [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]} range:NSMakeRange(0, @"已选商品数:".length)];
-    [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]} range:[str rangeOfString:@"总计:"]];
+    [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]} range:NSMakeRange(0, [NSString stringWithFormat:@"%@:",Localized(@"Selected_items")].length)];
+    [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]} range:[str rangeOfString:[NSString stringWithFormat:@"%@:",Localized(@"Subtotal_txt")]]];
     self.labelSum.attributedText = attributeStr;
     self.btnConfrim.enabled = YES;
     if(self.payPrice<[@"9.00" floatValue]){
         self.btnConfrim.backgroundColor = [UIColor lightGrayColor];
         self.btnConfrim.enabled = NO;
-        [self.btnConfrim setTitle:[NSString stringWithFormat:@"差%.2f元送货",([@"9.00" floatValue]-self.payPrice)] forState:UIControlStateNormal];
+        [self.btnConfrim setTitle:[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),([@"9.00" floatValue]-self.payPrice)] forState:UIControlStateNormal];
     }else{
         self.btnConfrim.enabled = YES;
         self.btnConfrim.backgroundColor = [UIColor redColor];
-        [self.btnConfrim setTitle:@"去结算" forState:UIControlStateNormal];
+        [self.btnConfrim setTitle:Localized(@"Settlement") forState:UIControlStateNormal];
         
     }
     [self.tableView reloadData];
@@ -661,7 +661,7 @@
     if([item.quantity integerValue]>1){
         [self addGoodsWithNum:-1];
     }else{
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:@"确认重购物车删除?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"From_del_cart") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
         [alert show];
     }
 }
@@ -814,7 +814,7 @@
                     NSLog(@"json 格式错误");
                 }
             }else{
-                [self alertHUD:@"确认选择购买商品、收货地址!"];
+                [self alertHUD:Localized(@"Confirm_goods_address")];
             }
         }
     }];

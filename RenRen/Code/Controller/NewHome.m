@@ -13,7 +13,7 @@
 #import "NewHomeSection2.h"
 #import "NewHomeSectionFooter.h"
 #import "NewHomeCell.h"
-#import "MapLocation.h"
+#import "NewMapLocation.h"
 #import "Store.h"
 #import "BuyNow.h"
 #import "RandomBuy.h"
@@ -26,8 +26,11 @@
 #import "SearchGoods.h"
 #import "SupermarketAndFruit.h"
 #import "Empty2Controller.h"
+
+#import <GoogleMaps/GoogleMaps.h>
+#import <CoreLocation/CoreLocation.h>
 //记号
-@interface NewHome ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,NewHomeDelegate,UITextFieldDelegate> 
+@interface NewHome ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,NewHomeDelegate,UITextFieldDelegate,CLLocationManagerDelegate> 
 @property(nonatomic,strong) AMapLocationManager* locationManager;
 @property(nonatomic,strong) UIView* titleView;
 @property(nonatomic,strong) NSLayoutConstraint* searchConstraint;
@@ -59,6 +62,8 @@
 
 @property(nonatomic,strong) UIButton *changeCity;
 
+@property(nonatomic,strong) CLLocationManager* localManager;
+
 @end
 
 
@@ -79,7 +84,7 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
         //设置分栏按钮样式（选中及未选中） 标题及tag
         [self.tabBarItem setImage:[UIImage imageNamed:@"tab-home-default"]];
         [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"tab-home-enter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        [self.tabBarItem setTitle:@"首页"];
+        [self.tabBarItem setTitle:Localized(@"Home_txt")];
 
         self.tabBarItem.tag=0;
     }
@@ -98,14 +103,15 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
     self.navigationItem.titleView = self.titleView;
     
     _changeCity = [[UIButton alloc]initWithFrame:CGRectMake( SCREEN_WIDTH - 100, 0, 80, 30)];
-    [_changeCity setTitle:@"切换城市" forState:UIControlStateNormal];
+    [_changeCity setTitle:Localized(@"Change_city") forState:UIControlStateNormal];
     _changeCity.titleLabel.textColor = [UIColor blackColor];
     _delegate = self;
     [_changeCity addTarget:self action:@selector(changeMyCity) forControlEvents:UIControlEventTouchUpInside];
     
     [self.titleView addSubview:_changeCity];
 
-    
+    //garfunkel add
+    [self getLocationMessage];
 
     [self layoutUI];
     
@@ -123,6 +129,64 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changePositionNotification:) name:NotificationMapLocationChangePosition object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseData) name:NotificationGuidanceViewFinished object:nil];
     self.firstLoad = YES;
+}
+
+-(void)getLocationMessage{
+    NSLog(@"garfunkel_log:into getLocation");
+    if([CLLocationManager locationServicesEnabled]){
+        if(!self.localManager){
+            self.localManager = [[CLLocationManager alloc]init];
+        }
+        self.localManager.delegate = self;
+        //使用时运行获得地址
+        [self.localManager requestWhenInUseAuthorization];
+        self.localManager.desiredAccuracy = kCLLocationAccuracyBest;
+        self.localManager.distanceFilter = kCLDistanceFilterNone;
+        [self.localManager startUpdatingLocation];
+    }else{
+        
+    }
+}
+
+#pragma mark ================================= location delegate
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    [self.localManager stopUpdatingLocation];
+    CLLocation *curLocation = [locations firstObject];
+    CLGeocoder* geocoder = [[CLGeocoder alloc]init];
+    NSString* longitude = [NSString stringWithFormat:@"%0.6f",curLocation.coordinate.longitude];
+    NSString* latitude = [NSString stringWithFormat:@"%0.6f",curLocation.coordinate.latitude];
+    NSLog(@"纬度=%@，经度=%@",latitude,longitude);
+    NSLog(@"garfunkel_log:into getLocation first");
+    self.mapLocation.mapLng = longitude;
+    self.mapLocation.mapLat = latitude;
+    
+//    [geocoder reverseGeocodeLocation:manager.location completionHandler:^(NSArray * _Nullable placemarks, NSError * _Nullable error) {
+//
+//        if (error) {
+//            NSLog(@"garfunkel_log:into getLocation %@",error);
+//        }else{
+//            CLPlacemark *placemark = [placemarks objectAtIndex:0];
+//            NSLog(@"garfunkel_log:placemark---路号name:%@-市locality:%@-区subLocality:%@-省administrativeArea:%@-路thoroughfare:%@",placemark.name,placemark.locality,placemark.subLocality,placemark.administrativeArea,placemark.thoroughfare);
+//
+//        }
+//    }];
+    [geocoder reverseGeocodeLocation:manager.location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (error) {
+            NSLog(@"garfunkel_log:into getLocation %@",error);
+        }else{
+            CLPlacemark *placemark = [placemarks objectAtIndex:0];
+            //NSLog(@"garfunkel_log:placemark---路号name:%@-市locality:%@-区subLocality:%@-省administrativeArea:%@-路thoroughfare:%@",placemark.name,placemark.locality,placemark.subLocality,placemark.administrativeArea,placemark.thoroughfare);
+            self.mapLocation.address = placemark.name;
+            self.labelTitle.text = placemark.name;
+            Boolean flag= [NSKeyedArchiver archiveRootObject:self.mapLocation toFile:[WMHelper archiverMapLocationPath]];
+            if(flag){
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }else{
+                [self alertHUD: Localized(@"Positioning_fail")];
+            }
+        }
+    }];
+    //[self.localManager stopUpdatingLocation];
 }
 
 //自己更改4
@@ -284,7 +348,9 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 #pragma mark =====================================================  Data Source
 -(void)queryData{
     NetRepositories* repositories = [[NetRepositories alloc]init];
-    [repositories requestPost:@{ @"long": @"-123.364257", @"lat":@"48.430707"} complete:^(NSInteger react, NSDictionary *response, NSString *message) {
+//    NSDictionary* arg = @{ @"long": @"-123.364257", @"lat":@"48.430707"};
+    NSDictionary* arg = @{@"long":self.mapLocation.mapLng,@"lat":self.mapLocation.mapLat};
+    [repositories requestPost:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
         [self hidHUD];
         if(react ==1){
             NSDictionary* data = [response objectForKey: @"data"];
@@ -591,7 +657,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     if([WMHelper isEmptyOrNULLOrnil:textField.text]){
         [textField resignFirstResponder];
-        [self alertHUD:@"请输入关键词!"];
+        [self alertHUD:Localized(@"Please_enter_key")];
         return NO;
     }
    [self currentNavigationBarBackgroundView].alpha = 1.0;
@@ -623,7 +689,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
     [self cancelEdit];
 }
 -(void)didSelectedLocation{
-    MapLocation* controller = [[MapLocation alloc]init];
+    NewMapLocation* controller = [[NewMapLocation alloc]init];
     //Empty2Controller* controller = [[Empty2Controller alloc]init];
     controller.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:controller animated:YES];
@@ -765,7 +831,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 
 -(void)selectLocation:(UIButton*)sender{
     self.firstLoad = YES;
-    MapLocation* controller = [[MapLocation alloc]init];
+    NewMapLocation* controller = [[NewMapLocation alloc]init];
     controller.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:controller animated:YES];
     [self cancelEdit];
@@ -884,7 +950,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
             }
         }];
     }else{
-        UIAlertView* alert = [[UIAlertView alloc]initWithTitle: @"定位服务未开启" message: @"请在系统设置中开启定位服务\n设置->隐私->定位服务->外卖郎" delegate:self cancelButtonTitle: @"设置" otherButtonTitles: @"确认",nil];
+        UIAlertView* alert = [[UIAlertView alloc]initWithTitle: Localized(@"Positioning_close") message: [NSString stringWithFormat:@"%@ %@->%@->%@->%@",Localized(@"Please_pos_service"),Localized(@"Setting_txt"),Localized(@"Privacy_txt"),Localized(@"Positioning_service"),Localized(@"Tutti")] delegate:self cancelButtonTitle: Localized(@"Setting_txt") otherButtonTitles: Localized(@"Confirm_txt"),nil];
         [alert show];
         
     }
@@ -905,7 +971,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
             if(flag){
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }else{
-                [self alertHUD: @"定位失败请重试!"];
+                [self alertHUD: Localized(@"Positioning_fail")];
             }
             [self refreshDataSource];
         }else if(react == 400){
@@ -920,7 +986,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
                 [self.navigationController popToRootViewControllerAnimated:YES];
                 
             }else{
-                [self alertHUD: @"定位失败请重试!"];
+                [self alertHUD: Localized(@"Positioning_fail")];
             }
             [self emptyOrZoneNotOpen];
         }        
@@ -942,7 +1008,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         if(self.Identity.location){
            self.labelTitle.text = self.Identity.location.address;
         }else{
-            self.labelTitle.text = @"无网络,请重试";
+            self.labelTitle.text = Localized(@"Net_error");
         }
         self.collectionView.scrollEnabled = NO;
         self.collectionView.mj_header = nil;
@@ -1019,7 +1085,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         _txtSearch.leftView = btn;
         _txtSearch.delegate = self;
         _txtSearch.returnKeyType=UIReturnKeySearch;
-        _txtSearch.placeholder = @"搜索附近的商品";
+        _txtSearch.placeholder = Localized(@"Search_near_product");
         _txtSearch.font = [UIFont systemFontOfSize:14.f];
         _txtSearch.backgroundColor =[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.8];
        // [_txtSearch setValue:[UIColor whiteColor] forKeyPath:@"_placeholderLabel.textColor"];
@@ -1116,7 +1182,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         [icon addGestureRecognizer:tap];
         [_netException addSubview:icon];
         UILabel* label = [[UILabel alloc]initWithFrame:CGRectMake(0, CGRectGetMaxY(icon.frame)+20, SCREEN_WIDTH, 50)];
-        label.text =  @"未能连接到互联网\n或未开启定位服务";
+        label.text =  [NSString stringWithFormat:@"%@ \n %@",Localized(@"Not_link_net"),Localized(@"Positioning_close")];
         label.textColor = [UIColor grayColor];
         label.font = [UIFont systemFontOfSize:14.f];
         label.numberOfLines = 2;
@@ -1127,7 +1193,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         btn.frame =CGRectMake((SCREEN_WIDTH-80)/2, CGRectGetMaxY(label.frame)+20, 80, 36);
         btn.backgroundColor = theme_navigation_color;
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [btn setTitle: @"刷新重试" forState:UIControlStateNormal];
+        [btn setTitle: Localized(@"Refresh_txt") forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont systemFontOfSize:14.f];
         btn.layer.masksToBounds = YES;
         btn.layer.cornerRadius = 13.f;

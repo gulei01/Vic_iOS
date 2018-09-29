@@ -82,7 +82,7 @@
         _item = item;
         self.labelFoodName.text = [item objectForKey:@"fname"];
         self.labelNum.text = [NSString stringWithFormat:@"x%@",[item objectForKey:@"quantity"]];
-        self.labelPrice.text = [NSString stringWithFormat:@"￥%@",[item objectForKey:@"price"]];
+        self.labelPrice.text = [NSString stringWithFormat:@"$%@",[item objectForKey:@"price"]];
         self.labelDesc.text = [item objectForKey:@"spec_desc"];
     }
 }

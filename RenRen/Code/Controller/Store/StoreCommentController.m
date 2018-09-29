@@ -86,10 +86,10 @@
 //    self.labelExpress.attributedText = attributeStr;
 //    self.labelExpress.textAlignment = NSTextAlignmentCenter;
     
-    [self.btnAll setTitle:[NSString stringWithFormat:@"全部(%@)",@"0"] forState:UIControlStateNormal];
+    [self.btnAll setTitle:[NSString stringWithFormat:@"%@(%@)",Localized(@"All_txt"),@"0"] forState:UIControlStateNormal];
 //    [self.btnBest setTitle:[NSString stringWithFormat:@"好评(%@)",@"0"] forState:UIControlStateNormal];
-    [self.btnGood setTitle:[NSString stringWithFormat:@"好评(%@)",@"0"] forState:UIControlStateNormal];
-    [self.btnBad setTitle:[NSString stringWithFormat:@"差评(%@)",@"0"] forState:UIControlStateNormal];
+    [self.btnGood setTitle:[NSString stringWithFormat:@"%@(%@)",Localized(@"Praise_txt"),@"0"] forState:UIControlStateNormal];
+    [self.btnBad setTitle:[NSString stringWithFormat:@"%@(%@)",Localized(@"Bad_review"),@"0"] forState:UIControlStateNormal];
     
     
 }
@@ -278,7 +278,7 @@
 #pragma mark =====================================================  DZEmptyData 协议实现
 - (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView
 {
-    return [[NSAttributedString alloc] initWithString:@"暂无数据" attributes:@{NSFontAttributeName :[UIFont boldSystemFontOfSize:17.0],NSForegroundColorAttributeName:[UIColor grayColor]}];
+    return [[NSAttributedString alloc] initWithString:Localized(@"No_data") attributes:@{NSFontAttributeName :[UIFont boldSystemFontOfSize:17.0],NSForegroundColorAttributeName:[UIColor grayColor]}];
 }
 
 - (CGFloat)verticalOffsetForEmptyDataSet:(UIScrollView *)scrollView
@@ -328,10 +328,10 @@
 //        self.labelExpress.textAlignment = NSTextAlignmentCenter;
         
         
-        [self.btnAll setTitle:[NSString stringWithFormat:@"全部(%@)",item.totalNum] forState:UIControlStateNormal];
+        [self.btnAll setTitle:[NSString stringWithFormat:@"%@(%@)",Localized(@"All_txt"),item.totalNum] forState:UIControlStateNormal];
 //        [self.btnBest setTitle:[NSString stringWithFormat:@"好评(%@)",item.bestNum] forState:UIControlStateNormal];
-        [self.btnGood setTitle:[NSString stringWithFormat:@"好评(%@)",item.goodNum] forState:UIControlStateNormal];
-        [self.btnBad setTitle:[NSString stringWithFormat:@"差评(%@)",item.badNum] forState:UIControlStateNormal];
+        [self.btnGood setTitle:[NSString stringWithFormat:@"%@(%@)",Localized(@"Praise_txt"),item.goodNum] forState:UIControlStateNormal];
+        [self.btnBad setTitle:[NSString stringWithFormat:@"%@(%@)",Localized(@"Bad_review"),item.badNum] forState:UIControlStateNormal];
     }
 }
 

@@ -151,6 +151,7 @@
                 self.specSelectNum.hidden = YES;
             }
         }else{
+            self.btnAdd.hidden = NO;
             self.btnSelect.hidden = YES;
             self.specSelectNum.hidden = YES;
             if ([entity.quantity isEqualToString:@"0"]) {
@@ -204,7 +205,7 @@
     if(!_labelMiaoSha){
         _labelMiaoSha = [[UILabel alloc]init];
         _labelMiaoSha.backgroundColor = [UIColor redColor];
-        _labelMiaoSha.text =  @"秒杀";
+        _labelMiaoSha.text =  @"Spike";
         _labelMiaoSha.textColor = [UIColor whiteColor];
         _labelMiaoSha.textAlignment = NSTextAlignmentLeft;
         _labelMiaoSha.font = [UIFont systemFontOfSize:12.f];
@@ -259,7 +260,7 @@
 -(UIButton *)btnSelect{
     if(!_btnSelect){
         _btnSelect = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_btnSelect setTitle:@"可选规格" forState:UIControlStateNormal];
+        [_btnSelect setTitle:Localized(@"Optional_spec") forState:UIControlStateNormal];
         _btnSelect.titleLabel.font = [UIFont systemFontOfSize:14.0];
         [_btnSelect setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
         _btnSelect.layer.cornerRadius = 5.0;

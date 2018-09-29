@@ -49,7 +49,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"登录";
+    self.title = Localized(@"Log_in");
     [self layoutUI];
     [self layoutUIConstains];
     
@@ -95,7 +95,7 @@
     
     
     UIButton *btn =  [[UIButton alloc]initWithFrame:CGRectMake(15, 25, 40, 20)];
-    [btn setTitle:@"关闭" forState:UIControlStateNormal];
+    [btn setTitle:Localized(@"Close_txt") forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:15];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(closeView:) forControlEvents:UIControlEventTouchUpInside];
@@ -135,24 +135,24 @@
     
     //_mobileLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 60, 30)];
     _mobileLabel = [[UILabel alloc] init];
-    _mobileLabel.text = @"手机号:";
+    _mobileLabel.text = [NSString stringWithFormat:@"%@:",Localized(@"Mobile_num")];
     _mobileLabel.textAlignment = NSTextAlignmentRight;
     _mobileLabel.textColor = [UIColor whiteColor];
     
     _passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 50, 60, 30)];
-    _passwordLabel.text = @"密   码:";
+    _passwordLabel.text = [NSString stringWithFormat:@"%@:",Localized(@"Password_txt")];
     _passwordLabel.textAlignment = NSTextAlignmentRight;
     _passwordLabel.textColor = [UIColor whiteColor];
     
     _mobileText = [[UITextField alloc] initWithFrame:CGRectMake(75, 10, 200, 30)];
-    _mobileText.placeholder = @"请输入手机号";
+    _mobileText.placeholder = Localized(@"Please_enter_mobile");
     _mobileText.layer.borderWidth = 1.0f;
     _mobileText.layer.cornerRadius = 5;
     _mobileText.layer.borderColor = [UIColor grayColor].CGColor;
     _mobileText.backgroundColor = [UIColor whiteColor];
     
     _passwordText = [[UITextField alloc] initWithFrame:CGRectMake(75, 50, 200, 30)];
-    _passwordText.placeholder = @"请输入密码";
+    _passwordText.placeholder = Localized(@"Please_enter_password");
     _passwordText.secureTextEntry = YES;
     _passwordText.layer.borderWidth = 1.0f;
     _passwordText.layer.cornerRadius = 5;
@@ -165,12 +165,12 @@
     [_inputView addSubview:_passwordText];
     
     _loginBtn = [[UIButton alloc] init];
-    [_loginBtn setTitle:@"登录" forState:UIControlStateNormal];
+    [_loginBtn setTitle:Localized(@"Log_in") forState:UIControlStateNormal];
     [_loginBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_loginBtn addTarget:self action:@selector(loginTouch:) forControlEvents:UIControlEventTouchUpInside];
     
     _regBtn = [[UIButton alloc] init];
-    [_regBtn setTitle:@"注册" forState:UIControlStateNormal];
+    [_regBtn setTitle:Localized(@"Register_txt") forState:UIControlStateNormal];
     [_regBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_regBtn addTarget:self action:@selector(regTouch:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -285,17 +285,17 @@
     NSLog(@"garfunkel_log:loginReturn:%d",cancelled);
     if (cancelled)
     {
-        [self alertHUD:@"用户取消登陆"];
+        [self alertHUD:Localized(@"User_cancel_login")];
     }
     else
     {
-        [self alertHUD:@"登陆失败"];
+        [self alertHUD:Localized(@"Login_fail")];
     }
     
 }
 
 - (void)tencentDidNotNetWork{
-    [self alertHUD:@"网络异常"];
+    [self alertHUD:Localized(@"Net_anomaly")];
 }
 
 -(void)getUserInfoResponse:(APIResponse *)response{
@@ -307,7 +307,7 @@
         NSString* face = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
         [self thirdPartyLogin:nick openID:openID face:face type:1];
     }else {
-        [self alertHUD:@"授权失败"];
+        [self alertHUD:Localized(@"Auth_fail")];
     }
 }
 -(BOOL)checkPhoneNum:(NSString*)num{//验证手机号
@@ -337,14 +337,14 @@
             [self.HUD setLabelFont:[UIFont systemFontOfSize:14.f]];
             
             if(![self checkPhoneNum:_mobileText.text]){
-                [self alertHUD:@"请输入正确的手机号"];
+                [self alertHUD:Localized(@"Phone_error")];
             }else{
                 if([_passwordText.text length] < 6){
-                    [self alertHUD:@"密码不能少于六位"];
+                    [self alertHUD:Localized(@"Password_six")];
                 }else{
                     NSString *mobile = _mobileText.text;
                     NSString *password = _passwordText.text;
-                    self.HUD.labelText = @"正在登录!";
+                    self.HUD.labelText = Localized(@"Login_now");
                     [self.HUD show:YES];
                     
                     NSDictionary* arg = @{@"a":@"userLogin",@"userName":mobile,@"password":password};
@@ -363,7 +363,7 @@
                             }else{
                                 // NSLog(@"%@",@"归档失败!");
                             }
-                            [self hidHUD:@"登录成功" success:YES];
+                            [self hidHUD:Localized(@"Success_txt") success:YES];
                             [self dismissViewControllerAnimated:YES completion:nil];
                         }else if(react == 400){
                             [self hidHUD:message];
@@ -431,7 +431,7 @@
     self.HUD.delegate = self;
     self.HUD.minSize = CGSizeMake(135.f, 135.f);
     [self.HUD setLabelFont:[UIFont systemFontOfSize:14.f]];
-    self.HUD.labelText = @"正在登录!";
+    self.HUD.labelText = Localized(@"Login_now");
     [self.HUD show:YES];
     
     
@@ -453,7 +453,7 @@
             }else{
                // NSLog(@"%@",@"归档失败!");
             }
-            [self hidHUD:@"登录成功" success:YES];
+            [self hidHUD:Localized(@"Success_txt") success:YES];
             [self dismissViewControllerAnimated:YES completion:nil];
         }else if(react == 400){
             [self hidHUD:message];

@@ -38,6 +38,9 @@
 
 #import "MapLocation.h"
 
+@import GoogleMaps;
+@import GooglePlaces;
+
 @interface AppDelegate ()<UITabBarControllerDelegate,UIAlertViewDelegate>
 @property(nonatomic,strong) UITabBarController* mainTab;
 
@@ -50,6 +53,9 @@
     // Override point for customization after application launch.
     
     [self setWholeStyle];
+    [GMSServices provideAPIKey:googleMapAPIKey];
+    [GMSPlacesClient provideAPIKey:googleMapAPIKey];
+    
 
 //    [JSPatch startWithAppKey:@"04c363927fbfd6cb"];
 //    [JSPatch sync];
@@ -161,12 +167,10 @@
     
     [self configDB];
     
-
+    [self setLanguage];
     
     return YES;
 }
-
-
 
 
 
@@ -250,7 +254,7 @@
 //    [JPUSHService setBadge:0];//清空JPush服务器中存储的badge值
 //    [application setApplicationIconBadgeNumber:0];//小红点清0操作
     
-    NSLog(@"我他妈  是   推送 (7)     ！！！！！！！");
+//    NSLog(@"我他妈  是   推送 (7)     ！！！！！！！");
     
 
 }
@@ -297,7 +301,8 @@
 //支付宝回调函数
 -(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
     
-    if([url.description hasPrefix: @"com.wanmei.waimailanguser://wm.wm0530.com"]){
+    //if([url.description hasPrefix: @"com.wanmei.waimailanguser://wm.wm0530.com"]){
+    if([url.description hasPrefix: @"com.vicisland://www.vicisland.com"]){
         // NSLog( @"%@",url.description);
         //获取当前控制器
         UINavigationController* currentController = self.mainTab.selectedViewController;
@@ -379,7 +384,7 @@
 //    支付宝支付成功返回
     if ([url.host isEqualToString:@"safepay"]) {
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
-             NSLog(@"支付宝成功回调的接口result = %@",resultDic);
+             //NSLog(@"支付宝成功回调的接口result = %@",resultDic);
             
         }];
         return YES;
@@ -396,7 +401,22 @@
     return [WXApi handleOpenURL:url delegate:self];
 }
 
-
+//garfunkel add
+-(void)setLanguage{
+    if (![[NSUserDefaults standardUserDefaults]objectForKey:@"appLanguage"]) {
+        
+        NSArray *languages = [NSLocale preferredLanguages];
+        NSString *language = [languages objectAtIndex:0];
+        
+        if ([language hasPrefix:@"zh-"]) {
+            //开头匹配
+            [[NSUserDefaults standardUserDefaults] setObject:@"zh-Hans" forKey:@"appLanguage"];
+        }else{
+            [[NSUserDefaults standardUserDefaults] setObject:@"en" forKey:@"appLanguage"];
+        }
+    }
+    NSLog(@"garfunkel_log:**language-%@",[[NSUserDefaults standardUserDefaults]objectForKey:@"appLanguage"]);
+}
 #pragma mark =====================================================  设置极光推送
 -(void)startJPush:(NSDictionary*)launchOptions{
     NSString *advertisingId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];
@@ -608,19 +628,19 @@
         NSString *strTitle;
         if([resp isKindOfClass:[PayResp class]]){
             //支付返回结果，实际支付结果需要去微信服务器端查询
-            strTitle = [NSString stringWithFormat:@"支付结果"];
+            strTitle = [NSString stringWithFormat:@"%@", Localized(@"Payment_result")];
             PayResp *aresp = (PayResp *)resp;
             
             switch (aresp.errCode) {
                     case WXSuccess:
                 {
-                    strMsg = @"支付结果：成功！";
+                    strMsg = [NSString stringWithFormat:@"%@:%@",Localized(@"Payment_result"),Localized(@"Success_txt") ];
                     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationPaySuccess object:strMsg];
                 }
                     break;
                     case WXErrCodeUserCancel:
                 {
-                    strMsg = @"用户取消支付！";
+                    strMsg = Localized(@"User_cancel_pay");
                     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationPayUserCancel object:strMsg];
                 }
                     break;
@@ -629,14 +649,14 @@
                     case WXErrCodeSentFail:
                     case WXErrCodeAuthDeny:
                 {
-                    strMsg =@"支付错误、请重试！";
+                    strMsg = Localized(@"Payment_error");
                     // NSLog(@"错误，retcode = %d, retstr = %@", aresp.errCode,aresp.errStr);
                     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationPayFailure object:strMsg];
                 }
                     break;
                 default:
                 {
-                    strMsg =@"支付错误、请重试！";
+                    strMsg = Localized(@"Payment_error");
                     //NSLog(@"错误，retcode = %d, retstr = %@", aresp.errCode,aresp.errStr);
                     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationPayFailure object:strMsg];
                 }

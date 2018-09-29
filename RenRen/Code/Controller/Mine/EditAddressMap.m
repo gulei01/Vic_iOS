@@ -10,8 +10,9 @@
 #import "SearchAddress.h"
 #import "EditAddressMapCell.h"
 #import "KCAnnotation.h"
+#import <GooglePlaces/GooglePlaces.h>
 
-@interface EditAddressMap ()<MAMapViewDelegate,AMapSearchDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchControllerDelegate,UISearchResultsUpdating>
+@interface EditAddressMap ()<UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate,UISearchControllerDelegate,UISearchResultsUpdating,GMSAutocompleteResultsViewControllerDelegate>
 
 
 
@@ -30,7 +31,7 @@
 
 @property(nonatomic,strong) NSMutableArray* arrayNear;
 @property(nonatomic,strong) NSMutableArray* arraySearch;
-@property (nonatomic, strong) SearchAddress *resultsTableController;
+@property (nonatomic, strong) GMSAutocompleteResultsViewController *resultsTableController;
 
 @property(nonatomic,strong) NSString* cellIdentifier;
 
@@ -41,7 +42,9 @@
  *  地图中心的经纬度
  */
 @property(nonatomic,strong) CLLocation* mapCenter;
+@property(nonatomic,strong) GMSPlacesClient* placesClient;
 
+@property(nonatomic,assign) BOOL isResult;
 
 @end
 
@@ -59,6 +62,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _placesClient = [GMSPlacesClient sharedClient];
     self.pageIndex = 1;
     self.keyWordPageIndex = 1;
     self.keyWords =  @"";
@@ -67,7 +71,8 @@
     [self layoutUI];
     [self layoutConstraints];
     self.firstLoad =YES;
-    [self refershDataSoruce];
+    //[self refershDataSoruce];
+    [self getAddressByGoogle];
 }
 
 
@@ -91,13 +96,15 @@
     [self.mapView addSubview:self.iconCenter];
     [self.view addSubview:self.tableView];
     self.definesPresentationContext = YES;
+    
+    self.mapView.hidden = YES;
 }
 
 -(void)layoutConstraints{
     
     NSArray* formats = @[ @"H:|-0-[headerView]-0-|", @"H:|-0-[tableView]-0-|",
-                          @"V:[topView][headerView(==headerHeight)][tableView][bottomView]",
-                          @"H:|-0-[mapView]-0-|", @"V:[mapView(==height)]-0-|",
+                          @"V:[topView][headerView(==54)][tableView][bottomView]",
+                          @"H:|-0-[mapView]-0-|", @"V:[mapView(==0)]-0-|",
                           @"H:[iconCenter(==centerWidth)]", @"V:[iconCenter(==centerHeight)]"];
     
     NSDictionary* metorics = @{ @"headerHeight":@(SCREEN_WIDTH), @"searchHeight":@(44.f), @"height":@(SCREEN_WIDTH-54.f), @"centerWidth":@(22.f), @"centerHeight":@(30.f)};
@@ -112,52 +119,36 @@
     [self.mapView addConstraint:constraint];
 }
 
+-(void)getAddressByGoogle{
+    [_placesClient currentPlaceWithCallback:^(GMSPlaceLikelihoodList * _Nullable likelihoodList, NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Current Place error %@", [error localizedDescription]);
+            return;
+        }
+        
+        //[self.arrayLocation removeAllObjects];
+        //[self.arrayLocation addObject:thood.place];
+        //NSLog(@"garfunkel_log:address--Name:%@",[[self.arrayLocation firstObject] objectForKey:@"name"]);
+        
+        for (GMSPlaceLikelihood *likelihood in likelihoodList.likelihoods) {
+            GMSPlace* place = likelihood.place;
+            [self.arrayNear addObject:place];
+        }
+        
+        GMSPlaceLikelihood* thood = [likelihoodList.likelihoods objectAtIndex:0];
+        CLLocationCoordinate2D neBoundsCorner = thood.place.coordinate;
+        CLLocationCoordinate2D swBoundsCorner = thood.place.coordinate;
+        GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:neBoundsCorner
+                                                                           coordinate:swBoundsCorner];
+        self.resultsTableController.autocompleteBounds = bounds;
+        //[self queryAddress];
+        
+        [self.tableView reloadData];
+    }];
+}
 
 #pragma mark - UISearchBarDelegate (which you use ,which you choose!!)
-- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar                   // return NO to not become first responder
-{
-    
-    return YES;
-}
-- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar                    // called when text starts editing
-{
-    
-}
-- (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar                       // return NO to not resign first responder
-{
-    return YES;
-}
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar                     // called when text ends editing
-{
-}
-- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText   // called when text changes (including clear)
-{
-    self.isKeyWords = YES;
-    [self.arraySearch removeAllObjects];
-    self.keyWords = searchText;
-    
-}
-- (BOOL)searchBar:(UISearchBar *)searchBar shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text NS_AVAILABLE_IOS(3_0) // called before text changes
-{
-    return YES;
-}
 
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar                    // called when keyboard search button pressed
-{
-}
-- (void)searchBarBookmarkButtonClicked:(UISearchBar *)searchBar                   // called when bookmark button pressed
-{
-}
-- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar                     // called when cancel button pressed
-{
-    self.isKeyWords = NO;
-}
-- (void)searchBarResultsListButtonClicked:(UISearchBar *)searchBar NS_AVAILABLE_IOS(3_2) // called when search results button pressed
-{
-}
-- (void)searchBar:(UISearchBar *)searchBar selectedScopeButtonIndexDidChange:(NSInteger)selectedScope NS_AVAILABLE_IOS(3_0){
-    
-}
 
 #pragma mark - UISearchControllerDelegate  (which you use ,which you choose!!)
 // These methods are called when automatic presentation or dismissal occurs. They will not be called if you present or dismiss the search controller yourself.
@@ -165,13 +156,16 @@
     // do something before the search controller is presented
 }
 - (void)didPresentSearchController:(UISearchController *)searchController{
-    
+    self.isResult = false;
 }
 - (void)willDismissSearchController:(UISearchController *)searchController{
     
 }
 - (void)didDismissSearchController:(UISearchController *)searchController{
-    
+    NSLog(@"garfunkel_log:closeSearch");
+    if(self.isResult)
+        [self.navigationController popViewControllerAnimated:YES];
+    NSLog(@"garfunkel_log:searchResult_close");
 }
 
 // Called after the search controller's search bar has agreed to begin editing or when 'active' is set to YES. If you choose not to present the controller yourself or do not implement this method, a default presentation is performed on your behalf.
@@ -184,7 +178,7 @@
 {
     // update the filtered array based on the search text
     
-    [self queryKeyWorkds];
+    //[self queryKeyWorkds];
 }
 
 
@@ -221,8 +215,8 @@
         [self.arraySearch removeAllObjects];
         dispatch_async(dispatch_get_main_queue(), ^{
             if(self.isKeyWords){
-                self.resultsTableController.arrayResult = self.arraySearch;
-                [self.resultsTableController.tableView reloadData];
+                //self.resultsTableController.arrayResult = self.arraySearch;
+                //[self.resultsTableController.tableView reloadData];
             }else{
                 [self.tableView reloadData];
                 if(self.pageIndex == 1){
@@ -247,8 +241,8 @@
     }];
     dispatch_async(dispatch_get_main_queue(), ^{
         if(self.isKeyWords){
-            self.resultsTableController.arrayResult = self.arraySearch;
-            [self.resultsTableController.tableView reloadData];
+            //self.resultsTableController.arrayResult = self.arraySearch;
+            //[self.resultsTableController.tableView reloadData];
         }else{
             [self.tableView reloadData];
             if(self.pageIndex == 1){
@@ -276,8 +270,8 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     EditAddressMapCell* cell = (EditAddressMapCell*)[tableView dequeueReusableCellWithIdentifier:self.cellIdentifier forIndexPath:indexPath];
-    AMapPOI* item = self.arrayNear[indexPath.row];
-    [cell loadData:item.name subTitle:item.address];
+    GMSPlace* item = self.arrayNear[indexPath.row];
+    [cell loadData:item.name subTitle:item.formattedAddress];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -286,12 +280,13 @@
 #pragma mark =====================================================  <UITableViewDelegate>
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    AMapPOI* item;
-    if(tableView == self.resultsTableController.tableView){
-        item = self.arraySearch[indexPath.row];
-    }else{
-        item = self.arrayNear[indexPath.row];
-    }
+//    AMapPOI* item;
+//    if(tableView == self.resultsTableController.tableView){
+//        item = self.arraySearch[indexPath.row];
+//    }else{
+//        item = self.arrayNear[indexPath.row];
+//    }
+    GMSPlace* item = self.arrayNear[indexPath.row];
     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationSelecteMapAddress object:item];
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -346,12 +341,57 @@
     __weak typeof(self) weakSelf = self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         weakSelf.pageIndex =1;
-        [weakSelf queryAround];
+        [weakSelf getAddressByGoogle];
     }];
     self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         weakSelf.pageIndex++;
-        [weakSelf queryAround];
+        [weakSelf getAddressByGoogle];
     }];
+}
+
+#pragma mark =====================================================  <GMSAutocompleteViewControllerDelegate>
+
+- (void)resultsController:(GMSAutocompleteResultsViewController *)resultsController
+ didAutocompleteWithPlace:(GMSPlace *)place {
+    _searchController.active = NO;
+    // Do something with the selected place.
+    //    NSLog(@"Place name %@", place.name);
+    //    NSLog(@"Place address %@", place.formattedAddress);
+    //    NSLog(@"Place attributions %@", place.attributions.string);
+    
+//    self.mapLocation.address = place.name;
+//    self.mapLocation.mapLat = [NSString stringWithFormat:@"%0.6f",place.coordinate.latitude];
+//    self.mapLocation.mapLng = [NSString stringWithFormat:@"%0.6f",place.coordinate.longitude];
+//    self.mapLocation.isOpen = YES;
+//    Boolean flag= [NSKeyedArchiver archiveRootObject:self.mapLocation toFile:[WMHelper archiverMapLocationPath]];
+//    if(flag){
+//        [[NSNotificationCenter defaultCenter]postNotificationName:NotificationMapLocationChangePosition object:nil];
+//        [self.navigationController popToRootViewControllerAnimated:YES];
+//    }else{
+//        [self alertHUD: @"定位失败请重试!"];
+//    }
+    NSLog(@"garfunkel_log:searchResult");
+    GMSPlace* item = place;
+    [[NSNotificationCenter defaultCenter] postNotificationName:NotificationSelecteMapAddress object:item];
+    //[self dismissViewControllerAnimated:YES completion:nil];
+    self.isResult = true;
+}
+
+- (void)resultsController:(GMSAutocompleteResultsViewController *)resultsController
+didFailAutocompleteWithError:(NSError *)error {
+    [self dismissViewControllerAnimated:YES completion:nil];
+    // TODO: handle the error.
+    NSLog(@"Error: %@", [error description]);
+}
+
+- (void)didRequestAutocompletePredictionsForResultsController:
+(GMSAutocompleteResultsViewController *)resultsController {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
+- (void)didUpdateAutocompletePredictionsForResultsController:
+(GMSAutocompleteResultsViewController *)resultsController {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
 }
 
 #pragma mark =====================================================  property package
@@ -381,21 +421,26 @@
 -(UISearchController *)searchController{
     if(!_searchController){
         _searchController = [[UISearchController alloc] initWithSearchResultsController:self.resultsTableController];
+        _searchController.searchResultsUpdater = self.resultsTableController;
         _searchController.searchBar.frame = CGRectMake(self.searchController.searchBar.frame.origin.x, self.searchController.searchBar.frame.origin.y, self.searchController.searchBar.frame.size.width, 44.0);
-        _searchController.searchResultsUpdater = self;
-        _searchController.searchBar.placeholder =  @"小区/大厦/学校等";
+//        _searchController.searchResultsUpdater = self;
+        //_searchController.searchBar.placeholder =  @"小区/大厦/学校等";
+//        _searchController.delegate = self;
+//        _searchController.dimsBackgroundDuringPresentation = NO; // default is YES
+//        _searchController.searchBar.delegate = self; // so we can monitor text changes + others
+        [_searchController.searchBar sizeToFit];
         _searchController.delegate = self;
-        _searchController.dimsBackgroundDuringPresentation = NO; // default is YES
-        _searchController.searchBar.delegate = self; // so we can monitor text changes + others
     }
     return _searchController;
 }
 
 
--(SearchAddress *)resultsTableController{
+-(GMSAutocompleteResultsViewController *)resultsTableController{
     if(!_resultsTableController){
-        _resultsTableController = [[SearchAddress alloc]init];
-        _resultsTableController.tableView.delegate = self;
+//        _resultsTableController = [[SearchAddress alloc]init];
+//        _resultsTableController.tableView.delegate = self;
+        _resultsTableController = [[GMSAutocompleteResultsViewController alloc]init];
+        _resultsTableController.delegate = self;
     }
     return _resultsTableController;
 }
@@ -404,7 +449,7 @@
     if(!_mapView){
         _mapView = [[MAMapView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_WIDTH-44.f)];
         _mapView.translatesAutoresizingMaskIntoConstraints = NO;
-        _mapView.delegate = self;
+        //_mapView.delegate = self;
         _mapView.showsUserLocation = YES;
         _mapView.userTrackingMode = MAUserTrackingModeFollow;
         [_mapView setZoomLevel:18.5];
@@ -436,7 +481,7 @@
 -(AMapSearchAPI *)search{
     if(!_search){
         _search = [[AMapSearchAPI alloc] init];
-        _search.delegate = self;
+        //_search.delegate = self;
     }
     return _search;
 }

@@ -35,5 +35,8 @@ target :RenRen do
     pod 'AMapSearch'
     pod 'AMapLocation'
     #pod 'JSPatchPlatform'
+    pod 'GoogleMaps'
+    pod 'GooglePlaces'
+    pod 'GooglePlacePicker'
     
 end

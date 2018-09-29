@@ -61,7 +61,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"订单详情";
+    self.title = Localized(@"Order_detail");
     [self layoutUI];
     [self layoutConstrants];
     
@@ -259,14 +259,14 @@
 #pragma mark =====================================================  <UIAlertViewDelegate>
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(buttonIndex == 1){
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",[self.dictOther objectForKey:@"tel"]]]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"Tel:%@",[self.dictOther objectForKey:@"tel"]]]];
     }
 }
 
 #pragma mark =====================================================  Private Method
 -(void)loadData{
     NSString* statusName = [self.dictOther objectForKey:@"statusname"];
-    NSString* str =[NSString stringWithFormat:@"%@\n有任何意见都可联系我们",statusName];
+    NSString* str =[NSString stringWithFormat:@"%@\n%@",statusName,Localized(@"Can_touch_we")];
     NSMutableAttributedString* attributeStr = [[NSMutableAttributedString alloc]initWithString:str];
     [attributeStr addAttributes:@{NSForegroundColorAttributeName:theme_title_color,NSFontAttributeName:[UIFont systemFontOfSize:17.f]} range:NSMakeRange(0, statusName.length)];
     [attributeStr addAttributes:@{NSForegroundColorAttributeName:theme_Fourm_color,NSFontAttributeName:[UIFont systemFontOfSize:12.f]} range:NSMakeRange(statusName.length+1, str.length-statusName.length-1)];
@@ -293,10 +293,10 @@
     double shipFee = [[self.dictOther objectForKey:@"ship_fee"] doubleValue];
     double foodFee = [[self.dictOther objectForKey:@"food_amount"] doubleValue];
     
-    self.labelPackgeFee.text = [NSString stringWithFormat:@" ￥%.2f",packageFee];
-    self.labelShipFee.text = [NSString stringWithFormat:@" ￥%.2f",shipFee];
+    self.labelPackgeFee.text = [NSString stringWithFormat:@" $%.2f",packageFee];
+    self.labelShipFee.text = [NSString stringWithFormat:@" $%.2f",shipFee];
     
-    self.labelSumPrice.text = [NSString stringWithFormat:@"商品金额    ￥%.2f",(packageFee+shipFee+foodFee)];
+    self.labelSumPrice.text = [NSString stringWithFormat:@"%@    $%.2f",Localized(@"Product_price"),(packageFee+shipFee+foodFee)];
     self.txtExpressMan.text = [self.dictOther objectForKey:@"empname"];
     self.txtOrderNO.text = [self.dictOther objectForKey:@"order_id"];
     self.txtExpressDate.text = [self.dictOther objectForKey:@"expect_time"];
@@ -311,7 +311,7 @@
     double storeDiscount = [[self.dictOther objectForKey: @"discount"]doubleValue];
     
     self.fullCut = platformDiscount+storeDiscount;
-    self.labelFullCutPrice.text = [NSString stringWithFormat:@"- ￥%.2f",self.fullCut];
+    self.labelFullCutPrice.text = [NSString stringWithFormat:@"- $%.2f",self.fullCut];
     if(self.fullCut>0.00){
         dispatch_async(dispatch_get_main_queue(), ^{
          if(self.fullCutConstraint){
@@ -351,7 +351,7 @@
 
 -(IBAction)tipTouch:(UIButton*)sender{
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"是否拨打电话？" message:[self.dictOther objectForKey:@"tel"] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:Localized(@"Whether_call") message:[self.dictOther objectForKey:@"Tel"] delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     [alert show];
 }
 
@@ -370,7 +370,7 @@
         _labelExpressStatus.backgroundColor = [UIColor colorWithRed:231/255.f green:232/255.f blue:238/255.f alpha:1.0];
         _labelExpressStatus.textColor = [UIColor colorWithRed:105/255.f green:106/255.f blue:110/255.f alpha:1.0];
         _labelExpressStatus.font = [UIFont systemFontOfSize:14.f];
-        _labelExpressStatus.text = @"   配送状态";
+        _labelExpressStatus.text = [NSString stringWithFormat:@"   %@",Localized(@"Delivery_status")];
     }
     return _labelExpressStatus;
 }
@@ -380,8 +380,8 @@
         _labelStatus = [[UILabel alloc]initWithFrame:CGRectMake(10, 35.f, SCREEN_WIDTH/2, 80.f)];
         _labelStatus.numberOfLines = 0;
         _labelStatus.lineBreakMode = NSLineBreakByCharWrapping;
-        NSString* statusName = @"订单未知";
-        NSString* str =[NSString stringWithFormat:@"%@\n有任何意见都可联系我们",statusName];
+        NSString* statusName = Localized(@"Order_unknow");
+        NSString* str =[NSString stringWithFormat:@"%@\n%@",statusName,Localized(@"Can_touch_we")];
         NSMutableAttributedString* attributeStr = [[NSMutableAttributedString alloc]initWithString:str];
         [attributeStr addAttributes:@{NSForegroundColorAttributeName:theme_title_color,NSFontAttributeName:[UIFont systemFontOfSize:17.f]} range:NSMakeRange(0, statusName.length)];
         [attributeStr addAttributes:@{NSForegroundColorAttributeName:theme_Fourm_color,NSFontAttributeName:[UIFont systemFontOfSize:12.f]} range:NSMakeRange(statusName.length+1, str.length-statusName.length-1)];
@@ -402,7 +402,7 @@
         _labelCreateDate.textAlignment = NSTextAlignmentRight;
         
         NSString* createDate = [WMHelper convertToStringWithDate:[NSDate new] format:@"yyyy/MM/dd HH:mm:ss "];
-        NSString* payWay = @"支付未知";
+        NSString* payWay = Localized(@"Payment_unknow");
         
         NSString*  str =[NSString stringWithFormat:@"%@\n%@",createDate,payWay];
         NSMutableAttributedString*   attributeStr = [[NSMutableAttributedString alloc]initWithString:str];
@@ -423,7 +423,7 @@
         _labelDetail.backgroundColor = [UIColor colorWithRed:231/255.f green:232/255.f blue:238/255.f alpha:1.0];
         _labelDetail.textColor = theme_Fourm_color;
         _labelDetail.font = [UIFont systemFontOfSize:14.f];
-        _labelDetail.text = @"   订单明细";
+        _labelDetail.text = [NSString stringWithFormat:@"   %@",Localized(@"Order_detail")];
     }
     return _labelDetail;
 }
@@ -438,7 +438,7 @@
         _btnStore.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
         [_btnStore setImage:[UIImage imageNamed:@"icon-store-default"] forState:UIControlStateNormal];
         [_btnStore setTitleColor:[UIColor colorWithRed:72/255.f green:72/255.f blue:72/255.f alpha:1.0] forState:UIControlStateNormal];
-        [_btnStore setTitle:@"家家乐超市" forState:UIControlStateNormal];
+        [_btnStore setTitle:@"supermarket" forState:UIControlStateNormal];
         _btnStore.titleLabel.font = [UIFont systemFontOfSize:16.f];
         CALayer *border = [CALayer layer];
         border.frame = CGRectMake(0.0f, 44.5f, SCREEN_WIDTH,0.5f);
@@ -473,7 +473,7 @@
         _labelCutIcon.layer.masksToBounds = YES;
         _labelCutIcon.layer.cornerRadius = 3.f;
         _labelCutIcon.textAlignment = NSTextAlignmentCenter;
-        _labelCutIcon.text =  @"减";
+        _labelCutIcon.text =  Localized(@"Less_txt");
         _labelCutIcon.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelCutIcon;
@@ -483,7 +483,7 @@
     if(!_labelCutTitle){
         _labelCutTitle = [[UILabel alloc]init];
         _labelCutTitle.font =[UIFont systemFontOfSize:14.f];
-        _labelCutTitle.text =  @"满减优惠:";
+        _labelCutTitle.text = [NSString stringWithFormat:@"%@:",Localized(@"Full_redue")];
         _labelCutTitle.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
         _labelCutTitle.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -493,7 +493,7 @@
 -(UILabel *)labelFullCutPrice{
     if(!_labelFullCutPrice){
         _labelFullCutPrice = [[UILabel alloc]init];
-        _labelFullCutPrice.text = @"￥0.00";
+        _labelFullCutPrice.text = @"$0.00";
         _labelFullCutPrice.textAlignment = NSTextAlignmentRight;
         _labelFullCutPrice.font = [UIFont systemFontOfSize:14.f];
         _labelFullCutPrice.textColor = [UIColor redColor];
@@ -509,7 +509,7 @@
         _labelPackge.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
         _labelPackge.font = [UIFont systemFontOfSize:14.f];
         _labelPackge.textAlignment = NSTextAlignmentLeft;
-        _labelPackge.text =  @"打包费";
+        _labelPackge.text =  Localized(@"Packing_fee");
     }
     return _labelPackge;
 }
@@ -530,7 +530,7 @@
         _labelShip.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
         _labelShip.font = [UIFont systemFontOfSize:14.f];
         _labelShip.textAlignment = NSTextAlignmentLeft;
-        _labelShip.text =  @"配送费";
+        _labelShip.text =  Localized(@"Delivery_fee");
     }
     return _labelShip;
 }
@@ -551,7 +551,7 @@
         _labelSumPrice.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
         _labelSumPrice.textAlignment = NSTextAlignmentRight;
         _labelSumPrice.font = [UIFont systemFontOfSize:15.f];
-        _labelSumPrice.text = [NSString stringWithFormat:@"商品金额    ￥%@",@"0.00"];
+        _labelSumPrice.text = [NSString stringWithFormat:@"%@    $%@",Localized(@"Product_price"),@"0.00"];
     }
     return _labelSumPrice;
 }
@@ -562,7 +562,7 @@
         _labelOther.backgroundColor = [UIColor colorWithRed:231/255.f green:232/255.f blue:238/255.f alpha:1.0];
         _labelOther.textColor = theme_Fourm_color;
         _labelOther.font = [UIFont systemFontOfSize:14.f];
-        _labelOther.text = @"   其他信息";
+        _labelOther.text = [NSString stringWithFormat:@"   %@",Localized(@"Other_info")];
     }
     return _labelOther;
 }
@@ -574,7 +574,7 @@
         label.frame = CGRectMake(10, 0, 80, 45.f);
         label.font = [UIFont systemFontOfSize:16.f];
         label.textColor = [UIColor colorWithRed:5/255.f green:5/255.f blue:5/255.f alpha:1.0];
-        label.text = @"   配送人:";
+        label.text = [NSString stringWithFormat:@"   %@:",Localized(@"Delivery_person")];
         CALayer *border = [CALayer layer];
         border.frame = CGRectMake(0.0f, 44.5f, SCREEN_WIDTH,0.5f);
         border.backgroundColor = [UIColor colorWithRed:208/255.f green:207/255.f blue:213/255.f alpha:1.0].CGColor;
@@ -584,7 +584,7 @@
         _txtExpressMan.leftViewMode =UITextFieldViewModeAlways;
         _txtExpressMan.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
         _txtExpressMan.autocapitalizationType= UITextAutocapitalizationTypeAllCharacters;
-        _txtExpressMan.placeholder = @"无配送人";
+        _txtExpressMan.placeholder = Localized(@"No_deli_person");
         _txtExpressMan.font = [UIFont systemFontOfSize:14.f];
         _txtExpressMan.enabled = NO;
         _txtExpressMan.textColor  = theme_Fourm_color;
@@ -599,7 +599,7 @@
         label.frame = CGRectMake(10, 0, 80, 45.f);
         label.font = [UIFont systemFontOfSize:16.f];
         label.textColor = [UIColor colorWithRed:51/255.f green:51/255.f blue:51/255.f alpha:1.0];
-        label.text = @"   订单号:";
+        label.text = [NSString stringWithFormat:@"   %@:",Localized(@"Order_num")];
         CALayer *border = [CALayer layer];
         border.frame = CGRectMake(0.0f, 44.5f, SCREEN_WIDTH,0.5f);
         border.backgroundColor = [UIColor colorWithRed:208/255.f green:207/255.f blue:213/255.f alpha:1.0].CGColor;
@@ -609,7 +609,7 @@
         _txtOrderNO.leftViewMode =UITextFieldViewModeAlways;
         _txtOrderNO.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
         _txtOrderNO.autocapitalizationType= UITextAutocapitalizationTypeAllCharacters;
-        _txtOrderNO.placeholder = @"无订单号";
+        _txtOrderNO.placeholder = Localized(@"No_order_num");
         _txtOrderNO.font = [UIFont systemFontOfSize:14.f];
         _txtOrderNO.enabled = NO;
         _txtOrderNO.textColor  = theme_Fourm_color;
@@ -624,7 +624,7 @@
         label.frame = CGRectMake(0, 0, 90, 45.f);
         label.font = [UIFont systemFontOfSize:16.f];
         label.textColor = [UIColor colorWithRed:51/255.f green:51/255.f blue:51/255.f alpha:1.0];
-        label.text = @"   配送时间:";
+        label.text = [NSString stringWithFormat:@"   %@:",Localized(@"Delivery_time")];
         CALayer *border = [CALayer layer];
         border.frame = CGRectMake(0.0f, 44.5f, SCREEN_WIDTH,0.5f);
         border.backgroundColor = [UIColor colorWithRed:208/255.f green:207/255.f blue:213/255.f alpha:1.0].CGColor;
@@ -634,7 +634,7 @@
         _txtExpressDate.leftViewMode =UITextFieldViewModeAlways;
         _txtExpressDate.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
         _txtExpressDate.autocapitalizationType= UITextAutocapitalizationTypeAllCharacters;
-        _txtExpressDate.placeholder = @"无配送时间";
+        _txtExpressDate.placeholder = Localized(@"No_deli_time");
         _txtExpressDate.font = [UIFont systemFontOfSize:14.f];
         _txtExpressDate.enabled = NO;
         _txtExpressDate.textColor  = theme_Fourm_color;
@@ -650,7 +650,7 @@
         label.frame = CGRectMake(0, 0, 90, 55.f);
         label.font = [UIFont systemFontOfSize:16.f];
         label.textColor = [UIColor colorWithRed:51/255.f green:51/255.f blue:51/255.f alpha:1.0];
-        NSMutableAttributedString*   attributeStr = [[NSMutableAttributedString alloc]initWithString:@"   收货信息:\n"];
+        NSMutableAttributedString*   attributeStr = [[NSMutableAttributedString alloc]initWithString:[NSString stringWithFormat:@"   %@:\n",Localized(@"Rece_info")]];
         label.attributedText = attributeStr;
         label.numberOfLines = 0;
         label.lineBreakMode = NSLineBreakByCharWrapping;
@@ -668,7 +668,7 @@
         _txtAddress.rightView = self.txtShoppingAddress;
         _txtAddress.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
         _txtAddress.autocapitalizationType= UITextAutocapitalizationTypeAllCharacters;
-        _txtShoppingAddress.text =@"无收货信息";
+        _txtShoppingAddress.text =Localized(@"No_rece_info");
         _txtAddress.enabled = NO;
         [_txtShoppingAddress setEditable:NO];
         _txtShoppingAddress.textAlignment = NSTextAlignmentLeft;
@@ -684,7 +684,7 @@
         label.frame = CGRectMake(0, 0, 90, 45.f);
         label.font = [UIFont systemFontOfSize:15.f];
         label.textColor = [UIColor colorWithRed:51/255.f green:51/255.f blue:51/255.f alpha:1.0];
-        label.text =@"   支付方式:";
+        label.text = [NSString stringWithFormat:@"   %@:",Localized(@"Payment_method")];
         CALayer *border = [CALayer layer];
         border.frame = CGRectMake(0.0f, 44.5f, SCREEN_WIDTH,0.5f);
         border.backgroundColor = [UIColor colorWithRed:208/255.f green:207/255.f blue:213/255.f alpha:1.0].CGColor;
@@ -694,7 +694,7 @@
         _txtPayWay.leftViewMode =UITextFieldViewModeAlways;
         _txtPayWay.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
         _txtPayWay.autocapitalizationType= UITextAutocapitalizationTypeAllCharacters;
-        _txtPayWay.placeholder = @"无支付方式";
+        _txtPayWay.placeholder = Localized(@"No_payment_method");
         _txtPayWay.enabled = NO;
         _txtPayWay.font = [UIFont systemFontOfSize:14.f];
         _txtPayWay.textColor  = theme_Fourm_color;

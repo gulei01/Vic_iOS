@@ -48,7 +48,7 @@
     if(self){
         [self.tabBarItem setImage:[UIImage imageNamed:@"tab-order-default"]];
         [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"tab-order-enter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        [self.tabBarItem setTitle:@"订单"];
+        [self.tabBarItem setTitle:Localized(@"Order_txt")];
         self.tabBarItem.tag=2;
     }
     return self;
@@ -56,7 +56,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = theme_table_bg_color;
-    self.title = @"我的订单";
+    self.title = Localized(@"My_order");
     self.orderStatus = @"-1";
     [self layoutUI];
     [self layoutConstraints];
@@ -101,7 +101,7 @@
     
     
     self.arrayBtn = [[NSMutableArray alloc]init];
-    NSArray* arrayTitle = @[@"全部",@"待付款",@"已付款",@"退款单"];
+    NSArray* arrayTitle = @[Localized(@"All_txt"),Localized(@"Pending_pay"),Localized(@"Already_paid"),Localized(@"Refund_from")];
     for (int i=0; i<4; i++) {
         UIButton* btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(i*SCREEN_WIDTH/4, 0, SCREEN_WIDTH/4, 45);
@@ -339,7 +339,7 @@
 }
 -(void)orderCancelOrder:(MOrder *)item{
     self.orderNo = item.rowID;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"是否要取消订单?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"Want_to_cancel_order") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     alert.tag = 9999;
     [alert show];
 }
@@ -352,7 +352,7 @@
 -(void)orderDelete:(OrderCell *)tableViewCell item:(MOrder *)item{
     self.temporaryOrder = item;
     self.temporaryIndex = tableViewCell.tag;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"确认删除订单?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"Want_to_del_order") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     alert.tag = 7777;
     [alert show];
 }
@@ -367,7 +367,7 @@
             NetRepositories* repositories = [[NetRepositories alloc]init];
             [repositories netConfirm:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
                 if(react == 1){
-                    [self hidHUD:@"订单取消成功"];
+                    [self hidHUD:Localized(@"Order_cancel_success")];
                 }else if(react == 400){
                     [self hidHUD:message];
                 }else{
@@ -490,10 +490,10 @@
     order.partner = partner;
     order.seller = seller;
     order.tradeNO = orderID; //订单ID（由商家自行制定）
-    order.productName = @"外卖郎 订单"; //商品标题
-    order.productDescription = @"外卖郎变量店 订单"; //商品描述
+    order.productName = @"Tutti 订单"; //商品标题
+    order.productDescription = @"Tutti变量店 订单"; //商品描述
     order.amount = [NSString stringWithFormat:@"%.2f",[price floatValue]]; //商品价格
-    order.notifyURL =  @"http://wm.wm0530.com/Mobile/Tpay/notifyurl"; //回调URL
+    order.notifyURL =  @"http://www.vicisland/Mobile/Tpay/notifyurl"; //回调URL
     
     order.service = @"mobile.securitypay.pay";
     order.paymentType = @"1";
@@ -502,7 +502,7 @@
     order.showUrl = @"m.alipay.com";
     
     //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = @"com.wanmei.waimailanguser";
+    NSString *appScheme = @"com.kavl.waimailanguser";
     
     //将商品信息拼接成字符串
     NSString *orderSpec = [order description];
@@ -567,7 +567,7 @@
     NSMutableParagraphStyle *paragraph = [NSMutableParagraphStyle new];
     paragraph.lineBreakMode = NSLineBreakByWordWrapping;
     paragraph.alignment = NSTextAlignmentCenter;
-    return  [[NSMutableAttributedString alloc] initWithString:@"没有查询到相关数据" attributes:@{NSForegroundColorAttributeName:[UIColor grayColor],NSParagraphStyleAttributeName:paragraph}];
+    return  [[NSMutableAttributedString alloc] initWithString:Localized(@"No_data") attributes:@{NSForegroundColorAttributeName:[UIColor grayColor],NSParagraphStyleAttributeName:paragraph}];
 }
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
 {

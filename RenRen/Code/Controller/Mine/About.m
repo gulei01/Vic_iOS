@@ -29,7 +29,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.title = @"关于我们";
+    self.navigationItem.title = Localized(@"About_us");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -101,7 +101,7 @@
 -(UILabel *)labelCopyRight{
     if(!_labelCopyRight){
         _labelCopyRight = [[UILabel alloc]init];
-        NSAttributedString* attributeStr =[[NSAttributedString alloc]initWithString:@"完美网络科技有限公司 \n Copyright © 2016-2017 http://wm.wm0530.com" attributes:@{NSFontAttributeName :[UIFont systemFontOfSize:14.0],NSForegroundColorAttributeName:theme_Fourm_color}];
+        NSAttributedString* attributeStr =[[NSAttributedString alloc]initWithString:@"Kavl Technology Ltd \n Copyright © 2018 https://www.vicisland.com" attributes:@{NSFontAttributeName :[UIFont systemFontOfSize:14.0],NSForegroundColorAttributeName:theme_Fourm_color}];
         _labelCopyRight.attributedText = attributeStr;
         _labelCopyRight.textAlignment = NSTextAlignmentCenter;
         _labelCopyRight.numberOfLines = 0;

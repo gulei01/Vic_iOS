@@ -144,14 +144,14 @@
 }
 
 -(void)orderStatusCall:(NSString *)phone{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"是否拨打电话？" message:phone delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:Localized(@"Whether_call") message:phone delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     [alert show];
 }
 
 #pragma mark =====================================================  <UIAlertViewDelegate>
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(buttonIndex == 1){
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",alertView.message]]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"Tel:%@",alertView.message]]];
     }
 }
 

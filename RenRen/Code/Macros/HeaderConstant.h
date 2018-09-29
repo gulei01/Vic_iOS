@@ -103,6 +103,8 @@
 #pragma mark =====================================================  APPID 苹果应用唯一标示
 #define kStoreAppId     @""
 
+#pragma google map ===============================================  Google Map
+#define googleMapAPIKey @"AIzaSyCLuaiOlNCVdYl9ZKZzJIeJVkitLksZcYA"
 /**
  * end 20170407 第三方配置文件
  *
@@ -162,7 +164,10 @@
  */
 #define kDefaultTuanImage @"Icon-default-image"
 
-
-
+//garfunkel add
+#define languageName_zh @"中文"
+#define languageName_en @"English"
+//获取语言包
+#define Localized(key)  [[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"appLanguage"]] ofType:@"lproj"]] localizedStringForKey:(key) value:nil table:@"Language"]
 
 #endif /* HeaderConstant_h */

@@ -278,7 +278,7 @@
     self.labelNavTitle.text = item.storeName;
     [self.storeLogo sd_setImageWithURL:[NSURL URLWithString:item.logo] placeholderImage:[UIImage imageNamed:kDefStoreLogo]];
     self.labelStoreName.text = item.storeName;
-    self.labelShip.text = [NSString stringWithFormat:@"配送费:$%@ | 打包费:$%@",item.shipFee,item.pack_fee];
+    self.labelShip.text = [NSString stringWithFormat:@"%@:$%@ | %@:$%@",Localized(@"Delivery_fee"),item.shipFee,Localized(@"Packing_fee"),item.pack_fee];
     self.labelNotice.text = item.notice;
     
     self.storeInfoCotroller.entity = item;
@@ -286,17 +286,17 @@
     self.labelName.text = item.storeName;
     NSString* starTime =[NSString stringWithFormat:@"%ld:00",[item.servicTimeBegin integerValue]/60];
     NSString* endTime =[NSString stringWithFormat:@"%ld:00",[item.serviceTimerEnd integerValue]/60];
-    self.labelSale.text =  [NSString stringWithFormat: @"月售单量: %@单 营业时间: %@",item.sale,item.time];
+    self.labelSale.text =  [NSString stringWithFormat: @"%@: %@ %@: %@",Localized(@"Month_sale_num"),item.sale,Localized(@"Business_time"),item.time];
     self.labelNotices.text = [NSString stringWithFormat: @"☆ %@",item.notice];
     NSInteger star = [item.storeScore integerValue];
     [self.starService setScore:star/5.0f withAnimation:YES];
     BOOL flag = NO;
     for (NSDictionary* sub in item.arrayActive) {
-        if([sub objectForKey: @"满"]){
-            self.labelIcon.text =  @"减";
-            self.labelActive.text = [sub objectForKey: @"满"];
-            flag = YES;
-        }
+//        if([sub objectForKey: @"满"]){
+//            self.labelIcon.text =  @"减";
+//            self.labelActive.text = [sub objectForKey: @"满"];
+//            flag = YES;
+//        }
         //        if([sub objectForKey: @"首"]){
         //            self.labelIcon.text =  @" 首 ";
         //            self.labelActive.text = [sub objectForKey: @"首"];
@@ -333,9 +333,18 @@
 }
 
 -(void)openSpecView:(NSNotification *)obj{
-    UIView* tView = [self specView:obj.object[@"item"] btn:obj.object[@"btn"]];
+    if(self.Identity.userInfo.isLogin){
+        UIView* tView = [self specView:obj.object[@"item"] btn:obj.object[@"btn"]];
+        
+        [self.navigationController.view addSubview:tView];
+    }else{
+        UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Login alloc]init]];
+        [nav.navigationBar setBackgroundColor:theme_navigation_color];
+        [nav.navigationBar setBarTintColor:theme_navigation_color];
+        [nav.navigationBar setTintColor:theme_default_color];
+        [self presentViewController:nav animated:YES completion:nil];
+    }
     
-    [self.navigationController.view addSubview:tView];
 //    NSLog(@"garfunkel_log:%@",[[obj object] storeName]);
 }
 #pragma mark =====================================================  <UMSocialUIDelegate>
@@ -352,7 +361,8 @@
 }
 
 -(void)didSelectSocialPlatform:(NSString *)platformName withSocialData:(UMSocialData *)socialData{
-    NSString* url = [NSString stringWithFormat: @"http://wm.wm0530.com/Mobile/Shop/index?sid=%@",self.entity.rowID];
+    //NSString* url = [NSString stringWithFormat: @"http://wm.wm0530.com/Mobile/Shop/index?sid=%@",self.entity.rowID];
+    NSString* url = [NSString stringWithFormat: @"http://www.vicisland.com/Wap/Shop/index?sid=%@",self.entity.rowID];
     if (platformName==UMShareToWechatTimeline) {
         [UMSocialData defaultData].extConfig.wechatTimelineData.url = url;
         [UMSocialData defaultData].extConfig.wechatTimelineData.wxMessageType = UMSocialWXMessageTypeWeb;
@@ -395,7 +405,7 @@
     [UMSocialData defaultData].extConfig.title = self.entity.storeName;
     [UMSocialSnsService presentSnsIconSheetView:self
                                          appKey:kYouMengAppKey
-                                      shareText:[NSString stringWithFormat: @"%@ 来自#外卖郎iOS#",self.entity.storeName]
+                                      shareText:[NSString stringWithFormat: @"%@ #TUTTi iOS#",self.entity.storeName]
                                      shareImage:[UIImage imageNamed:@"icon"]
                                 shareToSnsNames:arrayShare
                                        delegate:self];
@@ -554,7 +564,7 @@
         _btnMenu = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnMenu.tag = 0;
         [_btnMenu setTitleColor:[UIColor colorWithRed:48/255.f green:48/255.f blue:48/255.f alpha:1.0] forState:UIControlStateNormal];
-        [_btnMenu setTitle:@"商品" forState:UIControlStateNormal];
+        [_btnMenu setTitle:Localized(@"Product_txt") forState:UIControlStateNormal];
         [_btnMenu addTarget:self action:@selector(changeOption:) forControlEvents:UIControlEventTouchUpInside];
         _btnMenu.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -566,7 +576,7 @@
         _btnComment =[UIButton buttonWithType:UIButtonTypeCustom];
         _btnComment.tag = 1;
         [_btnComment setTitleColor:[UIColor colorWithRed:48/255.f green:48/255.f blue:48/255.f alpha:1.0] forState:UIControlStateNormal];
-        [_btnComment setTitle:@"评论" forState:UIControlStateNormal];
+        [_btnComment setTitle:Localized(@"Comment_txt") forState:UIControlStateNormal];
         [_btnComment addTarget:self action:@selector(changeOption:) forControlEvents:UIControlEventTouchUpInside];
         _btnComment.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -578,7 +588,7 @@
         _btnStore = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnStore.tag =2;
         [_btnStore setTitleColor:[UIColor colorWithRed:48/255.f green:48/255.f blue:48/255.f alpha:1.0] forState:UIControlStateNormal];
-        [_btnStore setTitle:@"商家" forState:UIControlStateNormal];
+        [_btnStore setTitle:Localized(@"Store_txt") forState:UIControlStateNormal];
         [_btnStore addTarget:self action:@selector(changeOption:) forControlEvents:UIControlEventTouchUpInside];
         _btnStore.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -678,7 +688,7 @@
 -(UILabel *)labelScore{
     if(!_labelScore){
         _labelScore = [[UILabel alloc]init];
-        _labelScore.text =  @"店铺评分: ";
+        _labelScore.text =  [NSString stringWithFormat:@"%@:",Localized(@"Stop_rating")];
         _labelScore.textColor = [UIColor whiteColor];
         _labelScore.textAlignment = NSTextAlignmentRight;
         _labelScore.font = [UIFont systemFontOfSize:12.f];
@@ -721,7 +731,7 @@
     if(!_labelTitle){
         _labelTitle = [[UILabel alloc]init];
         _labelTitle.textColor = [UIColor whiteColor];
-        _labelTitle.text =  @"店铺公告";
+        _labelTitle.text = Localized(@"Stop_notice");
         _labelTitle.textAlignment = NSTextAlignmentCenter;
         _labelTitle.translatesAutoresizingMaskIntoConstraints = NO;
     }

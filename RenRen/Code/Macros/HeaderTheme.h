@@ -19,7 +19,7 @@
 
 #define theme_default_color [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1.0]
 
-#define theme_navigation_color  [UIColor colorWithRed:255/255.0 green:37/255.0 blue:68/255.0 alpha:1.0]
+#define theme_navigation_color  [UIColor colorWithRed:239/255.0 green:151/255.0 blue:62/255.0 alpha:1.0]
 
 #define theme_line_color [UIColor colorWithRed:231/255.0f green:231/255.0f blue:231/255.0f alpha:1.0f]
 

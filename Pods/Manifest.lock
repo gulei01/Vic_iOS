@@ -44,6 +44,16 @@ PODS:
   - FMDB/standard (2.6.2)
   - FMDBHelper (0.2.0):
     - FMDB (= 2.6.2)
+  - GoogleMaps (2.2.0):
+    - GoogleMaps/Maps (= 2.2.0)
+  - GoogleMaps/Base (2.2.0)
+  - GoogleMaps/Maps (2.2.0):
+    - GoogleMaps/Base
+  - GooglePlacePicker (2.2.0):
+    - GoogleMaps (= 2.2.0)
+    - GooglePlaces (= 2.2.0)
+  - GooglePlaces (2.2.0):
+    - GoogleMaps/Base (= 2.2.0)
   - IQKeyboardManager (3.3.7)
   - MarqueeLabel (3.1.6):
     - MarqueeLabel/ObjC (= 3.1.6)
@@ -69,6 +79,9 @@ DEPENDENCIES:
   - DZNEmptyDataSet
   - FMDB
   - FMDBHelper
+  - GoogleMaps
+  - GooglePlacePicker
+  - GooglePlaces
   - IQKeyboardManager (~> 3.3.2)
   - MarqueeLabel
   - MBProgressHUD (~> 0.9.1)
@@ -93,6 +106,9 @@ SPEC REPOS:
     - DZNEmptyDataSet
     - FMDB
     - FMDBHelper
+    - GoogleMaps
+    - GooglePlacePicker
+    - GooglePlaces
     - IQKeyboardManager
     - MarqueeLabel
     - MBProgressHUD
@@ -116,6 +132,9 @@ SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   FMDBHelper: 8f6a750760fcc25a514eaae2063b720631724b77
+  GoogleMaps: 104c418d61ab8a05dff06ed0784c25ea9d37da45
+  GooglePlacePicker: 345b1aabd42c9d6d9bf2369c1bae1234d903e764
+  GooglePlaces: bca867d5e9da15384c794b945e4226848bc6e9d9
   IQKeyboardManager: 249c3946acf61345c18b038eb50863fe2793e3a8
   MarqueeLabel: 0c41f08ef5773e29c0f71064a8fa788a2fd8b365
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
@@ -128,6 +147,6 @@ SPEC CHECKSUMS:
   UMengSocialCOM: 074c135ce349aa4c8848d3fb8458757bcb6ffb67
   ZQCountDownView: 2da320244912c1cabc9d83c3c7f86e2d097b3002
 
-PODFILE CHECKSUM: 7544d025f54aca243b2f6f8be851540f97dc095e
+PODFILE CHECKSUM: 9e7aa8e3127046e7c751930ab0aa7209e6e2db55
 
 COCOAPODS: 1.5.3

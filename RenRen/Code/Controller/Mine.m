@@ -15,6 +15,7 @@
 #import "About.h"
 #import "PointsMall.h"
 #import "MyTuan.h"
+#import "Language.h"
 
 @interface Mine ()<UIAlertViewDelegate>
 
@@ -41,7 +42,7 @@
     if(self){
         [self.tabBarItem setImage:[UIImage imageNamed:@"tab-mine-default"]];
         [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"tab-mine-enter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-        [self.tabBarItem setTitle:@"我的"];
+        [self.tabBarItem setTitle:Localized(@"My_txt")];
         self.tabBarItem.tag=3;
     }
     return self;
@@ -51,10 +52,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = @"个人中心";
+    self.title = Localized(@"Personal_center");
     
-    self.arrayData = @[@"管理地址",@"我的红包", @"我的拼团",@"积分商城",@"意见反馈",@"商务合作",@"帮助中心",@"关于我们", @"清除本地缓存"];
-    self.arrayImage = @[@"icon-address",@"icon-red",@"icon-mytuan",@"icon-points",@"icon-feedback",@"icon-together",@"icon-help-mine",@"icon-about", @"icon-del"];
+//    self.arrayData = @[@"管理地址",@"我的优惠券", @"我的拼团",@"积分商城",@"意见反馈",@"商务合作",@"帮助中心",@"关于我们", @"清除本地缓存"];
+    self.arrayData = @[Localized(@"Manager_address"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"), Localized(@"Clear_cache")];
+//    self.arrayImage = @[@"icon-address",@"icon-red",@"icon-mytuan",@"icon-points",@"icon-feedback",@"icon-together",@"icon-help-mine",@"icon-about", @"icon-del"];
+    self.arrayImage = @[@"icon-address",@"icon-red",@"icon-about",@"icon-help-mine", @"icon-del"];
     
     
     [self layoutUI];
@@ -67,6 +70,8 @@
     self.labelName.text = self.Identity.userInfo.userName;
     [self queryData];
     [self changeNavigationBarBackgroundColor:theme_navigation_color];
+    
+    [self updateTableText];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -74,6 +79,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)updateTableText{
+    self.arrayData = @[Localized(@"Manager_address"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"), Localized(@"Clear_cache")];
+    [self.tableView reloadData];
+}
 
 -(void)layoutUI{
     
@@ -102,7 +111,7 @@
     
     self.btnLogout = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.btnLogout setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [self.btnLogout setTitle:@"注销" forState:UIControlStateNormal];
+    [self.btnLogout setTitle:Localized(@"Log_out") forState:UIControlStateNormal];
     self.btnLogout.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [self.btnLogout addTarget:self action:@selector(logoutTouch:) forControlEvents:UIControlEventTouchUpInside];
     [self.headerView addSubview:self.btnLogout];
@@ -110,7 +119,7 @@
     self.labelPoint = [[UILabel alloc]init];
     self.labelPoint.textAlignment = NSTextAlignmentCenter;
     self.labelPoint.textColor = theme_title_color;
-    self.labelPoint.text = @"普通会员  积分: 0";
+    self.labelPoint.text = [NSString stringWithFormat:@"%@  %@: 0",Localized(@"Ordin_member"),Localized(@"Integral_txt")];
     [self.headerView addSubview:self.labelPoint];
     
     
@@ -122,10 +131,10 @@
 - (void)addPrivate {
     
 //        lineView.image = [UIImage imageNamed:@"line-vertical-home"];
-        float widthView = SCREEN_WIDTH/3;
+        float widthView = SCREEN_WIDTH/2;
         float widthSmall = 4;
         float widthLine = 0.7;
-        for (int i = 0; i < 3; i ++) {
+        for (int i = 0; i < 2; i ++) {
             UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(widthView *i, SCREEN_WIDTH*5/8, widthView, heightView)];
             view.backgroundColor = [UIColor whiteColor];
             
@@ -154,6 +163,7 @@
             float w = widthView - iconSize - 2*iconSpace;
             [iconLable setFrame:CGRectMake(CGRectGetMaxX(iconView.frame)+5, heightView/3 - widthSmall, w, iconSize + 2*widthSmall)];
             iconLable.text = self.arrayData[i];
+            iconLable.textAlignment = NSTextAlignmentCenter;
             [view addSubview:iconLable];
     
             view.tag = i + 1;
@@ -186,13 +196,13 @@
             
         }
             break;
-        case 3:
-        {
-            MyTuan* controller = [[MyTuan alloc]init];
-            controller.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:controller animated:YES];
-        }
-            break;
+//        case 3:
+//        {
+//            MyTuan* controller = [[MyTuan alloc]init];
+//            controller.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:controller animated:YES];
+//        }
+//            break;
             }
 
 
@@ -278,13 +288,13 @@
             if(react == 1){
                 NSDictionary* dict = [response objectForKey:@"info"];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.labelPoint.text = [NSString stringWithFormat:@"%@  积分: %@",[dict objectForKey:@"level"],[dict objectForKey:@"credit"]];
+                    self.labelPoint.text = [NSString stringWithFormat:@"%@  %@: %@",[dict objectForKey:@"level"],Localized(@"Integral_txt"),[dict objectForKey:@"credit"]];
                 });
                 
             }else if(react == 400){
                 [self alertHUD:message];
             }else{
-                self.labelPoint.text = @"普通会员  积分: 0";
+                self.labelPoint.text = [NSString stringWithFormat:@"%@  %@: 0",Localized(@"Ordin_member"),Localized(@"Integral_txt")];
                 [self alertHUD:message];
             }
         }];
@@ -303,16 +313,22 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.arrayData.count - 3;
+    return self.arrayData.count - 2;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc ]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
     if(![WMHelper isEmptyOrNULLOrnil:self.arrayImage[indexPath.row]]){
-        [cell.imageView setImage:[UIImage imageNamed:self.arrayImage[indexPath.row+3]]];
+        [cell.imageView setImage:[UIImage imageNamed:self.arrayImage[indexPath.row+2]]];
     }
-    cell.textLabel.text = self.arrayData[indexPath.row+3];
+    if(indexPath.row == 1){//语言
+        NSString* languageName = [[[NSUserDefaults standardUserDefaults]objectForKey:@"appLanguage"] isEqualToString:@"zh-Hans"] ? languageName_zh : languageName_en;
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", self.arrayData[indexPath.row+2],languageName];
+    }else{
+        cell.textLabel.text = self.arrayData[indexPath.row+2];
+    }
+    
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -320,54 +336,61 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     switch (indexPath.row + 3) {
-        case 3:
-        {
-            PointsMall* controller = [[PointsMall alloc]init];
-            controller.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:controller animated:YES];
-        }
-            break;
-            
-        case 4:
-        {
-            Feedback* controller = [[Feedback alloc]init];
-            controller.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:controller animated:YES];
-        }
-            break;
-            
-        case 5:
-        {
-//            BusinessCooperation* controller = [[BusinessCooperation alloc]init];
+//        case 3:
+//        {
+//            PointsMall* controller = [[PointsMall alloc]init];
 //            controller.hidesBottomBarWhenPushed = YES;
 //            [self.navigationController pushViewController:controller animated:YES];
-            
-            NSURL *URL = [NSURL URLWithString:@"http://wm.wm0530.com/Mobile/re/user_about"];
-            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithURL:URL];
-            webViewController.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:webViewController animated:YES];
-        }
-            break;
-            
-        case 6:
-        {
-            NSURL *URL = [NSURL URLWithString:@"http://wm.wm0530.com/Mobile/re/user_help"];
-            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithURL:URL];
-            webViewController.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:webViewController animated:YES];
-        }
-            break;
-        case 7:
+//        }
+//            break;
+//
+//        case 4:
+//        {
+//            Feedback* controller = [[Feedback alloc]init];
+//            controller.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:controller animated:YES];
+//        }
+//            break;
+//
+//        case 5:
+//        {
+////            BusinessCooperation* controller = [[BusinessCooperation alloc]init];
+////            controller.hidesBottomBarWhenPushed = YES;
+////            [self.navigationController pushViewController:controller animated:YES];
+//
+//            NSURL *URL = [NSURL URLWithString:@"http://wm.wm0530.com/Mobile/re/user_about"];
+//            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithURL:URL];
+//            webViewController.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:webViewController animated:YES];
+//        }
+//            break;
+//
+//        case 6:
+//        {
+//            NSURL *URL = [NSURL URLWithString:@"http://wm.wm0530.com/Mobile/re/user_help"];
+//            SVWebViewController *webViewController = [[SVWebViewController alloc] initWithURL:URL];
+//            webViewController.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:webViewController animated:YES];
+//        }
+//            break;
+        case 3:
         {
             About* controller = [[About alloc]init];
             controller.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:controller animated:YES];
         }
             break;
-        case 8:
+        case 4:
+        {
+            Language* controller = [[Language alloc]init];
+            controller.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:controller animated:YES];
+        }
+            break;
+        case 5:
         {
             if(!self.alertClear){
-                self.alertClear = [[UIAlertView alloc] initWithTitle:nil message:@"确认清除本地缓存?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                self.alertClear = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"Want_to_clear_cache") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
             }
             [self.alertClear show];
         }
@@ -381,7 +404,7 @@
 
 #pragma mark =====================================================  SEL
 -(IBAction)logoutTouch:(id)sender{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"是否要退出登录?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"Want_to_logout") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     [alert show];
     
     
@@ -398,7 +421,7 @@
             [[[SDWebImageManager sharedManager] imageCache] clearDiskOnCompletion:NULL];
             [[[SDWebImageManager sharedManager] imageCache] clearMemory];
             [[NSURLCache sharedURLCache] removeAllCachedResponses];
-            [self alertHUD: @"清除完成!"];
+            [self alertHUD: Localized(@"Clear_complete")];
         }
     }else{
         if (buttonIndex==1){
@@ -415,11 +438,11 @@
             Boolean flag= [NSKeyedArchiver archiveRootObject:entity toFile:[WMHelper archiverPath]];
             if(flag){
                 [self logoutJPush:self.Identity.userInfo.userID];
-                self.HUD.labelText = @"退出成功";
+                self.HUD.labelText = Localized(@"Logout_success");
                 [self.HUD hide:YES afterDelay:1];
                 [self changeTab];
             }else{
-                self.HUD.labelText = @"退出失败";
+                self.HUD.labelText = Localized(@"Logout_fail");
                 [self.HUD hide:YES afterDelay:1];
             }
         }
@@ -440,7 +463,7 @@
         if(iResCode == 0){
             // NSLog( @"====================");
         }else{
-            self.HUD.labelText = @"消息推送退出失败";
+            //self.HUD.labelText = @"消息推送退出失败";
             [self.HUD hide:YES afterDelay:1];
         }
     }];

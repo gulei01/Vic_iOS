@@ -68,7 +68,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
     self.scoreFood = @"5";
     self.scoreService = @"5";
     // Do any additional setup after loading the view.
-    self.mark = @"(至少输入三个字)您的意见很重要! 来点评一下吧!";
+    self.mark = Localized(@"Let_review");
     [self layoutUI];
     self.automaticallyAdjustsScrollViewInsets = YES;
     [self queryData];
@@ -77,13 +77,13 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
-    self.labelTime.text =@"送达时间";
+    self.labelTime.text = Localized(@"Delivery_time");
    
 }
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.title =  @"添加评论";
+    self.navigationItem.title =  Localized(@"Add_comment");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -271,7 +271,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories updateComment:arg complete:^(NSInteger react, id obj, NSString *message) {
             if(react == 1){
-                [self alertHUD: @"提交成功" complete:^{
+                [self alertHUD: Localized(@"Success_txt") complete:^{
                     [self.navigationController popViewControllerAnimated:YES];
                 }];
 
@@ -300,10 +300,10 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
 #pragma mark =====================================================  private method
 -(BOOL)checkForm{
     if([self.txtComment.text isEqualToString:self.mark]|| self.txtComment.text.length<3){
-        [self alertHUD:@"请输入至少三个字评论!"];
+        [self alertHUD:Localized(@"Please_enter_three")];
         return NO;
     }else if (!([self.scoreToal floatValue]>0.f) || !([self.scoreFood floatValue]>0.f) || !([self.scoreService floatValue]>0.f)){
-        [self alertHUD:@"评分不能为空"];
+        [self alertHUD:Localized(@"Rating_not_empty")];
         return NO;
     }
     return YES;
@@ -344,7 +344,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
 -(UILabel *)labelTime{
     if(!_labelTime){
         _labelTime = [[UILabel alloc]init];
-        _labelTime.text =  @"送达时间";
+        _labelTime.text =  Localized(@"Delivery_time");
         _labelTime.font = [UIFont systemFontOfSize:14.f];
         _labelTime.textColor = [UIColor colorWithRed:67/255.f green:67/255.f blue:67/255.f alpha:1.0];
         _labelTime.translatesAutoresizingMaskIntoConstraints = NO;
@@ -358,7 +358,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         [_btnOnTime setTitleColor:[UIColor colorWithRed:247/255.f green:157/255.f blue:34/255.f alpha:1.0] forState:UIControlStateNormal];
         [_btnOnTime setImage:[UIImage imageNamed:@"icon-ontime-enter"] forState:UIControlStateSelected];
         [_btnOnTime setImage:[UIImage imageNamed:@"icon-ontime-default"] forState:UIControlStateNormal];
-        [_btnOnTime setTitle:@"准时" forState:UIControlStateNormal];
+        [_btnOnTime setTitle:Localized(@"On_time") forState:UIControlStateNormal];
         [_btnOnTime setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 15)];
         _btnOnTime.selected = YES;
         [_btnOnTime addTarget:self action:@selector(onTimeTouch:) forControlEvents:UIControlEventTouchUpInside];
@@ -374,7 +374,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         [_btnTimeOut setTitleColor:[UIColor colorWithRed:247/255.f green:157/255.f blue:34/255.f alpha:1.0] forState:UIControlStateNormal];
         [_btnTimeOut setImage:[UIImage imageNamed:@"icon-ontime-enter"] forState:UIControlStateSelected];
         [_btnTimeOut setImage:[UIImage imageNamed:@"icon-ontime-default"] forState:UIControlStateNormal];
-        [_btnTimeOut setTitle:@"不准" forState:UIControlStateNormal];
+        [_btnTimeOut setTitle:Localized(@"No_on_time") forState:UIControlStateNormal];
         [_btnTimeOut setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 15)];
         [_btnTimeOut addTarget:self action:@selector(onTimeTouch:) forControlEvents:UIControlEventTouchUpInside];
         _btnTimeOut.titleLabel.font = [UIFont systemFontOfSize:14.f];
@@ -401,7 +401,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelScore = [[UILabel alloc]init];
         _labelScore.textColor = [UIColor colorWithRed:113/255.f green:133/255.f blue:133/255.f alpha:1.0];
         _labelScore.font = [UIFont systemFontOfSize:14.f];
-        _labelScore.text = @"商品评价";
+        _labelScore.text = Localized(@"Product_comment");
         _labelScore.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelScore;
@@ -412,7 +412,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelTotal = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 80, 20)];
         _labelTotal.textColor = [UIColor colorWithRed:67/255.f green:67/255.f blue:67/255.f alpha:1.0];
         _labelTotal.font = [UIFont systemFontOfSize:14.f];
-        _labelTotal.text = @"总体评价";
+        _labelTotal.text = Localized(@"Total_comment");
         _labelTotal.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelTotal;
@@ -433,7 +433,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelFood = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, 80, 20)];
         _labelFood.textColor = [UIColor colorWithRed:67/255.f green:67/255.f blue:67/255.f alpha:1.0];
         _labelFood.font = [UIFont systemFontOfSize:14.f];
-        _labelFood.text = @"商品评价";
+        _labelFood.text = Localized(@"Product_comment");
         _labelFood.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelFood;
@@ -454,7 +454,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelService = [[UILabel alloc]initWithFrame:CGRectMake(10,90, 80, 20)];
         _labelService.textColor = [UIColor colorWithRed:67/255.f green:67/255.f blue:67/255.f alpha:1.0];
         _labelService.font = [UIFont systemFontOfSize:14.f];
-        _labelService.text = @"配送服务";
+        _labelService.text = Localized(@"Delivery_service");
         _labelService.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelService;
@@ -502,7 +502,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelComment = [[UILabel alloc]init];
         _labelComment.textColor = [UIColor colorWithRed:109/255.f green:109/255.f blue:109/255.f alpha:1.0];
         _labelComment.font = [UIFont systemFontOfSize:14.f];
-        _labelComment.text = @"写点什么";
+        _labelComment.text = @"...";
         _labelComment.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelComment;
@@ -526,7 +526,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _btnConfirm = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnConfirm.backgroundColor =theme_navigation_color;
         [_btnConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_btnConfirm setTitle:@"提交评价" forState:UIControlStateNormal];
+        [_btnConfirm setTitle:Localized(@"Submit_comment") forState:UIControlStateNormal];
         [_btnConfirm addTarget:self action:@selector(confirmTouch:) forControlEvents:UIControlEventTouchUpInside];
         _btnConfirm.translatesAutoresizingMaskIntoConstraints = NO;
     }

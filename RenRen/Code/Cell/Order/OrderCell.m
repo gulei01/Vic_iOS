@@ -139,10 +139,10 @@
             [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor redColor]} range:NSMakeRange(0, rang.location+1)];
             self.labelGoodsNum.attributedText = attributeStr;
         }else{
-            self.labelGoodsNum.text = [NSString stringWithFormat:@"共计%@件商品",entity.goodsCount];
+            self.labelGoodsNum.text = [NSString stringWithFormat:@"%@:%@",Localized(@"Product_total"),entity.goodsCount];
         }
-        self.labelStoreName.text = [NSString stringWithFormat:@"店铺:%@",entity.storeName];
-        self.labelPrice.text = [NSString stringWithFormat:@"总价:￥%.2f",[entity.goodsPrice floatValue]];
+        self.labelStoreName.text = [NSString stringWithFormat:@"%@:%@",Localized(@"Store_txt"),entity.storeName];
+        self.labelPrice.text = [NSString stringWithFormat:@"%@:$%.2f",Localized(@"Total_price"),[entity.goodsPrice floatValue]];
         
         
         if([entity.status integerValue]==0){ //未付款
@@ -312,7 +312,7 @@
         _btnPay = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnPay.backgroundColor = theme_navigation_color;
         [_btnPay setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_btnPay setTitle:@"去支付" forState:UIControlStateNormal];
+        [_btnPay setTitle:Localized(@"Payment_txt") forState:UIControlStateNormal];
         _btnPay.titleLabel.font =[UIFont systemFontOfSize:14.f];
         _btnPay.layer.masksToBounds = YES;
         _btnPay.layer.cornerRadius =5.f;
@@ -325,9 +325,9 @@
 -(UIButton *)btnCancel{
     if(!_btnCancel){
         _btnCancel = [UIButton buttonWithType:UIButtonTypeCustom];
-        _btnCancel.backgroundColor = [UIColor colorWithRed:90/255.f green:193/255.f blue:218/255.f alpha:1.0 ];
+        _btnCancel.backgroundColor = [UIColor colorWithRed:41/255.f green:64/255.f blue:104/255.f alpha:1.0 ];
         [_btnCancel setTitleColor:[UIColor whiteColor ] forState:UIControlStateNormal];
-        [_btnCancel setTitle:@"取消" forState:UIControlStateNormal];
+        [_btnCancel setTitle:Localized(@"Cancel_txt") forState:UIControlStateNormal];
         _btnCancel.titleLabel.font =[UIFont systemFontOfSize:14.f];
         _btnCancel.layer.masksToBounds = YES;
         _btnCancel.layer.cornerRadius =5.f;
@@ -342,7 +342,7 @@
         _btnComment = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnComment.backgroundColor = theme_navigation_color;
         [_btnComment setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_btnComment setTitle:@"去评价" forState:UIControlStateNormal];
+        [_btnComment setTitle:Localized(@"To_comment") forState:UIControlStateNormal];
         _btnComment.titleLabel.font =[UIFont systemFontOfSize:14.f];
         _btnComment.layer.masksToBounds = YES;
         _btnComment.layer.cornerRadius =5.f;

@@ -193,7 +193,7 @@
         _entity = entity;
         [self.photoGoods sd_setImageWithURL:[NSURL URLWithString:entity.defaultImg] placeholderImage:[UIImage imageNamed:kDefaultImage]];
         self.labelTitle.text = entity.goodsName;
-        self.labelPrice.text = [NSString stringWithFormat:@"￥%@",entity.price];
+        self.labelPrice.text = [NSString stringWithFormat:@"$%@",entity.price];
         self.labelCount.text = entity.quantity;
         if(!([entity.spec_desc isEqualToString:@""] && [entity.proper_desc isEqualToString:@""]))
             self.labelDesc.text = [NSString stringWithFormat:@"(%@ %@)",entity.spec_desc,entity.proper_desc];

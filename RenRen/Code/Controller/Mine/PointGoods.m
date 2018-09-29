@@ -49,7 +49,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.title =  @"详情";
+    self.navigationItem.title =  Localized(@"Detail_txt");
 }
 
 - (void)didReceiveMemoryWarning {

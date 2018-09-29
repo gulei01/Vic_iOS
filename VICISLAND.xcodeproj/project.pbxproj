@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0AA60570D86BA43F436008E2 /* libPods-RenRen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B99693D1CC2686376872EB /* libPods-RenRen.a */; };
+		322FD70D2154CDD00092AB56 /* NewMapLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 322FD70C2154CDD00092AB56 /* NewMapLocation.m */; };
+		324729DC215A418F00B6AF48 /* Language.m in Sources */ = {isa = PBXBuildFile; fileRef = 324729DB215A418F00B6AF48 /* Language.m */; };
+		324729E6215A597E00B6AF48 /* Language.strings in Resources */ = {isa = PBXBuildFile; fileRef = 324729E8215A597E00B6AF48 /* Language.strings */; };
 		32874D0B214E55BE0009F127 /* GoodsSpecController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32874D0A214E55BE0009F127 /* GoodsSpecController.m */; };
 		32874D0D214E90160009F127 /* icon-close-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 32874D0C214E90160009F127 /* icon-close-gray.png */; };
 		32F88B6E2135354C0007C6CD /* Reg.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F88B6D2135354C0007C6CD /* Reg.m */; };
@@ -334,7 +337,6 @@
 		81D5BDA61ED800D400FDDA0B /* icon-together@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 81D5BCC61ED800D400FDDA0B /* icon-together@2x.png */; };
 		81D5BDA71ED800D400FDDA0B /* icon-trash.png in Resources */ = {isa = PBXBuildFile; fileRef = 81D5BCC71ED800D400FDDA0B /* icon-trash.png */; };
 		81D5BDA81ED800D400FDDA0B /* icon-tuan-home.png in Resources */ = {isa = PBXBuildFile; fileRef = 81D5BCC81ED800D400FDDA0B /* icon-tuan-home.png */; };
-		81D5BDA91ED800D400FDDA0B /* Icon-waimailang*76.png in Resources */ = {isa = PBXBuildFile; fileRef = 81D5BCC91ED800D400FDDA0B /* Icon-waimailang*76.png */; };
 		81D5BDAA1ED800D400FDDA0B /* icon-waste.png in Resources */ = {isa = PBXBuildFile; fileRef = 81D5BCCA1ED800D400FDDA0B /* icon-waste.png */; };
 		81D5BDAB1ED800D400FDDA0B /* icon-waste@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 81D5BCCB1ED800D400FDDA0B /* icon-waste@2x.png */; };
 		81D5BDAC1ED800D400FDDA0B /* icon-waste@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 81D5BCCC1ED800D400FDDA0B /* icon-waste@3x.png */; };
@@ -544,6 +546,12 @@
 
 /* Begin PBXFileReference section */
 		21111BFEBC14EBA10CC2B551 /* Pods-RenRen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RenRen.release.xcconfig"; path = "Pods/Target Support Files/Pods-RenRen/Pods-RenRen.release.xcconfig"; sourceTree = "<group>"; };
+		322FD70B2154CDD00092AB56 /* NewMapLocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewMapLocation.h; sourceTree = "<group>"; };
+		322FD70C2154CDD00092AB56 /* NewMapLocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewMapLocation.m; sourceTree = "<group>"; };
+		324729DA215A418F00B6AF48 /* Language.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Language.h; sourceTree = "<group>"; };
+		324729DB215A418F00B6AF48 /* Language.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Language.m; sourceTree = "<group>"; };
+		324729E7215A597E00B6AF48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Language.strings; sourceTree = "<group>"; };
+		324729E9215A59A400B6AF48 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Language.strings"; sourceTree = "<group>"; };
 		3274052A212567CB00579642 /* vicisland.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vicisland.entitlements; sourceTree = "<group>"; };
 		32874D09214E55BE0009F127 /* GoodsSpecController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsSpecController.h; sourceTree = "<group>"; };
 		32874D0A214E55BE0009F127 /* GoodsSpecController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsSpecController.m; sourceTree = "<group>"; };
@@ -1071,7 +1079,6 @@
 		81D5BCC61ED800D400FDDA0B /* icon-together@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-together@2x.png"; sourceTree = "<group>"; };
 		81D5BCC71ED800D400FDDA0B /* icon-trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-trash.png"; sourceTree = "<group>"; };
 		81D5BCC81ED800D400FDDA0B /* icon-tuan-home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-tuan-home.png"; sourceTree = "<group>"; };
-		81D5BCC91ED800D400FDDA0B /* Icon-waimailang*76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-waimailang*76.png"; sourceTree = "<group>"; };
 		81D5BCCA1ED800D400FDDA0B /* icon-waste.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-waste.png"; sourceTree = "<group>"; };
 		81D5BCCB1ED800D400FDDA0B /* icon-waste@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-waste@2x.png"; sourceTree = "<group>"; };
 		81D5BCCC1ED800D400FDDA0B /* icon-waste@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-waste@3x.png"; sourceTree = "<group>"; };
@@ -1451,6 +1458,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		324729E3215A58BE00B6AF48 /* language */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = language;
+			sourceTree = "<group>";
+		};
 		6101FA2F1D90E9BA009E8393 /* AdLabelScroll */ = {
 			isa = PBXGroup;
 			children = (
@@ -1732,6 +1746,7 @@
 		81D5BC161ED800D400FDDA0B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				324729E3215A58BE00B6AF48 /* language */,
 				81C25BE81EECDCCD008F5007 /* 外卖郎登录页 */,
 				81992A5F1EEAA42E000E702E /* 启动页 */,
 				81B433D81EDBB963009DFA60 /* 抛物线小红点 */,
@@ -1903,7 +1918,6 @@
 				81D5BCC61ED800D400FDDA0B /* icon-together@2x.png */,
 				81D5BCC71ED800D400FDDA0B /* icon-trash.png */,
 				81D5BCC81ED800D400FDDA0B /* icon-tuan-home.png */,
-				81D5BCC91ED800D400FDDA0B /* Icon-waimailang*76.png */,
 				81D5BCCA1ED800D400FDDA0B /* icon-waste.png */,
 				81D5BCCB1ED800D400FDDA0B /* icon-waste@2x.png */,
 				81D5BCCC1ED800D400FDDA0B /* icon-waste@3x.png */,
@@ -2253,6 +2267,7 @@
 		F7A595721BE1E1330013BBF2 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				324729E8215A597E00B6AF48 /* Language.strings */,
 				F7A595731BE1E1330013BBF2 /* main.m */,
 				F7B46F081BE1E5CB00757709 /* PrefixHeader.pch */,
 			);
@@ -2481,6 +2496,8 @@
 				61341CFD1D5D5881002D53F8 /* MapLocation.m */,
 				611625731D6157D6002AC28E /* EmptyController.h */,
 				611625741D6157D6002AC28E /* EmptyController.m */,
+				322FD70B2154CDD00092AB56 /* NewMapLocation.h */,
+				322FD70C2154CDD00092AB56 /* NewMapLocation.m */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2527,6 +2544,8 @@
 				611B3C6E1D59CF4C0041E9BC /* SearchAddress.m */,
 				618F43551D5C4C810083187E /* EmptyAddressMap.h */,
 				618F43561D5C4C810083187E /* EmptyAddressMap.m */,
+				324729DA215A418F00B6AF48 /* Language.h */,
+				324729DB215A418F00B6AF48 /* Language.m */,
 			);
 			path = Mine;
 			sourceTree = "<group>";
@@ -2766,7 +2785,6 @@
 				F7A5956C1BE1E1330013BBF2 /* Frameworks */,
 				F7A5956D1BE1E1330013BBF2 /* Resources */,
 				EDE89E87BE42F143F73D197D /* [CP] Copy Pods Resources */,
-				6D7B5EF0094F1D4D3EAF2455 /* 📦 Embed Pods Frameworks */,
 				99DEE71331E0DA55CBB09D0C /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
@@ -2814,6 +2832,7 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = F7A595641BE1E0E80013BBF2;
 			productRefGroup = F7A595701BE1E1330013BBF2 /* Products */;
@@ -3027,7 +3046,6 @@
 				81992A801EEAA42E000E702E /* 01-568h@2x.png in Resources */,
 				81D5BD311ED800D400FDDA0B /* icon-buy-icon.png in Resources */,
 				81D5BCFC1ED800D400FDDA0B /* default-640x300@3x.png in Resources */,
-				81D5BDA91ED800D400FDDA0B /* Icon-waimailang*76.png in Resources */,
 				81D5BD5E1ED800D400FDDA0B /* icon-lock.png in Resources */,
 				81D5BD721ED800D400FDDA0B /* icon-pepole-default.png in Resources */,
 				81D5BDB21ED800D400FDDA0B /* Icon.png in Resources */,
@@ -3061,6 +3079,7 @@
 				81D5BD111ED800D400FDDA0B /* home_newActThree_first@2x.png in Resources */,
 				81D5BD261ED800D400FDDA0B /* icon-arrow-cancel@2x.png in Resources */,
 				F7A5961D1BE1E1A40013BBF2 /* HomeCell.xib in Resources */,
+				324729E6215A597E00B6AF48 /* Language.strings in Resources */,
 				81D5BD731ED800D400FDDA0B /* icon-pepole-enter.png in Resources */,
 				81D5BD561ED800D400FDDA0B /* icon-line-address.png in Resources */,
 				81D5BCFE1ED800D400FDDA0B /* empty-banner.jpg in Resources */,
@@ -3123,21 +3142,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		6D7B5EF0094F1D4D3EAF2455 /* 📦 Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "📦 Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RenRen/Pods-RenRen-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		99DEE71331E0DA55CBB09D0C /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3177,6 +3181,9 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-RenRen/Pods-RenRen-resources.sh",
 				"${PODS_ROOT}/AMap2DMap/MAMapKit.framework/AMap.bundle",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FMDBHelper/FMDBHelper.bundle",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Versions/A/Resources/GoogleMaps.bundle",
+				"${PODS_ROOT}/GooglePlacePicker/Frameworks/GooglePlacePicker.framework/Versions/A/Resources/GooglePlacePicker.bundle",
+				"${PODS_ROOT}/GooglePlaces/Frameworks/GooglePlaces.framework/Versions/A/Resources/GooglePlaces.bundle",
 				"${PODS_ROOT}/IQKeyboardManager/IQKeyBoardManager/Resources/IQKeyboardManager.bundle",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
 				"${PODS_ROOT}/SVWebViewController/SVWebViewController/SVWebViewController.bundle/SVWebViewControllerBack.png",
@@ -3208,6 +3215,9 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AMap.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FMDBHelper.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlacePicker.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GooglePlaces.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/IQKeyboardManager.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SVWebViewControllerBack.png",
@@ -3313,6 +3323,7 @@
 				F7F874C11D113B5100544669 /* Car.m in Sources */,
 				616F48451D1E7D3800322D67 /* WXUtil.mm in Sources */,
 				61AC726C1D910CED0027160B /* RandomMap.m in Sources */,
+				322FD70D2154CDD00092AB56 /* NewMapLocation.m in Sources */,
 				619D57E91D23C58F00DE0DEF /* MyTuanInfoHeader.m in Sources */,
 				F7E6FE441D1A9690008014C5 /* BuyNowItemHeader.m in Sources */,
 				F7ABF3B91CE169CA00573EDE /* ExchangeRecordCell.m in Sources */,
@@ -3327,6 +3338,7 @@
 				6184DE7B1D3F548600FD874F /* FruitListCell.m in Sources */,
 				61B4EE261D86923500F70268 /* RandomSaleInfoHeader.m in Sources */,
 				619156761DC07F5E00045685 /* SupermarketAndFruit.m in Sources */,
+				324729DC215A418F00B6AF48 /* Language.m in Sources */,
 				F743FCFA1CE07BC4003B6EB5 /* MPoint.m in Sources */,
 				61848A361D8E36DA00E921B7 /* RandomOrder.m in Sources */,
 				F7C2BAFF1BF1895200A57002 /* RedEnvelopesCell.m in Sources */,
@@ -3493,10 +3505,23 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		324729E8215A597E00B6AF48 /* Language.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				324729E7215A597E00B6AF48 /* en */,
+				324729E9215A59A400B6AF48 /* zh-Hans */,
+			);
+			name = Language.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		F7A595691BE1E0E80013BBF2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Shuo Zhang (K7W9CZEJ4P)";
 				DEVELOPMENT_TEAM = D5T8GK748F;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -3506,6 +3531,7 @@
 		F7A5956A1BE1E0E80013BBF2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Shuo Zhang (K7W9CZEJ4P)";
 				DEVELOPMENT_TEAM = D5T8GK748F;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
@@ -3533,8 +3559,8 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = RenRen/vicisland.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kaisa Aierkrn (2W58BVZWAU)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kavl Technology Ltd (TZL94T5P9A)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kavl Technology Ltd (TZL94T5P9A)";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -3583,7 +3609,7 @@
 					"$(PROJECT_DIR)/RenRen/Code/Library/JPush",
 				);
 				INFOPLIST_FILE = RenRen/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3595,8 +3621,8 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
 				PRODUCT_NAME = "Island Life";
-				PROVISIONING_PROFILE = "fd2f1f9a-4f98-41c2-8b74-f22845dd0ad6";
-				PROVISIONING_PROFILE_SPECIFIER = kavlUser;
+				PROVISIONING_PROFILE = "36537a48-a228-426d-bdf4-fa0df2dcbe76";
+				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Debug;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
@@ -3623,8 +3649,8 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_ENTITLEMENTS = RenRen/vicisland.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Kaisa Aierkrn (2W58BVZWAU)";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Kavl Technology Ltd (TZL94T5P9A)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Kavl Technology Ltd (TZL94T5P9A)";
 				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -3667,7 +3693,7 @@
 					"$(PROJECT_DIR)/RenRen/Code/Library/JPush",
 				);
 				INFOPLIST_FILE = RenRen/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3679,8 +3705,8 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
 				PRODUCT_NAME = "Island Life";
-				PROVISIONING_PROFILE = "5f63d4b9-dc37-4850-884c-56cbcf782cb3";
-				PROVISIONING_PROFILE_SPECIFIER = kavlUser;
+				PROVISIONING_PROFILE = "36537a48-a228-426d-bdf4-fa0df2dcbe76";
+				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Debug;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s";

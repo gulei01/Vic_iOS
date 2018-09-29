@@ -19,6 +19,7 @@
         self.loginType = [item objectForKey:@"login_type"];
         self.avatar = [item objectForKey:@"outsrc"];
         self.openID = [item objectForKey:@"openid"];
+        self.language = [item objectForKey:@"language"];
     }
     return self;
 }
@@ -34,6 +35,7 @@
         self.avatar = [aDecoder decodeObjectForKey:@"avatar"];
         self.openID = [aDecoder decodeObjectForKey:@"openID"];
          self.isLogin = [[aDecoder decodeObjectForKey:@"isLogin"] boolValue];
+        self.language = [aDecoder decodeObjectForKey:@"language"];
         return self;
     }else{
         return nil;
@@ -49,6 +51,7 @@
     [aCoder encodeObject:self.avatar forKey:@"avatar"];
     [aCoder encodeObject:self.openID forKey:@"openID"];
     [aCoder encodeObject:[NSNumber numberWithBool:self.isLogin] forKey:@"isLogin"];
+    [aCoder encodeObject:self.language forKey:@"language"];
     
 }
 
@@ -59,7 +62,7 @@
 }
 
 -(NSString *)description{
-    return [NSString stringWithFormat:@"userID:%@ userName:%@ passWord:%@ loginType:%@ avatar:%@ openID:%@",self.userID,self.userName,self.passWord,self.loginType,self.avatar,self.openID];
+    return [NSString stringWithFormat:@"userID:%@ userName:%@ passWord:%@ loginType:%@ avatar:%@ openID:%@ language:%@",self.userID,self.userName,self.passWord,self.loginType,self.avatar,self.openID,self.language];
 }
 
 -(NSString *)userID{
@@ -83,6 +86,8 @@
             _avatar = value;
         }else if ([key isEqualToString:@"openid"]){
             _openID = value;
+        }else if([key isEqualToString:@"language"]){
+            _language = value;
         }
     }
 }

@@ -67,7 +67,7 @@
 -(void)loadData:(NSString *)goodName price:(NSString *)price count:(NSString *)count{
     self.labelName.text = goodName;
     self.labelCount.text = [NSString stringWithFormat:@"x%@",count];
-    self.labelPrice.text = [NSString stringWithFormat:@"￥%@",price];
+    self.labelPrice.text = [NSString stringWithFormat:@"$%@",price];
 }
 
 #pragma mark =====================================================  peroperty package

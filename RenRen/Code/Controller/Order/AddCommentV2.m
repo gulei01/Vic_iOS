@@ -68,7 +68,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
     self.scoreFood = @"5";
     self.scoreService = @"5";
     // Do any additional setup after loading the view.
-    self.mark = @"(至少输入三个字)您的意见很重要! 来点评一下吧!";
+    self.mark = Localized(@"Let_review");
     [self layoutUI];
     self.automaticallyAdjustsScrollViewInsets = YES;
     [self queryData];
@@ -76,7 +76,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.title =  @"添加评论";
+    self.navigationItem.title =  Localized(@"Add_comment");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -294,7 +294,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
 -(UILabel *)labelTime{
     if(!_labelTime){
         _labelTime = [[UILabel alloc]init];
-        _labelTime.text =  @"送达时间";
+        _labelTime.text =  Localized(@"Delivery_time");
         _labelTime.font = [UIFont systemFontOfSize:14.f];
         _labelTime.textColor = [UIColor colorWithRed:67/255.f green:67/255.f blue:67/255.f alpha:1.0];
         _labelTime.translatesAutoresizingMaskIntoConstraints = NO;
@@ -308,7 +308,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         [_btnOnTime setTitleColor:[UIColor colorWithRed:247/255.f green:157/255.f blue:34/255.f alpha:1.0] forState:UIControlStateNormal];
         [_btnOnTime setImage:[UIImage imageNamed:@"icon-ontime-enter"] forState:UIControlStateSelected];
         [_btnOnTime setImage:[UIImage imageNamed:@"icon-ontime-default"] forState:UIControlStateNormal];
-        [_btnOnTime setTitle:@"准时" forState:UIControlStateNormal];
+        [_btnOnTime setTitle:Localized(@"On_time") forState:UIControlStateNormal];
         [_btnOnTime setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 15)];
         _btnOnTime.selected = YES;
         [_btnOnTime addTarget:self action:@selector(onTimeTouch:) forControlEvents:UIControlEventTouchUpInside];
@@ -324,7 +324,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         [_btnTimeOut setTitleColor:[UIColor colorWithRed:247/255.f green:157/255.f blue:34/255.f alpha:1.0] forState:UIControlStateNormal];
         [_btnTimeOut setImage:[UIImage imageNamed:@"icon-ontime-enter"] forState:UIControlStateSelected];
         [_btnTimeOut setImage:[UIImage imageNamed:@"icon-ontime-default"] forState:UIControlStateNormal];
-        [_btnTimeOut setTitle:@"不准" forState:UIControlStateNormal];
+        [_btnTimeOut setTitle:Localized(@"No_on_time") forState:UIControlStateNormal];
         [_btnTimeOut setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 15)];
         [_btnTimeOut addTarget:self action:@selector(onTimeTouch:) forControlEvents:UIControlEventTouchUpInside];
         _btnTimeOut.titleLabel.font = [UIFont systemFontOfSize:14.f];
@@ -351,7 +351,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelScore = [[UILabel alloc]init];
         _labelScore.textColor = [UIColor colorWithRed:113/255.f green:133/255.f blue:133/255.f alpha:1.0];
         _labelScore.font = [UIFont systemFontOfSize:14.f];
-        _labelScore.text = @"商品评价";
+        _labelScore.text = Localized(@"Product_comment");
         _labelScore.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelScore;
@@ -362,7 +362,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelTotal = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 80, 20)];
         _labelTotal.textColor = [UIColor colorWithRed:67/255.f green:67/255.f blue:67/255.f alpha:1.0];
         _labelTotal.font = [UIFont systemFontOfSize:14.f];
-        _labelTotal.text = @"总体评价";
+        _labelTotal.text = Localized(@"Total_comment");
         _labelTotal.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelTotal;
@@ -383,7 +383,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelFood = [[UILabel alloc]initWithFrame:CGRectMake(10, 50, 80, 20)];
         _labelFood.textColor = [UIColor colorWithRed:67/255.f green:67/255.f blue:67/255.f alpha:1.0];
         _labelFood.font = [UIFont systemFontOfSize:14.f];
-        _labelFood.text = @"商品评价";
+        _labelFood.text = Localized(@"Product_comment");
         _labelFood.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelFood;
@@ -404,7 +404,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelService = [[UILabel alloc]initWithFrame:CGRectMake(10,90, 80, 20)];
         _labelService.textColor = [UIColor colorWithRed:67/255.f green:67/255.f blue:67/255.f alpha:1.0];
         _labelService.font = [UIFont systemFontOfSize:14.f];
-        _labelService.text = @"配送服务";
+        _labelService.text = Localized(@"Delivery_service");
         _labelService.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelService;
@@ -452,7 +452,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _labelComment = [[UILabel alloc]init];
         _labelComment.textColor = [UIColor colorWithRed:109/255.f green:109/255.f blue:109/255.f alpha:1.0];
         _labelComment.font = [UIFont systemFontOfSize:14.f];
-        _labelComment.text = @"写点什么";
+        _labelComment.text = @"...";
         _labelComment.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelComment;
@@ -476,7 +476,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
         _btnConfirm = [UIButton buttonWithType:UIButtonTypeCustom];
         _btnConfirm.backgroundColor =theme_navigation_color;
         [_btnConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_btnConfirm setTitle:@"提交评价" forState:UIControlStateNormal];
+        [_btnConfirm setTitle:Localized(@"Submit_comment") forState:UIControlStateNormal];
         [_btnConfirm addTarget:self action:@selector(confirmTouch:) forControlEvents:UIControlEventTouchUpInside];
         _btnConfirm.translatesAutoresizingMaskIntoConstraints = NO;
     }

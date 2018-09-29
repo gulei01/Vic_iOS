@@ -111,13 +111,13 @@
 -(void)setEntity:(MAddress *)entity{
     if(entity){
         _entity = entity;
-        self.labelUserName.text = [NSString stringWithFormat:@"收货人:%@ %@",entity.userName,entity.phoneNum];
-        self.labelAddress.text = [NSString stringWithFormat:@"收货地址: %@",entity.address];
+        self.labelUserName.text = [NSString stringWithFormat:@"%@:%@ %@",Localized(@"Receiver_txt"),entity.userName,entity.phoneNum];
+        self.labelAddress.text = [NSString stringWithFormat:@"%@: %@",Localized(@"Shipping_address"),entity.address];
         [self.btnAddress setTitle:@"" forState:UIControlStateNormal];
     }else{
         self.labelUserName.hidden = YES;
         self.labelAddress.hidden = YES;
-        [self.btnAddress setTitle:@"+添加新地址" forState:UIControlStateNormal];
+        [self.btnAddress setTitle:Localized(@"Add_new_address") forState:UIControlStateNormal];
     }
 }
 
@@ -188,7 +188,7 @@
         _btnOrderInfo.userInteractionEnabled = NO;
         [_btnOrderInfo setTitleColor:[UIColor colorWithRed:68/255.f green:66/255.f blue:67/255.f alpha:1.0] forState:UIControlStateNormal];
         _btnOrderInfo.titleLabel.font = [UIFont systemFontOfSize:14.f];
-        [_btnOrderInfo setTitle:@"订单信息" forState:UIControlStateNormal];
+        [_btnOrderInfo setTitle:Localized(@"Order_info") forState:UIControlStateNormal];
         CALayer* bordr = [[CALayer alloc]init];
         bordr.frame = CGRectMake(0, 39, SCREEN_WIDTH, 1.f);
         bordr.backgroundColor =  theme_line_color.CGColor;

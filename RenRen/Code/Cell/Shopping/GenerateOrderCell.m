@@ -87,14 +87,14 @@
         _entity = entity;
         self.labelName.text = entity.goodsName;
         self.labelCount.text = [NSString stringWithFormat:@"x%@",entity.quantity];
-        self.labelPrice.text = [NSString stringWithFormat:@"￥%.2f",[entity.price floatValue]];
+        self.labelPrice.text = [NSString stringWithFormat:@"$%.2f",[entity.price floatValue]];
     }
 }
 
 -(void)setItemWithDict:(NSDictionary *)item{
     self.labelName.text = [item objectForKey:@"fname"];
     self.labelCount.text = [NSString stringWithFormat:@"x%@",[item objectForKey:@"stock"]];
-    self.labelPrice.text = [NSString stringWithFormat:@"￥%.2f",[[item objectForKey:@"price"] floatValue]];
+    self.labelPrice.text = [NSString stringWithFormat:@"$%.2f",[[item objectForKey:@"price"] floatValue]];
 }
 
 @end

@@ -160,19 +160,19 @@
                             self.labelSumPrice.frame = CGRectMake(0, 0, SCREEN_WIDTH/2-10, 45.f);
                             self.labelOtherPrice.hidden = NO;
                             self.btnBuy.hidden = YES;
-                            self.labelOtherPrice.text =[NSString stringWithFormat:@"差%.2f元送货",[@"9.00" floatValue] - self.sumPrice];
+                            self.labelOtherPrice.text =[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),[@"9.00" floatValue] - self.sumPrice];
                         }
-                        self.labelSumPrice.text = [NSString stringWithFormat:@"共$%.2f元",self.sumPrice];
+                        self.labelSumPrice.text = [NSString stringWithFormat:@"%@ $%.2f",Localized(@"Subtotal_txt"),self.sumPrice];
                     }];
                 });
                 //garfunkel add
                 [[NSNotificationCenter defaultCenter]postNotificationName:NotificationUpdateGoodList object:self.entity];
             }else{
                 self.labelNum.text =@"0";
-                self.labelSumPrice.text =@"共￥0.00 元  ";
+                self.labelSumPrice.text =[NSString stringWithFormat:@"%@ $0.00  ",Localized(@"Subtotal_txt")];
                 self.labelOtherPrice.hidden = NO;
                 self.btnBuy.hidden = YES;
-                self.labelOtherPrice.text =@"差9.00元送货";
+                self.labelOtherPrice.text =[NSString stringWithFormat:@"%@ $9.00",Localized(@"Still_need_num")] ;
             }
 
         }];
@@ -190,13 +190,19 @@
 }
 
 - (void)photoCarClicked:(UITapGestureRecognizer *)recognizer {
-
-    if(self.tabBarController.selectedIndex ==1){
-        [self.navigationController popToRootViewControllerAnimated:YES];
+    if(self.Identity.userInfo.isLogin){
+        if(self.tabBarController.selectedIndex ==1){
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }else{
+            self.tabBarController.selectedIndex = 1;
+        }
     }else{
-        self.tabBarController.selectedIndex = 1;
+        UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Login alloc]init]];
+        [nav.navigationBar setBackgroundColor:theme_navigation_color];
+        [nav.navigationBar setBarTintColor:theme_navigation_color];
+        [nav.navigationBar setTintColor:theme_default_color];
+        [self presentViewController:nav animated:YES completion:nil];
     }
- 
 }
 
 #pragma mark =====================================================  property package
@@ -222,7 +228,7 @@
         _labelSumPrice .backgroundColor = [UIColor blackColor];
         _labelSumPrice.alpha=0.7f;
         _labelSumPrice.textColor = [UIColor whiteColor];
-        _labelSumPrice.text =@"共￥0.00 元  ";
+        _labelSumPrice.text =[NSString stringWithFormat:@"%@ $0.00  ",Localized(@"Subtotal_txt")];;
         _labelSumPrice.textAlignment = NSTextAlignmentRight;
         _labelSumPrice.font = [UIFont systemFontOfSize:15.f];
     }
@@ -235,7 +241,7 @@
         _labelOtherPrice.backgroundColor = [UIColor darkGrayColor];
         _labelOtherPrice.alpha=0.7f;
         _labelOtherPrice.textColor = [UIColor whiteColor];
-        _labelOtherPrice.text =@"差9.00元送货";
+        _labelOtherPrice.text =[NSString stringWithFormat:@"%@ $9.00",Localized(@"Still_need_num")];
         _labelOtherPrice.textAlignment = NSTextAlignmentCenter;
         _labelOtherPrice.font = [UIFont systemFontOfSize:15.f];
         _labelOtherPrice.hidden = NO;
@@ -250,7 +256,7 @@
         _btnBuy.backgroundColor = [UIColor redColor];
         _btnBuy.alpha = 0.7f;
         [_btnBuy setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [_btnBuy setTitle:@"去结算" forState:UIControlStateNormal];
+        [_btnBuy setTitle:Localized(@"Settlement") forState:UIControlStateNormal];
         _btnBuy.titleLabel.font = [UIFont systemFontOfSize:14.f];
         _btnBuy.hidden = YES;
         _btnBuy.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
@@ -281,7 +287,7 @@
         _labelNum = [[UILabel alloc]init];
         _labelNum.layer.masksToBounds = YES;
         _labelNum.layer.cornerRadius = 10;
-        _labelNum.backgroundColor = [UIColor redColor];
+        _labelNum.backgroundColor = theme_navigation_color;
         _labelNum.textColor = [UIColor whiteColor];
         _labelNum.text = @"0";
         _labelNum.textAlignment = NSTextAlignmentCenter;

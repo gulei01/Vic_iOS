@@ -152,7 +152,7 @@
     }
     
     button.selected = YES;
-    button.layer.borderColor = [UIColor redColor].CGColor;
+    button.layer.borderColor = theme_navigation_color.CGColor;
     
     for(NSDictionary* dict in self.spec_list){
         if ([[dict objectForKey:@"id"] isEqualToString:index]) {
@@ -173,7 +173,7 @@
     }
     
     button.selected = YES;
-    button.layer.borderColor = [UIColor redColor].CGColor;
+    button.layer.borderColor = theme_navigation_color.CGColor;
     
     for(NSDictionary* dict in self.properties){
         if ([[dict objectForKey:@"id"] isEqualToString:index]) {
@@ -350,7 +350,7 @@
                 btn.frame = CGRectMake(btn_x, btn_y, btn_width, 30);
                 [btn setTitle:[specVal objectForKey:@"name"] forState:UIControlStateNormal];
                 [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                [btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+                [btn setTitleColor:theme_navigation_color forState:UIControlStateSelected];
 //                [btn.titleLabel sizeToFit];
 //                btn.titleLabel.adjustsFontSizeToFitWidth = YES;
                 btn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
@@ -360,7 +360,7 @@
                     btn.selected = YES;
                 }
                 if(btn.selected){
-                    btn.layer.borderColor = [UIColor redColor].CGColor;
+                    btn.layer.borderColor = theme_navigation_color.CGColor;
                 }else{
                     btn.layer.borderColor = [UIColor grayColor].CGColor;
                 }
@@ -415,7 +415,7 @@
                 NSLog(@"garfunkel_log:length %lu",(unsigned long)[name lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
                 [btn setTitle:name forState:UIControlStateNormal];
                 [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-                [btn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+                [btn setTitleColor:theme_navigation_color forState:UIControlStateSelected];
                 btn.titleLabel.font = [UIFont systemFontOfSize:14.0f];
 //                [btn.titleLabel sizeToFit];
 //                btn.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -425,7 +425,7 @@
                     btn.selected = YES;
                 }
                 if(btn.selected){
-                    btn.layer.borderColor = [UIColor redColor].CGColor;
+                    btn.layer.borderColor = theme_navigation_color.CGColor;
                 }else{
                     btn.layer.borderColor = [UIColor grayColor].CGColor;
                 }
@@ -460,7 +460,7 @@
                     for(NSString* spec_id in spec_array){
                         if(btn.tag == [spec_id integerValue]){
                             btn.selected = YES;
-                            btn.layer.borderColor = [UIColor redColor].CGColor;
+                            btn.layer.borderColor = theme_navigation_color.CGColor;
                         }
                     }
                 }
@@ -479,7 +479,7 @@
                         NSString* ptag = [pid_array objectAtIndex:1];
                         if(btn.tag - 100 == [ptag integerValue]){
                             btn.selected = YES;
-                            btn.layer.borderColor = [UIColor redColor].CGColor;
+                            btn.layer.borderColor = theme_navigation_color.CGColor;
                         }
                     }
                 }
@@ -536,7 +536,7 @@
         _priceLabel = [[UILabel alloc]init];
         _priceLabel.text = [NSString stringWithFormat: @"$%@",_entity.price];
         _priceLabel.font = [UIFont systemFontOfSize:24.0];
-        _priceLabel.textColor = [UIColor redColor];
+        _priceLabel.textColor = theme_navigation_color;
         
         _priceLabel.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -546,9 +546,9 @@
 -(UIButton *)btnAddCart{
     if(!_btnAddCart){
         _btnAddCart = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_btnAddCart setTitle:@"加入购物车" forState:UIControlStateNormal];
+        [_btnAddCart setTitle:Localized(@"Add_to_cart") forState:UIControlStateNormal];
         [_btnAddCart setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _btnAddCart.layer.backgroundColor = [UIColor redColor].CGColor;
+        _btnAddCart.layer.backgroundColor = theme_navigation_color.CGColor;
         _btnAddCart.layer.cornerRadius = 5.0f;
         _btnAddCart.tag = 3;
         

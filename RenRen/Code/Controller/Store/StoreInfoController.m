@@ -80,10 +80,10 @@
         [icon setImage:[UIImage imageNamed:@"icon-lock"]];
         NSString* star =[NSString stringWithFormat:@"%ld:00",[self.entity.servicTimeBegin integerValue]/60];
          NSString* end =[NSString stringWithFormat:@"%ld:00",[self.entity.serviceTimerEnd integerValue]/60];
-        label.text = [NSString stringWithFormat:@"配送时间 : %@",self.entity.time];
+        label.text = [NSString stringWithFormat:@"%@ : %@",Localized(@"Delivery_time"),self.entity.time];
     }else if (indexPath.row == 1){
         [icon setImage:[UIImage imageNamed:@"icon-boll"]];
-        label.text = [NSString stringWithFormat:@"商家电话 : %@",[WMHelper isEmptyOrNULLOrnil:self.entity.phone]?self.entity.mobile:self.entity.phone];
+        label.text = [NSString stringWithFormat:@"%@ : %@",Localized(@"Shop_phone"),[WMHelper isEmptyOrNULLOrnil:self.entity.phone]?self.entity.mobile:self.entity.phone];
         UIButton* btn =[UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(SCREEN_WIDTH-50, 15/2, 30.f, 30.f);
         [btn setImage:[UIImage imageNamed:@"icon-phone"] forState:UIControlStateNormal];
@@ -93,11 +93,11 @@
         [icon setImage:[UIImage imageNamed:@"icon-loca"]];
         label.numberOfLines = 0;
         label.lineBreakMode =NSLineBreakByCharWrapping;
-        label.text = [NSString stringWithFormat:@"商家地址 : %@",self.entity.address];
+        label.text = [NSString stringWithFormat:@"%@ : %@",Localized(@"Shop_address"),self.entity.address];
     }else{
         [icon setImage:[UIImage imageNamed:@"icon-word"]];
         label.frame = CGRectMake(40.f, 0, 80.f, 25.f);
-        label.text = @"配送服务 : ";
+        label.text = [NSString stringWithFormat:@"%@ : ",Localized(@"Delivery_service")];
         
         
         UILabel* label1 =[[UILabel alloc]init];
@@ -110,14 +110,14 @@
         label1.layer.masksToBounds = YES;
         //garfunkel modify
         if(self.entity.send){
-            label1.text =@"平台配送";
+            label1.text = Localized(@"Platform_deli");
         }else{
-            label1.text =@"商家";
+            label1.text = Localized(@"Store_txt");
         }
         UILabel* label2 =[[UILabel alloc]init];
         label2.font =[UIFont systemFontOfSize:14.f];
         label2.frame =CGRectMake(CGRectGetMaxX(label1.frame), 2, 130, 20.f);
-        label2.text = @"提供高品质配送服务";
+        label2.text = Localized(@"High_deli_service");
         
         UILabel* label3 =[[UILabel alloc]init];
         label3.frame =CGRectMake(CGRectGetMaxX(label.frame), CGRectGetMaxY(label1.frame)+2, 60, 20.f);
@@ -128,7 +128,7 @@
         label3.layer.borderColor =[UIColor colorWithRed:98/255.f green:196/255.f blue:111/255.f alpha:1.0].CGColor;
         label3.layer.borderWidth= 0.5f;
         label3.textAlignment = NSTextAlignmentCenter;
-        label3.text =@"送货快";
+        label3.text = Localized(@"Delivery_fast");
         
         UILabel* label4 =[[UILabel alloc]init];
         label4.frame =CGRectMake(CGRectGetMaxX(label3.frame)+5, CGRectGetMaxY(label1.frame)+2, 60, 20.f);
@@ -139,7 +139,7 @@
         label4.layer.borderColor =[UIColor colorWithRed:98/255.f green:196/255.f blue:111/255.f alpha:1.0].CGColor;
         label4.layer.borderWidth = 0.5f;
         label4.textAlignment = NSTextAlignmentCenter;
-        label4.text =@"准时到";
+        label4.text = Localized(@"Arrive_time");
         
         [cell.contentView addSubview:label1];
         [cell.contentView addSubview:label2];
@@ -163,12 +163,12 @@
 #pragma mark =====================================================  <UIAlertViewDelegate>
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if(buttonIndex == 1){
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"tel:%@",alertView.message]]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"Tel:%@",alertView.message]]];
     }
 }
 #pragma mark =====================================================  SEL
 -(IBAction)callPhoneTouch:(UIButton*)sender{
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"是否拨打电话？" message:[WMHelper isEmptyOrNULLOrnil:self.entity.phone]?self.entity.mobile:self.entity.phone delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:Localized(@"Whether_call") message:[WMHelper isEmptyOrNULLOrnil:self.entity.phone]?self.entity.mobile:self.entity.phone delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     [alert show];
 }
 

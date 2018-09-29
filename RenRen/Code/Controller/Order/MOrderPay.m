@@ -54,10 +54,10 @@
     order.partner = partner;
     order.seller = seller;
     order.tradeNO = orderID; //订单ID（由商家自行制定）
-    order.productName = @"外卖郎 订单"; //商品标题
-    order.productDescription = @"外卖郎 订单"; //商品描述
+    order.productName = @"Tutti 订单"; //商品标题
+    order.productDescription = @"Tutti 订单"; //商品描述
     order.amount = [NSString stringWithFormat:@"%.2f",price]; //商品价格
-    order.notifyURL =  @"http://wm.wm0530.com/Mobile/Tpay/notifyurl"; //回调URL
+    order.notifyURL =  @"http://www.vicisland/Mobile/Tpay/notifyurl"; //回调URL
     
     order.service = @"mobile.securitypay.pay";
     order.paymentType = @"1";
@@ -66,7 +66,7 @@
     order.showUrl = @"m.alipay.com";
     
     //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = @"com.wanmei.waimailanguser";
+    NSString *appScheme = @"com.kavl.waimailanguser";
     
     //将商品信息拼接成字符串
     NSString *orderSpec = [order description];
@@ -116,10 +116,10 @@
     if(dict == nil){
         //错误提示
         NSString *debug = [req getDebugifo];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示"
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:Localized(@"Prompt_txt")
                                                         message:debug
                                                        delegate:self
-                                              cancelButtonTitle:@"确定"
+                                              cancelButtonTitle:Localized(@"Confirm_txt")
                                               otherButtonTitles:nil];
         [alert show];
     }else{

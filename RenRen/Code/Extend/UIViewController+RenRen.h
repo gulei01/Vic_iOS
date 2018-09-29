@@ -41,7 +41,6 @@
 
 -(void)checkNetWorkState:(void (^)(AFNetworkReachabilityStatus netWorkStatus))complete;
  
-
 //-(void)clearCache;
 
 @end

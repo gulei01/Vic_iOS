@@ -181,8 +181,8 @@
     AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
     MAddress* item = delegate.globalAddress;
     self.photoLociation.image = [UIImage imageNamed:@"icon-address"];
-    self.labelUserName.text = [NSString stringWithFormat:@"收货人:%@ %@",item.userName,item.phoneNum];
-    self.labelAddress.text = [NSString stringWithFormat:@"收货地址:%@ %@ %@ %@",self.Identity.location.cityName,item.areaName,item.zoneName,item.address];
+    self.labelUserName.text = [NSString stringWithFormat:@"%@:%@ %@",Localized(@"Receiver_txt"),item.userName,item.phoneNum];
+    self.labelAddress.text = [NSString stringWithFormat:@"%@:%@ %@ %@ %@",Localized(@"Shipping_address"),self.Identity.location.cityName,item.areaName,item.zoneName,item.address];
     
     [self refreshDataSource];
     [self btnPayWay:self.btnFacePay];
@@ -197,8 +197,8 @@
     
     _tasteCount = 0;
     _myFontSize = 13;
-    self.navigationItem.title = @"提交订单";
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelTouch:)];
+    self.navigationItem.title = Localized(@"Submit_order");
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:Localized(@"Cancel_txt") style:UIBarButtonItemStylePlain target:self action:@selector(cancelTouch:)];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -261,7 +261,7 @@
     self.btnSectionPay.imageEdgeInsets = UIEdgeInsetsMake(15/2, 15, 15/2, SCREEN_WIDTH-40);
     self.btnSectionPay.titleEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 0);
     [self.btnSectionPay setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
-    [self.btnSectionPay setTitle:@"支付方式" forState:UIControlStateNormal];
+    [self.btnSectionPay setTitle:Localized(@"Payment_method") forState:UIControlStateNormal];
     self.btnSectionPay.titleLabel.font = [UIFont systemFontOfSize:14.f];
     [self.footerView addSubview:self.btnSectionPay];
     
@@ -272,7 +272,7 @@
     self.btnWeXinPay.titleEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 0);
     [self.btnWeXinPay setImage:[UIImage imageNamed:@"icon-wechat-pay"] forState:UIControlStateNormal];
     [self.btnWeXinPay setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
-    [self.btnWeXinPay setTitle:@"微信支付" forState:UIControlStateNormal];
+    [self.btnWeXinPay setTitle:Localized(@"Wexin_payment") forState:UIControlStateNormal];
     self.btnWeXinPay.titleLabel.font = [UIFont systemFontOfSize:14.f];
     [self.btnWeXinPay addTarget:self action:@selector(btnPayWay:) forControlEvents:UIControlEventTouchUpInside];
     [self.footerView addSubview:self.btnWeXinPay];
@@ -289,7 +289,7 @@
     self.btnAlipay.titleEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 0);
     [self.btnAlipay setImage:[UIImage imageNamed:@"icon-alipay"] forState:UIControlStateNormal];
     [self.btnAlipay setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
-    [self.btnAlipay setTitle:@"支付宝支付" forState:UIControlStateNormal];
+    [self.btnAlipay setTitle:Localized(@"Alipay_payment") forState:UIControlStateNormal];
     self.btnAlipay.titleLabel.font = [UIFont systemFontOfSize:14.f];
     [self.btnAlipay addTarget:self action:@selector(btnPayWay:) forControlEvents:UIControlEventTouchUpInside];
     [self.footerView addSubview:self.btnAlipay];
@@ -302,7 +302,7 @@
     self.btnFacePay = [UIButton buttonWithType:UIButtonTypeCustom];
     //self.btnFacePay.hidden = YES;
     [self.btnFacePay setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
-    NSMutableAttributedString* attributeStr = [[NSMutableAttributedString alloc]initWithString:@"线下支付"];
+    NSMutableAttributedString* attributeStr = [[NSMutableAttributedString alloc]initWithString:Localized(@"Offline_payment")];
     
 //    [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor redColor]} range:[@"货到付款(在线付款享受折扣价)" rangeOfString:@"在线付款享受折扣价"]];
     [self.btnFacePay setAttributedTitle:attributeStr forState:UIControlStateNormal];
@@ -322,11 +322,11 @@
     [self.footerView addSubview:self.sumView];
     
     self.labelGoodsPriceTitle = [[UILabel alloc]init];
-    self.labelGoodsPriceTitle.text = @"商品金额:";
+    self.labelGoodsPriceTitle.text = [NSString stringWithFormat:@"%@:",Localized(@"Product_price")];
     [self.sumView addSubview:self.labelGoodsPriceTitle];
     
     self.labelGoodsPrice = [[UILabel alloc]init];
-    self.labelGoodsPrice.text =@"￥0.00";
+    self.labelGoodsPrice.text =@"$0.00";
     self.labelGoodsPrice.textAlignment = NSTextAlignmentRight;
     [self.sumView addSubview:self.labelGoodsPrice];
     
@@ -336,21 +336,21 @@
     [self.fullCutView addSubview:self.labelFullCutPrice];
     
     self.labelDiscountPriceTitle = [[UILabel alloc]init];
-    self.labelDiscountPriceTitle.text = @"优惠金额:";
+    self.labelDiscountPriceTitle.text = [NSString stringWithFormat:@"%@:",Localized(@"Disc_price")];
     [self.sumView addSubview:self.labelDiscountPriceTitle];
     
     self.labelDiscountPrice = [[UILabel alloc]init];
-    self.labelDiscountPrice.text = @"￥0.00";
+    self.labelDiscountPrice.text = @"$0.00";
     self.labelDiscountPrice.textAlignment = NSTextAlignmentRight;
     self.labelDiscountPrice.textColor = [UIColor redColor];
     [self.sumView addSubview:self.labelDiscountPrice];
     
     self.labelExpectPriceTitle = [[UILabel alloc]init];
-    self.labelExpectPriceTitle.text = @"配送费:";
+    self.labelExpectPriceTitle.text = [NSString stringWithFormat:@"%@:",Localized(@"Delivery_fee")];
     [self.sumView addSubview:self.labelExpectPriceTitle];
     
     self.labelExpectPrice = [[UILabel alloc]init];
-    self.labelExpectPrice.text = @"￥0.00";
+    self.labelExpectPrice.text = @"$0.00";
     self.labelExpectPrice.textAlignment = NSTextAlignmentRight;
     [self.sumView addSubview:self.labelExpectPrice];
     
@@ -358,7 +358,7 @@
     [self.sumView addSubview:self.labelPackagePrice];
     
     self.labelTax = [[UILabel alloc]init];
-    self.labelTax.text = @"税费";
+    self.labelTax.text = [NSString stringWithFormat:@"%@:",Localized(@"Tax_fee")];
     [self.sumView addSubview:self.labelTax];
     
     self.labelTaxNum = [[UILabel alloc]init];
@@ -367,11 +367,11 @@
     [self.sumView addSubview:self.labelTaxNum];
     
     self.labelSumPriceTitle = [[UILabel alloc]init];
-    self.labelSumPriceTitle.text = @"应付总金额:";
+    self.labelSumPriceTitle.text = [NSString stringWithFormat:@"%@:",Localized(@"Subtotal_price")];
     [self.sumView addSubview:self.labelSumPriceTitle];
     
     self.labelSumPrice = [[UILabel alloc]init];
-    self.labelSumPrice.text =  @"￥0.00";
+    self.labelSumPrice.text =  @"$0.00";
     self.labelSumPrice.textColor=[UIColor redColor];
     self.labelSumPrice.textAlignment = NSTextAlignmentRight;
     [self.sumView addSubview:self.labelSumPrice];
@@ -379,7 +379,7 @@
     self.btnPay = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnPay.backgroundColor = [UIColor colorWithRed:229/255.f green:0/255.f blue:71/255.f alpha:1.0];
     [self.btnPay setTitleColor:theme_default_color forState:UIControlStateNormal];
-    [self.btnPay setTitle:@"提交订单" forState:UIControlStateNormal];
+    [self.btnPay setTitle:Localized(@"Submit_order") forState:UIControlStateNormal];
     self.btnPay.titleLabel.font = [UIFont systemFontOfSize:20.f];
     self.btnPay.layer.masksToBounds = YES;
     self.btnPay.layer.cornerRadius = 5.f;
@@ -831,10 +831,10 @@
     [btnSection.layer addSublayer:border];
     if(section==0){
         [btnSection setImage:[UIImage imageNamed:@"icon-store"] forState:UIControlStateNormal];
-        [btnSection setTitle:@"订单信息" forState:UIControlStateNormal];
+        [btnSection setTitle:Localized(@"Order_info") forState:UIControlStateNormal];
     }else if (section==1){
         [btnSection setImage:[UIImage imageNamed:@"icon-time"] forState:UIControlStateNormal];
-        [btnSection setTitle:@"预计送达时间" forState:UIControlStateNormal];
+        [btnSection setTitle:Localized(@"Esti_deli_time") forState:UIControlStateNormal];
         UILabel* label = [[UILabel alloc]init];
         label.frame = CGRectMake(SCREEN_WIDTH-150, 0, 140, 40);
         label.text = [NSString stringWithFormat:@"%@",self.expect_time];
@@ -845,10 +845,10 @@
         
     }else if (section ==2){
         [btnSection setImage:[UIImage imageNamed:@"icon-preferential"] forState:UIControlStateNormal];
-        [btnSection setTitle:@"使用优惠劵" forState:UIControlStateNormal];
+        [btnSection setTitle:Localized(@"Use_Coupon") forState:UIControlStateNormal];
         UILabel* label = [[UILabel alloc]init];
         label.frame = CGRectMake(SCREEN_WIDTH-150, 0, 140, 40);
-        label.text = self.useRed?@"已使用":@"未使用";
+        label.text = self.useRed?Localized(@"Used_txt"):Localized(@"Unused_txt");
         label.textColor = [UIColor redColor];
         label.font = [UIFont systemFontOfSize:14.f];
         label.textAlignment = NSTextAlignmentRight;
@@ -941,7 +941,7 @@
         txtRemark.layer.masksToBounds = YES;
         txtRemark.layer.cornerRadius = 5.f;
         txtRemark.backgroundColor = theme_line_color;
-        txtRemark.placeholder = @"订单备注 (30字以内)";
+        txtRemark.placeholder = [NSString stringWithFormat:@"%@(%@)",Localized(@"Order_notes"),Localized(@"Within_words")];
         txtRemark.text = self.remark;
         [cell.contentView addSubview:txtRemark];
         
@@ -968,8 +968,8 @@
         btnUse.frame = CGRectMake(SCREEN_WIDTH-90, 5, 80, 35);
         [btnUse setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [btnUse setTitleColor:[UIColor darkGrayColor] forState:UIControlStateSelected];
-        [btnUse setTitle:@"使用" forState:UIControlStateNormal];
-        [btnUse setTitle:@"已使用" forState:UIControlStateSelected];
+        [btnUse setTitle:Localized(@"Use_txt") forState:UIControlStateNormal];
+        [btnUse setTitle:Localized(@"Used_txt") forState:UIControlStateSelected];
         btnUse.layer.masksToBounds = YES;
         btnUse.layer.cornerRadius = 5.f;
         btnUse.layer.borderColor = theme_line_color.CGColor;
@@ -1204,7 +1204,7 @@
         
         if (!arr.count) {
             
-            tasteString = [tasteString stringByAppendingString:[NSString stringWithFormat:@"|空|，"]];
+            tasteString = [tasteString stringByAppendingString:[NSString stringWithFormat:@"|%@|，",Localized(@"Blank_txt")]];
 
             return;
             
@@ -1251,7 +1251,7 @@
                     
                     if (count!=1) {
                         
-                        endString = [endString stringByAppendingString:[NSString stringWithFormat:@"%d份%@，",count - 1,nucleobase]];
+                        endString = [endString stringByAppendingString:[NSString stringWithFormat:@"%d%@，",count - 1,nucleobase]];
                         
                         sub += count -1;
                     }
@@ -1262,14 +1262,14 @@
                 
                 if (sub < num) {
                     
-                    endString = [endString stringByAppendingString:[NSString stringWithFormat:@"%d份默认，",num - sub]];
+                    endString = [endString stringByAppendingString:[NSString stringWithFormat:@"%d %@，",num - sub,Localized(@"Default_txt")]];
                     
                 }
                 
                 
                 if (idx == comArray.count - 2) {
                     
-                    endString = [endString stringByReplacingCharactersInRange:NSMakeRange(endString.length -1, 1) withString:@"。"];
+                    endString = [endString stringByReplacingCharactersInRange:NSMakeRange(endString.length -1, 1) withString:@"."];
                     
                 }
                 
@@ -1331,7 +1331,7 @@
 -(IBAction)generalOrderTouch:(id)sender{
     if(self.btnWeXinPay.selected){
         if(![WXApi isWXAppInstalled]){
-            [self alertHUD:@"您的手机不支持微信支付"];
+            [self alertHUD:Localized(@"Not_weixin_payment")];
             return;
         }
     }
@@ -1419,8 +1419,8 @@
     self.paySumPrice = self.goodsSumPrice;
     [self updatePrice];
     }else{
-        NSString* message = [NSString stringWithFormat: @"不满%@,不能使用优惠券哦！",[dict objectForKey: @"limit_money"]];
-        UIAlertView* alert = [[UIAlertView alloc]initWithTitle: @"提示" message: message delegate:nil cancelButtonTitle: @"知道了" otherButtonTitles: nil];
+        NSString* message = [NSString stringWithFormat: Localized(@"Cannot_use_coupon"),[dict objectForKey: @"limit_money"]];
+        UIAlertView* alert = [[UIAlertView alloc]initWithTitle: Localized(@"Prompt_txt") message: message delegate:nil cancelButtonTitle: Localized(@"Confirm_txt") otherButtonTitles: nil];
         [alert show];
     }
 }
@@ -1464,12 +1464,12 @@
 #pragma mark =====================================================  私有方法
 -(void)updatePrice{
     //self.paySumPrice =self.goodsSumPrice-self.discountPrice+self.packagePrice+self.shipPrice-self.fullCut;
-    self.labelFullCutPrice.text = [NSString stringWithFormat:@"-￥%.2f",self.fullCut];
-    self.labelDiscountPrice.text = [NSString stringWithFormat:@"-￥%.2f",self.discountPrice];
-    self.labelPackagePrice.text = [NSString stringWithFormat:@"￥%.2f",self.packagePrice];
-    self.labelExpectPrice.text = [NSString stringWithFormat:@"￥%.2f",self.shipPrice];
-    self.labelGoodsPrice.text = [NSString stringWithFormat:@"￥%.2f",self.goodsSumPrice];
-    self.labelSumPrice.text =[NSString stringWithFormat:@"￥%.2f",self.paySumPrice];
+    self.labelFullCutPrice.text = [NSString stringWithFormat:@"-$%.2f",self.fullCut];
+    self.labelDiscountPrice.text = [NSString stringWithFormat:@"-$%.2f",self.discountPrice];
+    self.labelPackagePrice.text = [NSString stringWithFormat:@"$%.2f",self.packagePrice];
+    self.labelExpectPrice.text = [NSString stringWithFormat:@"$%.2f",self.shipPrice];
+    self.labelGoodsPrice.text = [NSString stringWithFormat:@"$%.2f",self.goodsSumPrice];
+    self.labelSumPrice.text =[NSString stringWithFormat:@"$%.2f",self.paySumPrice];
     [self.tableView reloadData];
 }
 #pragma mark 微信支付
@@ -1559,12 +1559,12 @@
     order.partner = partner;
     order.seller = seller;
     order.tradeNO = orderID; //订单ID（由商家自行制定）
-    order.productName = @"外卖郎 订单"; //商品标题
-    order.productDescription = @"外卖郎i便利店 订单"; //商品描述
+    order.productName = @"Tutti 订单"; //商品标题
+    order.productDescription = @"Tutti 订单"; //商品描述
     order.amount = [NSString stringWithFormat:@"%.2f",self.paySumPrice]; //商品价格
-    // order.notifyURL =  @"http://wm.wm0530.com"; //回调URL
+    // order.notifyURL =  @"http://www.vicisland.com"; //回调URL
     
-    order.notifyURL =  @"http://wm.wm0530.com/Mobile/Tpay/notifyurl"; //回调URL
+    order.notifyURL =  @"http://www.vicisland.com/Mobile/Tpay/notifyurl"; //回调URL
     
     order.service = @"mobile.securitypay.pay";
     order.paymentType = @"1";
@@ -1573,7 +1573,7 @@
     order.showUrl = @"m.alipay.com";
     
     //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = @"com.wanmei.waimailanguser";
+    NSString *appScheme = @"com.kavl.tutti";
     
     //将商品信息拼接成字符串
     NSString *orderSpec = [order description];
@@ -1652,7 +1652,7 @@
 -(UILabel *)labelPackage{
     if(!_labelPackage){
         _labelPackage =[[UILabel alloc]init];
-        _labelPackage.text = @"打包费:";
+        _labelPackage.text = [NSString stringWithFormat:@"%@:",Localized(@"Packing_fee")];
     }
     return _labelPackage;
 }
@@ -1660,7 +1660,7 @@
 -(UILabel *)labelPackagePrice{
     if(!_labelPackagePrice){
         _labelPackagePrice = [[UILabel alloc]init];
-        _labelPackagePrice.text = @"￥0.00";
+        _labelPackagePrice.text = @"$0.00";
         _labelPackagePrice.textAlignment = NSTextAlignmentRight;
     }
     return _labelPackagePrice;
@@ -1683,7 +1683,7 @@
         _labelCutIcon.layer.masksToBounds = YES;
         _labelCutIcon.layer.cornerRadius = 3.f;
         _labelCutIcon.textAlignment = NSTextAlignmentCenter;
-        _labelCutIcon.text =  @"减";
+        _labelCutIcon.text =  Localized(@"Less_txt");
         _labelCutIcon.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelCutIcon;
@@ -1692,7 +1692,7 @@
 -(UILabel *)labelCutTitle{
     if(!_labelCutTitle){
         _labelCutTitle = [[UILabel alloc]init];
-        _labelCutTitle.text =  @"满减优惠:";
+        _labelCutTitle.text =  [NSString stringWithFormat:@"%@:",Localized(@"Full_redue")];
         _labelCutTitle.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelCutTitle;
@@ -1701,7 +1701,7 @@
 -(UILabel *)labelFullCutPrice{
     if(!_labelFullCutPrice){
         _labelFullCutPrice = [[UILabel alloc]init];
-        _labelFullCutPrice.text = @"￥0.00";
+        _labelFullCutPrice.text = @"$0.00";
         _labelFullCutPrice.textAlignment = NSTextAlignmentRight;
         _labelFullCutPrice.textColor = [UIColor redColor];
         _labelFullCutPrice.translatesAutoresizingMaskIntoConstraints = NO;

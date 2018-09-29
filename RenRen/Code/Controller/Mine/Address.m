@@ -54,7 +54,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.title = @"地址管理";
+    self.navigationItem.title = Localized(@"Manager_address");
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -67,7 +67,7 @@
     self.headerView.backgroundColor = theme_default_color;
     self.btnAdd  = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.btnAdd setTitleColor:theme_title_color forState:UIControlStateNormal];
-    [self.btnAdd setTitle:@"新增收货地址" forState:UIControlStateNormal];
+    [self.btnAdd setTitle:Localized(@"Add_new_address") forState:UIControlStateNormal];
     self.btnAdd.titleLabel.font = [UIFont systemFontOfSize:17.f];
     [self.btnAdd addTarget:self action:@selector(addAddressTouch:) forControlEvents:UIControlEventTouchUpInside];
     [self.headerView addSubview:self.btnAdd];
@@ -77,7 +77,7 @@
     [self.headerView addSubview:self.lineBlock];
     
     self.labelTitle = [[UILabel alloc]init];
-    self.labelTitle.text = @"历史地址";
+    self.labelTitle.text = Localized(@"Historical_address");
     self.labelTitle.font = [UIFont systemFontOfSize:14.f];
     [self.headerView addSubview:self.labelTitle];
     CALayer* border = [[CALayer alloc]init];
@@ -115,7 +115,8 @@
 #pragma mark =====================================================  数据源
 -(void)queryData{
     
-    NSDictionary* arg = @{@"ince":@"get_user_addr_ince",@"uid":self.Identity.userInfo.userID,@"is_default":@"0"};
+    //NSDictionary* arg = @{@"ince":@"get_user_addr_ince",@"uid":self.Identity.userInfo.userID,@"is_default":@"0"};
+    NSDictionary* arg = @{@"a":@"getUserAddress",@"uid":self.Identity.userInfo.userID,@"is_default":@"0"};
         NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories queryAddress:arg complete:^(NSInteger react, NSArray *list, NSString *message) {
         [self.arrayData removeAllObjects];
@@ -167,6 +168,7 @@
         cell = [[AddressCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressCell"];
     
     cell.entity = self.arrayData[indexPath.row];
+    [cell disabledDelegate];
     cell.delegate =self;
     
     return cell;
@@ -175,12 +177,41 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
+//garfunkel add
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+/**
+ *  左滑cell时出现什么按钮
+ */
+- (NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewRowAction *action0 = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:Localized(@"Edit_txt") handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        tableView.editing = YES;
+        [self.tableView setEditing:YES animated:YES];
+        
+        [self editAddress:self.arrayData[indexPath.row]];
+        // 收回左滑出现的按钮(退出编辑模式)
+        //tableView.editing = NO;
+    }];
+    
+    UITableViewRowAction *action1 = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:Localized(@"Delete_txt") handler:^(UITableViewRowAction *action, NSIndexPath *indexPath) {
+        [self delAddress:self.arrayData[indexPath.row]];
+        //        [self.arrayData removeObjectAtIndex:indexPath.row];
+        //        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }];
+    
+    return @[action1, action0];
+}
+
 
 #pragma mark =====================================================  AddressCell 协议shixian
 -(void)setDefaultAddress:(MAddress *)item{
     self.emptyItem = item;
     if(!self.alertDefault)
-        self.alertDefault = [[UIAlertView alloc] initWithTitle:nil message:@"设置为默认收货地址?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        self.alertDefault = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"Setting_default_address") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     [self.alertDefault show];
     
 }
@@ -192,7 +223,7 @@
 -(void)delAddress:(MAddress *)item{
     self.emptyItem = item;
     if(!self.alertDel)
-        self.alertDel = [[UIAlertView alloc] initWithTitle:nil message:@"确认删除?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        self.alertDel = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"Want_to_dele") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     [self.alertDel show];
     
 }
@@ -243,11 +274,12 @@
     [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
             [self showHUD];
-            NSDictionary* arg = @{@"ince":@"set_default_map",@"uid":self.Identity.userInfo.userID,@"itemid":self.emptyItem.rowID};
+            //NSDictionary* arg = @{@"ince":@"set_default_map",@"uid":self.Identity.userInfo.userID,@"itemid":self.emptyItem.rowID};
+            NSDictionary* arg = @{@"a":@"setDefaultAdr",@"uid":self.Identity.userInfo.userID,@"itemid":self.emptyItem.rowID};
             NetRepositories* repositories = [[NetRepositories alloc]init];
             [repositories updateAddres:arg complete:^(NSInteger react, id obj, NSString *message) {
                 if(react == 1){
-                    [self hidHUD:@"操作成功!"];
+                    [self hidHUD:Localized(@"Success_txt")];
                     [self.tableView.mj_header beginRefreshing];
                 }else if(react == 400){
                     [self hidHUD:message];
@@ -268,7 +300,7 @@
             NetRepositories* repositories = [[NetRepositories alloc]init];
             [repositories updateAddres:arg complete:^(NSInteger react, id obj, NSString *message) {
                 if(react == 1){
-                    [self hidHUD:@"操作成功!"];
+                    [self hidHUD:Localized(@"Success_txt")];
                     [self.tableView.mj_header beginRefreshing];
                 }else if(react == 400){
                     [self hidHUD:message];
@@ -287,5 +319,6 @@
         _arrayData = [[NSMutableArray alloc]init];
     return _arrayData;
 }
+
 
 @end
