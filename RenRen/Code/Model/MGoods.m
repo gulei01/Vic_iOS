@@ -24,6 +24,7 @@
         self.isBest = [item objectForKey:@"is_best"];
         self.defaultImg = [item objectForKey:@"default_image"];
         self.storeStatus = [item objectForKey:@"shopstatus"];
+        self.storeID = [item objectForKey:@"sid"];
     }
     return self;
 }
@@ -177,7 +178,7 @@
             _desc = value;
         }else if ([key isEqualToString:@"site_name"]){
             _storeName = value;
-        }else if ([key isEqualToString:@"site_id"]){
+        }else if ([key isEqualToString:@"sid"]){
             _storeID = value;
         }else if ([key isEqualToString:@"cate_id"]){
             _categroyID = value;

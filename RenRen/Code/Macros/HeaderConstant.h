@@ -13,7 +13,24 @@
 #define IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
 #define IS_RETINA ([[UIScreen mainScreen] scale] >= 2.0)
 
+//判断iPHoneXr
+#define SCREENSIZE_IS_XR ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(828, 1792), [[UIScreen mainScreen] currentMode].size) && !UI_IS_IPAD : NO)
+
+//判断iPHoneX、iPHoneXs
+#define SCREENSIZE_IS_X ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) && !UI_IS_IPAD : NO)
+#define SCREENSIZE_IS_XS ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) && !UI_IS_IPAD : NO)
+
+//判断iPhoneXs Max
+#define SCREENSIZE_IS_XS_MAX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2688), [[UIScreen mainScreen] currentMode].size) && !UI_IS_IPAD : NO)
+
+#define IS_IPhoneX_All ([UIScreen mainScreen].bounds.size.height == 812 || [UIScreen mainScreen].bounds.size.height == 896)
+
 #define StatusBar_HEIGHT ([[UIApplication sharedApplication] statusBarFrame].size.height)
+
+//状态栏高度
+#define StatusBarHeight     (IS_IPhoneX_All ? 44.f : 20.f)
+#define StatusBarAndNavigationBarHeight  (IS_IPhoneX_All ? 88.f : 64.f)
+#define TabbarSafeBottomMargin  (IS_IPhoneX_All ? 34.f : 0.f)
 
 #define SCREEN_WIDTH ([[UIScreen mainScreen] bounds].size.width)
 #define SCREEN_HEIGHT ([[UIScreen mainScreen] bounds].size.height)
@@ -52,7 +69,7 @@
 #define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
 
 
-#define kHost @"http://wm.wm0530.com/mobile/Re/index"
+#define kHost @"http://www.vicisland.com/mobile/Re/index"
 
 /**
  * begin 20170407 第三方配置文件
@@ -60,8 +77,8 @@
  */
 
 #pragma mark =====================================================  微信登陆、支付
-#define kWXAPP_ID @"wx8b65930e48974b35"
-#define kWXAPP_SECRET @"6b477f1058f877e89da8bdaf7ad5de5f"
+#define kWXAPP_ID @"wx09a5c8d38a286fd0"
+#define kWXAPP_SECRET @"61782f1011c77e825ef20ee0e09b3753"
 
 #pragma mark 微信支付
 /**
@@ -167,6 +184,8 @@
 //garfunkel add
 #define languageName_zh @"中文"
 #define languageName_en @"English"
+
+#define languagePara ([[[NSUserDefaults standardUserDefaults]objectForKey:@"appLanguage"] isEqualToString:@"zh-Hans"] ? @"&lang=cn" : @"&lang=en")
 //获取语言包
 #define Localized(key)  [[NSBundle bundleWithPath:[[NSBundle mainBundle] pathForResource:[NSString stringWithFormat:@"%@",[[NSUserDefaults standardUserDefaults] objectForKey:@"appLanguage"]] ofType:@"lproj"]] localizedStringForKey:(key) value:nil table:@"Language"]
 

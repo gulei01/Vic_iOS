@@ -13,7 +13,9 @@
 //五个按钮的数据
 -(void)requestPost:(NSDictionary *)arg complete:(responseDictBlock)complete{
     NSLog(@"garfunkel arg:%@",arg);
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    NSLog(@"garfunkel postPath:%@",postPath);
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;

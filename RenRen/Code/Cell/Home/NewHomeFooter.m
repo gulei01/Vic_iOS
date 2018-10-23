@@ -164,7 +164,7 @@
 -(UILabel *)labelStore{
     if(!_labelStore){
         _labelStore = [[UILabel alloc]init];
-        _labelStore.text =  @"附近的店铺";
+        _labelStore.text =  Localized(@"Nearby_Shop");
         _labelStore.textColor = [UIColor grayColor];
         _labelStore.font = [UIFont systemFontOfSize:15.f];
         _labelStore.translatesAutoresizingMaskIntoConstraints = NO;

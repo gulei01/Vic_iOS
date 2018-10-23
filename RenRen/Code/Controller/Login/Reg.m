@@ -54,7 +54,7 @@
     _backView.userInteractionEnabled = YES;
     [self.navigationController.view addSubview:_backView];
     
-    UIButton *btn =  [[UIButton alloc]initWithFrame:CGRectMake(15, 25, 40, 20)];
+    UIButton *btn =  [[UIButton alloc]initWithFrame:CGRectMake(15, StatusBarHeight + 5, 40, 20)];
     [btn setTitle:Localized(@"Log_in") forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:15];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

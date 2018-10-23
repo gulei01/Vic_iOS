@@ -106,8 +106,8 @@
     if(entity){
         _entity = entity;
         self.labelNamePhone.text = [NSString stringWithFormat:@"%@ %@",entity.userName,entity.phoneNum];
-        self.labelAddress.text = [NSString stringWithFormat:@"%@ %@ %@ %@",[MSingle shareAuhtorization].location.cityName,entity.areaName,entity.zoneName,entity.address];
-      
+        //self.labelAddress.text = [NSString stringWithFormat:@"%@ %@ %@ %@",[MSingle shareAuhtorization].location.cityName,entity.areaName,entity.zoneName,entity.address];
+        self.labelAddress.text = [NSString stringWithFormat:@"%@ %@ %@. Zip code:%@",entity.zoneName,entity.address,entity.mapLocation,entity.mapNumber];
         self.btnEdit.tag = [entity.rowID integerValue];
         
     }

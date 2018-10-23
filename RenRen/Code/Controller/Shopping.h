@@ -12,5 +12,5 @@
  *  首页
  */
 @interface Shopping : UITableViewController
-
+@property(nonatomic,copy) NSString* from;
 @end

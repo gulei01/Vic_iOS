@@ -16,6 +16,7 @@
 #import "PointsMall.h"
 #import "MyTuan.h"
 #import "Language.h"
+#import "Card.h"
 
 @interface Mine ()<UIAlertViewDelegate>
 
@@ -55,9 +56,9 @@
     self.title = Localized(@"Personal_center");
     
 //    self.arrayData = @[@"管理地址",@"我的优惠券", @"我的拼团",@"积分商城",@"意见反馈",@"商务合作",@"帮助中心",@"关于我们", @"清除本地缓存"];
-    self.arrayData = @[Localized(@"Manager_address"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"), Localized(@"Clear_cache")];
+    self.arrayData = @[Localized(@"Manager_address"),Localized(@"Wallet_txt"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"), Localized(@"Clear_cache")];
 //    self.arrayImage = @[@"icon-address",@"icon-red",@"icon-mytuan",@"icon-points",@"icon-feedback",@"icon-together",@"icon-help-mine",@"icon-about", @"icon-del"];
-    self.arrayImage = @[@"icon-address",@"icon-red",@"icon-about",@"icon-help-mine", @"icon-del"];
+    self.arrayImage = @[@"icon-address",@"credit_card",@"icon-red",@"icon-about",@"icon-help-mine", @"icon-del"];
     
     
     [self layoutUI];
@@ -80,7 +81,7 @@
 }
 
 -(void)updateTableText{
-    self.arrayData = @[Localized(@"Manager_address"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"), Localized(@"Clear_cache")];
+    self.arrayData = @[Localized(@"Manager_address"),Localized(@"Wallet_txt"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"), Localized(@"Clear_cache")];
     [self.tableView reloadData];
 }
 
@@ -120,6 +121,7 @@
     self.labelPoint.textAlignment = NSTextAlignmentCenter;
     self.labelPoint.textColor = theme_title_color;
     self.labelPoint.text = [NSString stringWithFormat:@"%@  %@: 0",Localized(@"Ordin_member"),Localized(@"Integral_txt")];
+    self.labelPoint.hidden = YES;
     [self.headerView addSubview:self.labelPoint];
     
     
@@ -131,10 +133,10 @@
 - (void)addPrivate {
     
 //        lineView.image = [UIImage imageNamed:@"line-vertical-home"];
-        float widthView = SCREEN_WIDTH/2;
+        float widthView = SCREEN_WIDTH/3;
         float widthSmall = 4;
         float widthLine = 0.7;
-        for (int i = 0; i < 2; i ++) {
+        for (int i = 0; i < 3; i ++) {
             UIImageView *view = [[UIImageView alloc]initWithFrame:CGRectMake(widthView *i, SCREEN_WIDTH*5/8, widthView, heightView)];
             view.backgroundColor = [UIColor whiteColor];
             
@@ -190,19 +192,18 @@
             break;
         case 2:
         {
-            RedEnvelopes* controller = [[RedEnvelopes alloc]init];
+            Card* controller = [[Card alloc]init];
             controller.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:controller animated:YES];
-            
         }
             break;
-//        case 3:
-//        {
-//            MyTuan* controller = [[MyTuan alloc]init];
+        case 3:
+        {
+//            RedEnvelopes* controller = [[RedEnvelopes alloc]init];
 //            controller.hidesBottomBarWhenPushed = YES;
 //            [self.navigationController pushViewController:controller animated:YES];
-//        }
-//            break;
+        }
+            break;
             }
 
 
@@ -262,7 +263,7 @@
         }
         UIImageView *imageView = [self.navigationController.navigationBar viewWithTag:111];
         if (!imageView) {
-            imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, -20, SCREEN_WIDTH, 64)];
+            imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, -StatusBarHeight, SCREEN_WIDTH, StatusBarAndNavigationBarHeight)];
             imageView.tag = 111;
             [imageView setBackgroundColor:barBackgroundColor];
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -313,20 +314,20 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.arrayData.count - 2;
+    return self.arrayData.count - 3;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc ]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
-    if(![WMHelper isEmptyOrNULLOrnil:self.arrayImage[indexPath.row]]){
-        [cell.imageView setImage:[UIImage imageNamed:self.arrayImage[indexPath.row+2]]];
+    if(![WMHelper isEmptyOrNULLOrnil:self.arrayImage[indexPath.row+3]]){
+        [cell.imageView setImage:[UIImage imageNamed:self.arrayImage[indexPath.row+3]]];
     }
     if(indexPath.row == 1){//语言
         NSString* languageName = [[[NSUserDefaults standardUserDefaults]objectForKey:@"appLanguage"] isEqualToString:@"zh-Hans"] ? languageName_zh : languageName_en;
-        cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", self.arrayData[indexPath.row+2],languageName];
+        cell.textLabel.text = [NSString stringWithFormat:@"%@ (%@)", self.arrayData[indexPath.row+3],languageName];
     }else{
-        cell.textLabel.text = self.arrayData[indexPath.row+2];
+        cell.textLabel.text = self.arrayData[indexPath.row+3];
     }
     
     cell.accessoryType=UITableViewCellAccessoryDisclosureIndicator;

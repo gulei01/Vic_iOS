@@ -302,6 +302,7 @@
         _btnComplaints.layer.borderWidth = 1.f;
         [_btnComplaints setTitleColor:[UIColor colorWithRed:84/255.f green:84/255.f blue:84/255.f alpha:1.0] forState:UIControlStateNormal];
         [_btnComplaints setTitle:Localized(@"Order_complaint") forState:UIControlStateNormal];
+        _btnComplaints.hidden = YES;
         _btnComplaints.titleLabel.font = [UIFont systemFontOfSize:14.f];
         [_btnComplaints addTarget:self action:@selector(complaintsToutch:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -317,6 +318,7 @@
         [_btnComment setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_btnComment setTitle:Localized(@"To_comment") forState:UIControlStateNormal];
         _btnComment.titleLabel.font = [UIFont systemFontOfSize:14.f];
+        _btnComment.hidden = YES;
         [_btnComment addTarget:self action:@selector(commentTouch:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _btnComment;

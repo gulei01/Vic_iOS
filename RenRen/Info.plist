@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>fr_CA</string>
+	<string>en_CA</string>
 	<key>CFBundleDisplayName</key>
 	<string>TUTTI</string>
 	<key>CFBundleExecutable</key>
@@ -30,7 +30,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.kavl.tutti.user</string>
-				<string>wx8b65930e48974b35</string>
+				<string>wx09a5c8d38a286fd0</string>
 			</array>
 		</dict>
 		<dict>
@@ -82,9 +82,9 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>以便获取附近商家信息</string>
+	<string>Nearby Store Listing</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>以便获取附近商家信息</string>
+	<string>Nearby Store Listing</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

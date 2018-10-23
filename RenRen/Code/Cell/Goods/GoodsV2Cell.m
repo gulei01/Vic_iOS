@@ -88,9 +88,10 @@
 
 //自己更改100
 -(IBAction)addToShopCarTouch:(UIButton *)button{
-    
-    [[NSNotificationCenter defaultCenter]postNotificationName:FXLShoppingSelectingBtn object:nil userInfo:@{@"fxlShoppingSelectingBtn":button}];
     NSString *num = button.tag == 1 ? @"1" : @"-1";
+    
+    if([num integerValue] == 1)
+        [[NSNotificationCenter defaultCenter]postNotificationName:FXLShoppingSelectingBtn object:nil userInfo:@{@"fxlShoppingSelectingBtn":button}];
     //NSLog(@"garfunkel add_cart:%@",num);
     
     if(self.delegate && [self.delegate respondsToSelector:@selector(addToShopCar:num:)]){

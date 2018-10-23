@@ -55,7 +55,7 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if(self.entity){
-        return 4;
+        return 3;
     }
     return 0;
 }
@@ -95,57 +95,57 @@
         label.lineBreakMode =NSLineBreakByCharWrapping;
         label.text = [NSString stringWithFormat:@"%@ : %@",Localized(@"Shop_address"),self.entity.address];
     }else{
-        [icon setImage:[UIImage imageNamed:@"icon-word"]];
-        label.frame = CGRectMake(40.f, 0, 80.f, 25.f);
-        label.text = [NSString stringWithFormat:@"%@ : ",Localized(@"Delivery_service")];
-        
-        
-        UILabel* label1 =[[UILabel alloc]init];
-        label1.backgroundColor = [UIColor colorWithRed:247/255.f green:157/255.f blue:34/255.f alpha:1.0];
-        label1.textColor =[UIColor whiteColor];
-        label1.textAlignment = NSTextAlignmentCenter;
-        label1.font =[UIFont systemFontOfSize:14.f];
-        label1.frame =CGRectMake(CGRectGetMaxX(label.frame), 2, 60, 20.f);
-        label1.layer.cornerRadius = 5.f;
-        label1.layer.masksToBounds = YES;
-        //garfunkel modify
-        if(self.entity.send){
-            label1.text = Localized(@"Platform_deli");
-        }else{
-            label1.text = Localized(@"Store_txt");
-        }
-        UILabel* label2 =[[UILabel alloc]init];
-        label2.font =[UIFont systemFontOfSize:14.f];
-        label2.frame =CGRectMake(CGRectGetMaxX(label1.frame), 2, 130, 20.f);
-        label2.text = Localized(@"High_deli_service");
-        
-        UILabel* label3 =[[UILabel alloc]init];
-        label3.frame =CGRectMake(CGRectGetMaxX(label.frame), CGRectGetMaxY(label1.frame)+2, 60, 20.f);
-        label3.textColor =[UIColor colorWithRed:66/255. green:191/255.f blue:72/255.f alpha:1.0];
-        label3.font =[UIFont systemFontOfSize:14.f];
-        label3.layer.cornerRadius = 5.f;
-        label3.layer.masksToBounds = YES;
-        label3.layer.borderColor =[UIColor colorWithRed:98/255.f green:196/255.f blue:111/255.f alpha:1.0].CGColor;
-        label3.layer.borderWidth= 0.5f;
-        label3.textAlignment = NSTextAlignmentCenter;
-        label3.text = Localized(@"Delivery_fast");
-        
-        UILabel* label4 =[[UILabel alloc]init];
-        label4.frame =CGRectMake(CGRectGetMaxX(label3.frame)+5, CGRectGetMaxY(label1.frame)+2, 60, 20.f);
-        label4.textColor =[UIColor colorWithRed:66/255. green:191/255.f blue:72/255.f alpha:1.0];
-        label4.font =[UIFont systemFontOfSize:14.f];
-        label4.layer.cornerRadius = 5.f;
-        label4.layer.masksToBounds = YES;
-        label4.layer.borderColor =[UIColor colorWithRed:98/255.f green:196/255.f blue:111/255.f alpha:1.0].CGColor;
-        label4.layer.borderWidth = 0.5f;
-        label4.textAlignment = NSTextAlignmentCenter;
-        label4.text = Localized(@"Arrive_time");
-        
-        [cell.contentView addSubview:label1];
-        [cell.contentView addSubview:label2];
-        [cell.contentView addSubview:label3];
-        [cell.contentView addSubview:label4];
-        
+//        [icon setImage:[UIImage imageNamed:@"icon-word"]];
+//        label.frame = CGRectMake(40.f, 0, 80.f, 25.f);
+//        label.text = [NSString stringWithFormat:@"%@ : ",Localized(@"Delivery_service")];
+//
+//
+//        UILabel* label1 =[[UILabel alloc]init];
+//        label1.backgroundColor = [UIColor colorWithRed:247/255.f green:157/255.f blue:34/255.f alpha:1.0];
+//        label1.textColor =[UIColor whiteColor];
+//        label1.textAlignment = NSTextAlignmentCenter;
+//        label1.font =[UIFont systemFontOfSize:14.f];
+//        label1.frame =CGRectMake(CGRectGetMaxX(label.frame), 2, 60, 20.f);
+//        label1.layer.cornerRadius = 5.f;
+//        label1.layer.masksToBounds = YES;
+//        //garfunkel modify
+//        if(self.entity.send){
+//            label1.text = Localized(@"Platform_deli");
+//        }else{
+//            label1.text = Localized(@"Store_txt");
+//        }
+//        UILabel* label2 =[[UILabel alloc]init];
+//        label2.font =[UIFont systemFontOfSize:14.f];
+//        label2.frame =CGRectMake(CGRectGetMaxX(label1.frame), 2, 130, 20.f);
+//        label2.text = Localized(@"High_deli_service");
+//
+//        UILabel* label3 =[[UILabel alloc]init];
+//        label3.frame =CGRectMake(CGRectGetMaxX(label.frame), CGRectGetMaxY(label1.frame)+2, 60, 20.f);
+//        label3.textColor =[UIColor colorWithRed:66/255. green:191/255.f blue:72/255.f alpha:1.0];
+//        label3.font =[UIFont systemFontOfSize:14.f];
+//        label3.layer.cornerRadius = 5.f;
+//        label3.layer.masksToBounds = YES;
+//        label3.layer.borderColor =[UIColor colorWithRed:98/255.f green:196/255.f blue:111/255.f alpha:1.0].CGColor;
+//        label3.layer.borderWidth= 0.5f;
+//        label3.textAlignment = NSTextAlignmentCenter;
+//        label3.text = Localized(@"Delivery_fast");
+//
+//        UILabel* label4 =[[UILabel alloc]init];
+//        label4.frame =CGRectMake(CGRectGetMaxX(label3.frame)+5, CGRectGetMaxY(label1.frame)+2, 60, 20.f);
+//        label4.textColor =[UIColor colorWithRed:66/255. green:191/255.f blue:72/255.f alpha:1.0];
+//        label4.font =[UIFont systemFontOfSize:14.f];
+//        label4.layer.cornerRadius = 5.f;
+//        label4.layer.masksToBounds = YES;
+//        label4.layer.borderColor =[UIColor colorWithRed:98/255.f green:196/255.f blue:111/255.f alpha:1.0].CGColor;
+//        label4.layer.borderWidth = 0.5f;
+//        label4.textAlignment = NSTextAlignmentCenter;
+//        label4.text = Localized(@"Arrive_time");
+//
+//        [cell.contentView addSubview:label1];
+//        [cell.contentView addSubview:label2];
+//        [cell.contentView addSubview:label3];
+//        [cell.contentView addSubview:label4];
+//
     }
     
     UIImageView* line = [[UIImageView alloc]init];

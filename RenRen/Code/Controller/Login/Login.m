@@ -94,7 +94,7 @@
     [_backView addSubview:imgView];
     
     
-    UIButton *btn =  [[UIButton alloc]initWithFrame:CGRectMake(15, 25, 40, 20)];
+    UIButton *btn =  [[UIButton alloc]initWithFrame:CGRectMake(15, StatusBarHeight + 5, 40, 20)];
     [btn setTitle:Localized(@"Close_txt") forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:15];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -116,11 +116,13 @@
     [_backView addSubview:_myView];
     
     self.btnQQ = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnQQ.hidden = YES;
     [self.btnQQ setImage:[UIImage imageNamed:@"qq"] forState:UIControlStateNormal];
     [self.btnQQ addTarget:self action:@selector(QQLoginTouch:) forControlEvents:UIControlEventTouchUpInside];
 
     
     self.btnWeChat = [ UIButton buttonWithType:UIButtonTypeCustom];
+//    self.btnWeChat.hidden = YES;
     [self.btnWeChat setImage:[UIImage imageNamed:@"weixin"] forState:UIControlStateNormal];
     [self.btnWeChat addTarget:self action:@selector(weiXinLoginTouch:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -191,19 +193,19 @@
     [self.btnWeChat addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeChat attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
     [self.btnWeChat addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeChat attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
     [self.myView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeChat attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.myView attribute:NSLayoutAttributeTop multiplier:1.0 constant:20.f]];
-    [self.myView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeChat attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.myView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-SCREEN_WIDTH/2+100]];
+    [self.myView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeChat attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.myView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-SCREEN_WIDTH/2+30]];
     
     self.mobileLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.passwordLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.mobileText.translatesAutoresizingMaskIntoConstraints = NO;
     self.passwordText.translatesAutoresizingMaskIntoConstraints = NO;
 
-    [self.mobileLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
+    [self.mobileLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:100.f]];
     [self.mobileLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:20.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:30.f]];
     
-    [self.passwordLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
+    [self.passwordLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:100.f]];
     [self.passwordLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:60.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:30.f]];
@@ -211,12 +213,12 @@
     [self.mobileText addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:200.f]];
     [self.mobileText addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:20.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:100.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.mobileLabel attribute:NSLayoutAttributeRight multiplier:1.0 constant:10.f]];
     
     [self.passwordText addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:200.f]];
     [self.passwordText addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:60.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:100.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.passwordLabel attribute:NSLayoutAttributeRight multiplier:1.0 constant:10.f]];
     
     self.loginBtn.translatesAutoresizingMaskIntoConstraints = NO;
     self.regBtn.translatesAutoresizingMaskIntoConstraints = NO;
@@ -226,7 +228,7 @@
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:110.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:100.f]];
     
-    [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
+    [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:80.f]];
     [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:110.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-100.f]];
@@ -238,10 +240,13 @@
     NSString* nickName = [dict objectForKey:@"nickname"];
     NSString* openID = [dict objectForKey:@"openid"];
     NSString* avatar = [dict objectForKey:@"headimgurl"];
+    NSString* sex = [dict objectForKey:@"sex"];
+    NSString* province = [dict objectForKey:@"province"];
+    NSString* city = [dict objectForKey:@"city"];
     // 实现平台统一将openid 改成 unionid 的值
     openID = [dict objectForKey:@"unionid"];
     
-    [self thirdPartyLogin:nickName openID:openID face:avatar type:2];
+    [self thirdPartyLogin:nickName openID:openID face:avatar sex:sex province:province city:city type:2];
 }
 
 #pragma mark =====================================================  SEL
@@ -266,8 +271,8 @@
 -(IBAction)weiXinLoginTouch:(id)sender{
     [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
-            SendAuthReq* req =[[SendAuthReq alloc ] init ];
-            req.openID = @"wxa63756a88befb156";
+            SendAuthReq* req =[[SendAuthReq alloc ] init];
+            req.openID = @"wx09a5c8d38a286fd0";
             req.scope = @"snsapi_userinfo" ;
             req.state = @"123" ;
             //第三方向微信终端发送一个SendAuthReq消息结构
@@ -305,7 +310,11 @@
         NSString* openID = self.tencentOAuth.openId;
         NSString* nick = [response.jsonResponse objectForKey:@"nickname"];
         NSString* face = [response.jsonResponse objectForKey:@"figureurl_qq_2"];
-        [self thirdPartyLogin:nick openID:openID face:face type:1];
+        NSString* sex = [response.jsonResponse objectForKey:@"sex"];
+        NSString* province = [response.jsonResponse objectForKey:@"province"];
+        NSString* city = [response.jsonResponse objectForKey:@"city"];
+        [self thirdPartyLogin:nick openID:openID face:face sex:sex province:province city:city type:1];
+//        [self thirdPartyLogin:nick openID:openID face:face type:1];
     }else {
         [self alertHUD:Localized(@"Auth_fail")];
     }
@@ -424,7 +433,7 @@
     }
 }
 #pragma mark =====================================================  私有方法
--(void)thirdPartyLogin:(NSString*)nick openID:(NSString*)openID face:(NSString*)face type:(NSInteger)type{
+-(void)thirdPartyLogin:(NSString*)nick openID:(NSString*)openID face:(NSString*)face sex:(NSString*)sex province:(NSString*)province city:(NSString*)city type:(NSInteger)type{
     NSLog(@"garfunkel______________________log");
     self.HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
     [self.view.window addSubview:self.HUD];
@@ -436,7 +445,7 @@
     
     
     //NSDictionary* arg = @{@"ince":@"the_third_reg",@"nickname":nick,@"openid":openID,@"face_pic":face,@"type":[WMHelper integerConvertToString:type]};
-    NSDictionary* arg = @{@"a":@"user_third_Login"};
+    NSDictionary* arg = @{@"a":@"user_third_Login",@"nickname":nick,@"openid":openID,@"face_pic":face,@"sex":sex,@"province":province,@"city":city,@"type":[WMHelper integerConvertToString:type]};
     NSLog(@"garfunkel_log:loginArg:%@",arg);
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories login:arg complete:^(NSInteger react, id obj, NSString *message) {

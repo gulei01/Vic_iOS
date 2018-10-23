@@ -101,7 +101,7 @@
 -(UILabel *)labelCopyRight{
     if(!_labelCopyRight){
         _labelCopyRight = [[UILabel alloc]init];
-        NSAttributedString* attributeStr =[[NSAttributedString alloc]initWithString:@"Kavl Technology Ltd \n Copyright © 2018 https://www.vicisland.com" attributes:@{NSFontAttributeName :[UIFont systemFontOfSize:14.0],NSForegroundColorAttributeName:theme_Fourm_color}];
+        NSAttributedString* attributeStr =[[NSAttributedString alloc]initWithString:@"Kavl Technology Ltd \n Copyright © 2018 https://www.tutti.app" attributes:@{NSFontAttributeName :[UIFont systemFontOfSize:14.0],NSForegroundColorAttributeName:theme_Fourm_color}];
         _labelCopyRight.attributedText = attributeStr;
         _labelCopyRight.textAlignment = NSTextAlignmentCenter;
         _labelCopyRight.numberOfLines = 0;

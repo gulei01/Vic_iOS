@@ -56,6 +56,7 @@
     [GMSServices provideAPIKey:googleMapAPIKey];
     [GMSPlacesClient provideAPIKey:googleMapAPIKey];
     
+    [self setLanguage];
 
 //    [JSPatch startWithAppKey:@"04c363927fbfd6cb"];
 //    [JSPatch sync];
@@ -81,6 +82,7 @@
         UIImageView* barImageView =[UINavigationBar appearance].subviews.firstObject;
         barImageView.backgroundColor = theme_navigation_color;
         
+        //[nav.navigationBar setBarTintColor:theme_navigation_color];
     }];
     //分栏控制器，代理
     self.mainTab = [UITabBarController new];
@@ -166,8 +168,6 @@
     [self configureMAMap];
     
     [self configDB];
-    
-    [self setLanguage];
     
     return YES;
 }

@@ -20,6 +20,7 @@
 #import "AddComment.h"
 #import "MyTuanInfo.h"
 #import "GroupBuy.h"
+#import "CreditPay.h"
 
 
 @interface OrderVC ()<UITableViewDataSource,UITableViewDelegate,DZNEmptyDataSetDelegate,DZNEmptyDataSetSource,OrderCellDelegate,UIAlertViewDelegate>
@@ -66,6 +67,7 @@
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    self.netPage.pageIndex = 1;
     [self.tableView.mj_header beginRefreshing];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(paySuccessNotification:) name:NotificationPaySuccess object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(payUserCancelNotification:) name:NotificationPayUserCancel object:nil];
@@ -175,7 +177,7 @@
         }
         UIImageView *imageView = [self.navigationController.navigationBar viewWithTag:111];
         if (!imageView) {
-            imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, -20, SCREEN_WIDTH, 64)];
+            imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, -StatusBarHeight, SCREEN_WIDTH, StatusBarAndNavigationBarHeight)];
             imageView.tag = 111;
             [imageView setBackgroundColor:barBackgroundColor];
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -292,50 +294,64 @@
 
 //自己更改走的支付的协议方法
 -(void)orderGoPay:(MOrder *)item{
-    [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
-        if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
-            self.orderNo = item.rowID;
-            [self showHUD];
-            
-            NSDictionary* arg = @{@"ince":@"check_pay_order",@"order_id":item.rowID};
-            
-            NetRepositories* repositories = [[NetRepositories alloc]init];
-            [repositories netConfirm:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
-                if(react == 1){
-                    [self hidHUD];
-                    switch ([item.payType integerValue]) {
-                        case 0: //货到付款由后台操作
-                        {
-                            //[self alertHUD:@"货到付款"];支付宝
-                            
-                            //[[NSNotificationCenter defaultCenter] postNotificationName:NotificationPaySuccess object:@"货到付款支付成功!"];
-                        }
-                            break;
-                        case 1:
-                        case 3:
-                        {
-                            [self aliPay:item.rowID price:item.goodsPrice];
-                        }
-                            break;
-                        case 2:
-                        {
-                            [self wxPay:item.rowID price:item.goodsPrice];
-                        }
-                            break;
-                        default:
-                            break;
-                    }
-                    
-                }else if(react == 400){
-                    [self hidHUD:message];
-                }else{
-                    self.orderNo = nil;
-                    [self hidHUD:message];
-                    [self.tableView.mj_header beginRefreshing];
-                }
-            }];
-        }
-    }];
+    if ([item.payType isEqualToString:@"moneris"]) {
+        CreditPay* controller = [[CreditPay alloc]init];
+        controller.tip_price = [item.tip_fee doubleValue];
+        controller.total_price = [item.total_price doubleValue];
+        controller.order_id = item.order_id;
+        
+        UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
+//        nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        [nav.navigationBar setBackgroundColor:theme_navigation_color];
+        [nav.navigationBar setBarTintColor:theme_navigation_color];
+        [nav.navigationBar setTintColor:theme_default_color];
+        [self.parentViewController presentViewController:nav animated:YES completion:nil];
+    }
+//    [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
+//        if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
+//            self.orderNo = item.rowID;
+//            [self showHUD];
+//
+////            NSDictionary* arg = @{@"ince":@"check_pay_order",@"order_id":item.rowID};
+//            NSDictionary* arg = @{@"a":@"getOrderDetail",@"order_id":item.rowID};
+//            NetRepositories* repositories = [[NetRepositories alloc]init];
+//            [repositories netConfirm:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
+//                if(react == 1){
+//                    [self hidHUD];
+//                    switch ([item.payType integerValue]) {
+//                        case 0: //货到付款由后台操作
+//                        {
+//                            //[self alertHUD:@"货到付款"];支付宝
+//
+//                            //[[NSNotificationCenter defaultCenter] postNotificationName:NotificationPaySuccess object:@"货到付款支付成功!"];
+//                        }
+//                            break;
+//                        case 1:
+//                        case 3:
+//                        {
+//                            [self aliPay:item.rowID price:item.goodsPrice];
+//                        }
+//                            break;
+//                        case 2:
+//                        {
+//                            [self wxPay:item.rowID price:item.goodsPrice];
+//                        }
+//                            break;
+//                        default:
+//                            break;
+//                    }
+//
+//
+//                }else if(react == 400){
+//                    [self hidHUD:message];
+//                }else{
+//                    self.orderNo = nil;
+//                    [self hidHUD:message];
+//                    [self.tableView.mj_header beginRefreshing];
+//                }
+//            }];
+//        }
+//    }];
 }
 -(void)orderCancelOrder:(MOrder *)item{
     self.orderNo = item.rowID;

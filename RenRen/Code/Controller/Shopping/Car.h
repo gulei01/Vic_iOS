@@ -12,5 +12,5 @@
  *  购物车封装
  */
 @interface Car : UIViewController
-
+@property(nonatomic,copy) NSString* StoreID;
 @end

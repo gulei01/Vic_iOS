@@ -88,6 +88,7 @@
 //    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:_deleteBtn];
     
     [super viewDidLoad];
+    
     self.title = Localized(@"Cart_txt");
     self.allSelect = YES;
     [self layoutUI];
@@ -199,13 +200,18 @@
     [self.btnSelectAll setImage:[UIImage imageNamed:@"icon-address-enter"] forState:UIControlStateSelected];
     self.btnSelectAll.selected = self.allSelect;
     [self.btnSelectAll addTarget:self action:@selector(allSelectedTouch:) forControlEvents:UIControlEventTouchUpInside];
+    //garfunkel add
+    self.btnSelectAll.hidden = YES;
     [self.footerView addSubview:self.btnSelectAll];
     
     self.labelSelectAll = [[UILabel alloc]init];
     self.labelSelectAll.text = Localized(@"Select_txt");
+    //garfunkel add
+    self.labelSelectAll.hidden = YES;
     [self.footerView addSubview:self.labelSelectAll];
     
     self.labelSum = [[UILabel alloc]init];
+    self.labelSum.textAlignment = NSTextAlignmentRight;
     [self.footerView addSubview:self.labelSum];
     
     self.btnConfrim = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -318,7 +324,7 @@
         }
         UIImageView *imageView = [self.navigationController.navigationBar viewWithTag:111];
         if (!imageView) {
-            imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, -20, SCREEN_WIDTH, 64)];
+            imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, -StatusBarHeight, SCREEN_WIDTH, StatusBarAndNavigationBarHeight)];
             imageView.tag = 111;
             [imageView setBackgroundColor:barBackgroundColor];
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -338,15 +344,16 @@
 
 #pragma mark =====================================================  数据源/数据请求
 -(void)queryData{
-    
+    NSLog(@"garfunkel_log:print_from:%@",self.from);
     @try {
-        self.allSelect = YES;
+        self.allSelect = NO;
         //NSDictionary* arg = @{@"ince":@"getcart",@"zoneid":self.Identity.location.circleID,@"uid":self.Identity.userInfo.userID};
         NSDictionary* arg = @{@"a":@"getCart",@"uid":self.Identity.userInfo.userID};
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories queryShopCar:arg complete:^(NSInteger react, NSArray *list, NSString *message) {
             [self.arrayData removeAllObjects];
             if(react == 1){
+//                [self hidHUD];
                 [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                     [self.arrayData addObject:obj];
                 }];
@@ -363,13 +370,36 @@
                 //                    emptySumPrice+=emptyItem.shopCarGoodsPrice;
                 //                }
                 //            }];
-                for (MStore* item in self.arrayData) {
-                    for (MGoods* subItem in item.arrayGoods) {
-                        subItem.shopCarSelected = YES;
+                
+                if(self.from){
+                    for (MStore* item in self.arrayData) {
+                        if([item.rowID isEqualToString:self.from] && [item.status integerValue] == 1){
+                            for (MGoods* subItem in item.arrayGoods) {
+                                    subItem.shopCarSelected = YES;
+                            }
+                            emptySum+=item.shopCarGoodsCount;
+                            emptySumPrice+=item.shopCarGoodsPrice;
+                        }
                     }
-                    if([item.status integerValue] == 1){
-                        emptySum+=item.shopCarGoodsCount;
-                        emptySumPrice+=item.shopCarGoodsPrice;
+                }else{
+                    NSInteger i = 0;
+                    NSInteger userNum = -1;
+                    for (MStore* item in self.arrayData) {
+                        if([item.status integerValue] == 1){//在营业
+                            if(userNum == -1)
+                                userNum = i;
+                        }
+                        for (MGoods* subItem in item.arrayGoods) {
+                            if(userNum == i)
+                                subItem.shopCarSelected = YES;
+                            else
+                                subItem.shopCarSelected = NO;
+                        }
+                        if([item.status integerValue] == 1 && i==userNum){
+                            emptySum+=item.shopCarGoodsCount;
+                            emptySumPrice+=item.shopCarGoodsPrice;
+                        }
+                        i++;
                     }
                 }
                 
@@ -383,10 +413,10 @@
                 self.btnSelectAll.selected = self.allSelect;
                 self.btnConfrim.enabled = YES;
 //                自己更改去结算的金额
-                if(self.payPrice<[@"9.00" floatValue]){
+                if(self.payPrice<[@"0.00" floatValue]){
                     self.btnConfrim.backgroundColor = [UIColor lightGrayColor];
                     self.btnConfrim.enabled = NO;
-                    [self.btnConfrim setTitle:[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),([@"9.00" floatValue]-self.payPrice)] forState:UIControlStateNormal];
+                    [self.btnConfrim setTitle:[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),([@"0.00" floatValue]-self.payPrice)] forState:UIControlStateNormal];
                 }else{
                     self.btnConfrim.enabled = YES;
                     self.btnConfrim.backgroundColor = theme_navigation_color;
@@ -422,6 +452,7 @@
     
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories searchAddres:arg complete:^(NSInteger react, id obj, NSString *message) {
+        [self hidHUD];
         if(react == 1){
             self.defaultAddress = obj;
             AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
@@ -431,7 +462,8 @@
             [self.btnAdd setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
             self.photoLociation.image = [UIImage imageNamed:@"icon-address"];
             self.labelUserName.text = [NSString stringWithFormat:@"%@:%@ %@",Localized(@"Receiver_txt"),self.defaultAddress.userName,self.defaultAddress.phoneNum];
-            self.labelAddress.text = [NSString stringWithFormat:@"%@:%@ %@ %@ %@",Localized(@"Shipping_address"),[MSingle shareAuhtorization].location.cityName,self.defaultAddress.areaName,self.defaultAddress.zoneName,self.defaultAddress.address];
+            //self.labelAddress.text = [NSString stringWithFormat:@"%@:%@ %@ %@ %@",Localized(@"Shipping_address"),[MSingle shareAuhtorization].location.cityName,self.defaultAddress.areaName,self.defaultAddress.zoneName,self.defaultAddress.address];
+            self.labelAddress.text = [NSString stringWithFormat:@"%@:%@ %@ %@. Postal Code:%@",Localized(@"Shipping_address"),self.defaultAddress.zoneName,self.defaultAddress.address,self.defaultAddress.mapLocation,self.defaultAddress.mapNumber];
             
         }else if(react == 400){
             [self alertHUD:message];
@@ -591,18 +623,29 @@
  */
 #pragma mark =====================================================  ShoppingCell 协议实现
 -(void)selectedGoods:(MGoods *)item{
-    
     item.shopCarSelected = !item.shopCarSelected;
     NSInteger emptySum = 0;
     float emptySumPrice = 0.f;
     self.allSelect = YES;
+    NSInteger selectStoreID = 0;
+    if (item.shopCarSelected) {
+        selectStoreID = [item.storeID integerValue];
+    }
+    
     for (MStore* item in self.arrayData) {
-        for (MGoods* subIitem in item.arrayGoods) {
-            if(!subIitem.shopCarSelected)
-                self.allSelect = NO;
-            else{
-                emptySum+=[subIitem.quantity integerValue];
-                emptySumPrice+=[subIitem.price floatValue]*[subIitem.quantity integerValue];
+        //garfunkel modify 判断是否为同一个店铺的商品，不是同店铺的取消选择
+        if([item.rowID integerValue] == selectStoreID || selectStoreID == 0){
+            for (MGoods* subIitem in item.arrayGoods) {
+                if(!subIitem.shopCarSelected)
+                    self.allSelect = NO;
+                else{
+                    emptySum+=[subIitem.quantity integerValue];
+                    emptySumPrice+=[subIitem.price floatValue]*[subIitem.quantity integerValue];
+                }
+            }
+        }else{
+            for (MGoods* subIitem in item.arrayGoods) {
+                subIitem.shopCarSelected = NO;
             }
         }
     }
@@ -615,10 +658,10 @@
     [attributeStr addAttributes:@{NSForegroundColorAttributeName:[UIColor blackColor]} range:[str rangeOfString:[NSString stringWithFormat:@"%@:",Localized(@"Subtotal_txt")]]];
     self.labelSum.attributedText = attributeStr;
     self.btnConfrim.enabled = YES;
-    if(self.payPrice<[@"9.00" floatValue]){
+    if(self.payPrice<[@"0.00" floatValue]){
         self.btnConfrim.backgroundColor = [UIColor lightGrayColor];
         self.btnConfrim.enabled = NO;
-        [self.btnConfrim setTitle:[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),([@"9.00" floatValue]-self.payPrice)] forState:UIControlStateNormal];
+        [self.btnConfrim setTitle:[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),([@"0.00" floatValue]-self.payPrice)] forState:UIControlStateNormal];
     }else{
         self.btnConfrim.enabled = YES;
         self.btnConfrim.backgroundColor = [UIColor redColor];
@@ -849,6 +892,12 @@
         _arrayStoreRest = [[NSMutableArray alloc]init];
     }
     return _arrayStoreRest;
+}
+
+-(void)setFrom:(NSString *)from{
+    if(from){
+        _from = from;
+    }
 }
 
 @end

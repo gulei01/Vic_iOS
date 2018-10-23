@@ -8,11 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		0AA60570D86BA43F436008E2 /* libPods-RenRen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 93B99693D1CC2686376872EB /* libPods-RenRen.a */; };
+		3222BC962176E1E0004B35A4 /* CreditPay.m in Sources */ = {isa = PBXBuildFile; fileRef = 3222BC952176E1E0004B35A4 /* CreditPay.m */; };
 		322FD70D2154CDD00092AB56 /* NewMapLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 322FD70C2154CDD00092AB56 /* NewMapLocation.m */; };
 		324729DC215A418F00B6AF48 /* Language.m in Sources */ = {isa = PBXBuildFile; fileRef = 324729DB215A418F00B6AF48 /* Language.m */; };
 		324729E6215A597E00B6AF48 /* Language.strings in Resources */ = {isa = PBXBuildFile; fileRef = 324729E8215A597E00B6AF48 /* Language.strings */; };
 		32874D0B214E55BE0009F127 /* GoodsSpecController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32874D0A214E55BE0009F127 /* GoodsSpecController.m */; };
 		32874D0D214E90160009F127 /* icon-close-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 32874D0C214E90160009F127 /* icon-close-gray.png */; };
+		329566C22178685700DDD92C /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 329566C12178685700DDD92C /* Card.m */; };
+		329566C52178764600DDD92C /* CardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 329566C42178764600DDD92C /* CardCell.m */; };
+		329566C82178828800DDD92C /* EditCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 329566C72178828800DDD92C /* EditCard.m */; };
+		329566CA2178A96600DDD92C /* credit_card.png in Resources */ = {isa = PBXBuildFile; fileRef = 329566C92178A96500DDD92C /* credit_card.png */; };
 		32F88B6E2135354C0007C6CD /* Reg.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F88B6D2135354C0007C6CD /* Reg.m */; };
 		6101FA321D90E9BA009E8393 /* HRAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6101FA311D90E9BA009E8393 /* HRAdView.m */; };
 		61070D231D9216DC00EFA36C /* RandomShowOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61070D221D9216DC00EFA36C /* RandomShowOrderCell.m */; };
@@ -546,6 +551,8 @@
 
 /* Begin PBXFileReference section */
 		21111BFEBC14EBA10CC2B551 /* Pods-RenRen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RenRen.release.xcconfig"; path = "Pods/Target Support Files/Pods-RenRen/Pods-RenRen.release.xcconfig"; sourceTree = "<group>"; };
+		3222BC942176E1E0004B35A4 /* CreditPay.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CreditPay.h; sourceTree = "<group>"; };
+		3222BC952176E1E0004B35A4 /* CreditPay.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CreditPay.m; sourceTree = "<group>"; };
 		322FD70B2154CDD00092AB56 /* NewMapLocation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NewMapLocation.h; sourceTree = "<group>"; };
 		322FD70C2154CDD00092AB56 /* NewMapLocation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NewMapLocation.m; sourceTree = "<group>"; };
 		324729DA215A418F00B6AF48 /* Language.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Language.h; sourceTree = "<group>"; };
@@ -556,6 +563,13 @@
 		32874D09214E55BE0009F127 /* GoodsSpecController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsSpecController.h; sourceTree = "<group>"; };
 		32874D0A214E55BE0009F127 /* GoodsSpecController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsSpecController.m; sourceTree = "<group>"; };
 		32874D0C214E90160009F127 /* icon-close-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-close-gray.png"; sourceTree = "<group>"; };
+		329566C02178685700DDD92C /* Card.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		329566C12178685700DDD92C /* Card.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		329566C32178764600DDD92C /* CardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CardCell.h; sourceTree = "<group>"; };
+		329566C42178764600DDD92C /* CardCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CardCell.m; sourceTree = "<group>"; };
+		329566C62178828800DDD92C /* EditCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCard.h; sourceTree = "<group>"; };
+		329566C72178828800DDD92C /* EditCard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditCard.m; sourceTree = "<group>"; };
+		329566C92178A96500DDD92C /* credit_card.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = credit_card.png; sourceTree = "<group>"; };
 		32F88B6C2135354C0007C6CD /* Reg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reg.h; sourceTree = "<group>"; };
 		32F88B6D2135354C0007C6CD /* Reg.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reg.m; sourceTree = "<group>"; };
 		6101FA301D90E9BA009E8393 /* HRAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRAdView.h; sourceTree = "<group>"; };
@@ -1234,7 +1248,7 @@
 		F7A194451BF6DB34001A04BA /* SelectAddressCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectAddressCell.m; sourceTree = "<group>"; };
 		F7A536B11BE9AF2700654077 /* ShoppingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShoppingCell.h; sourceTree = "<group>"; };
 		F7A536B21BE9AF2700654077 /* ShoppingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShoppingCell.m; sourceTree = "<group>"; };
-		F7A5956F1BE1E1330013BBF2 /* Island Life.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Island Life.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7A5956F1BE1E1330013BBF2 /* TUTTI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TUTTI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7A595731BE1E1330013BBF2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F7A595751BE1E1330013BBF2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F7A595761BE1E1330013BBF2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -1458,6 +1472,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3222BC932176E1AF004B35A4 /* Pay */ = {
+			isa = PBXGroup;
+			children = (
+				3222BC942176E1E0004B35A4 /* CreditPay.h */,
+				3222BC952176E1E0004B35A4 /* CreditPay.m */,
+			);
+			path = Pay;
+			sourceTree = "<group>";
+		};
 		324729E3215A58BE00B6AF48 /* language */ = {
 			isa = PBXGroup;
 			children = (
@@ -1753,6 +1776,7 @@
 				81808AA91ED840850019ECFB /* lALO0RuFbcy-zQKA_640_190.png_620x10000q90g.jpg */,
 				81808AA71ED83F540019ECFB /* lALO0Rw7a80B2s0C7g_750_474.png_620x10000q90g.jpg */,
 				81D5BC171ED800D400FDDA0B /* arrow-bottom-gay@2x.png */,
+				329566C92178A96500DDD92C /* credit_card.png */,
 				81D5BC181ED800D400FDDA0B /* baidu_wallet_new_wifi@3x.png */,
 				81D5BC191ED800D400FDDA0B /* bg-search-home.png */,
 				81D5BC1A1ED800D400FDDA0B /* default-640x300.png */,
@@ -2208,6 +2232,8 @@
 				F7A7E1081CE1CB9A00A5689B /* PointRecordCell.m */,
 				611B3C701D59DBA80041E9BC /* EditAddressMapCell.h */,
 				611B3C711D59DBA80041E9BC /* EditAddressMapCell.m */,
+				329566C32178764600DDD92C /* CardCell.h */,
+				329566C42178764600DDD92C /* CardCell.m */,
 			);
 			path = Mine;
 			sourceTree = "<group>";
@@ -2244,7 +2270,7 @@
 		F7A595701BE1E1330013BBF2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F7A5956F1BE1E1330013BBF2 /* Island Life.app */,
+				F7A5956F1BE1E1330013BBF2 /* TUTTI.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2441,6 +2467,7 @@
 				F7A595BA1BE1E1A40013BBF2 /* Mine.m */,
 				F7A595BD1BE1E1A40013BBF2 /* OrderVC.m */,
 				F7A595C01BE1E1A40013BBF2 /* Shopping.m */,
+				3222BC932176E1AF004B35A4 /* Pay */,
 				F702581B1D0546C600FF20C5 /* BuyNow */,
 				F70258191D0546C600FF20C5 /* FightGroups */,
 				F7A595AB1BE1E1A40013BBF2 /* Goods */,
@@ -2546,6 +2573,10 @@
 				618F43561D5C4C810083187E /* EmptyAddressMap.m */,
 				324729DA215A418F00B6AF48 /* Language.h */,
 				324729DB215A418F00B6AF48 /* Language.m */,
+				329566C02178685700DDD92C /* Card.h */,
+				329566C12178685700DDD92C /* Card.m */,
+				329566C62178828800DDD92C /* EditCard.h */,
+				329566C72178828800DDD92C /* EditCard.m */,
 			);
 			path = Mine;
 			sourceTree = "<group>";
@@ -2793,7 +2824,7 @@
 			);
 			name = RenRen;
 			productName = RenRen;
-			productReference = F7A5956F1BE1E1330013BBF2 /* Island Life.app */;
+			productReference = F7A5956F1BE1E1330013BBF2 /* TUTTI.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2941,6 +2972,7 @@
 				F7A596291BE1E1A40013BBF2 /* LocationSection.xib in Resources */,
 				611E97711DB9A50900B66115 /* StoreInfo.geojson in Resources */,
 				81992A811EEAA42E000E702E /* 02-667h@2x.png in Resources */,
+				329566CA2178A96600DDD92C /* credit_card.png in Resources */,
 				81D5BD4E1ED800D400FDDA0B /* icon-help-mine.png in Resources */,
 				81D5BD151ED800D400FDDA0B /* home_newActThree_third@2x.png in Resources */,
 				81D5BDC21ED800D500FDDA0B /* net-exception-wifi@3x.png in Resources */,
@@ -3326,6 +3358,7 @@
 				322FD70D2154CDD00092AB56 /* NewMapLocation.m in Sources */,
 				619D57E91D23C58F00DE0DEF /* MyTuanInfoHeader.m in Sources */,
 				F7E6FE441D1A9690008014C5 /* BuyNowItemHeader.m in Sources */,
+				329566C52178764600DDD92C /* CardCell.m in Sources */,
 				F7ABF3B91CE169CA00573EDE /* ExchangeRecordCell.m in Sources */,
 				F7D3D8F31D1A323900F4D85C /* OrderPaySuccess.m in Sources */,
 				F7E6FE411D1A90EE008014C5 /* BuyNowInfoFooter.m in Sources */,
@@ -3352,6 +3385,7 @@
 				F7A5962F1BE1E1A40013BBF2 /* Home.m in Sources */,
 				612073921D83AEE600E4CB9E /* TagTypeCell.m in Sources */,
 				619F30D01DB5C33200B04075 /* NewHome.m in Sources */,
+				3222BC962176E1E0004B35A4 /* CreditPay.m in Sources */,
 				F78762AF1CC4883E0056FA15 /* MOrderStatus.m in Sources */,
 				F78762A61CC47C110056FA15 /* OrderInfo.m in Sources */,
 				611625751D6157D6002AC28E /* EmptyController.m in Sources */,
@@ -3401,6 +3435,7 @@
 				F7C24A151CC0B43F005F1E56 /* StoreGoodsController.m in Sources */,
 				F773CEE31D0573AA006FE6E4 /* BuyNowCell.m in Sources */,
 				616F48441D1E7D3800322D67 /* payRequsestHandler.mm in Sources */,
+				329566C22178685700DDD92C /* Card.m in Sources */,
 				61B4EE291D86924500F70268 /* RandomSaleInfoFooter.m in Sources */,
 				61848A3F1D8E471B00E921B7 /* RandomOrderInfoHeader.m in Sources */,
 				6191567C1DC08BD200045685 /* emptyHeader.m in Sources */,
@@ -3448,6 +3483,7 @@
 				F7BCB5051C45E670009DD166 /* OrderDetailCell.m in Sources */,
 				61848A391D8E3A1D00E921B7 /* RandomOrderCell.m in Sources */,
 				619D57E21D23BC1E00DE0DEF /* MyTuanInfo.m in Sources */,
+				329566C82178828800DDD92C /* EditCard.m in Sources */,
 				F7A5963B1BE1E1A40013BBF2 /* MSingle.m in Sources */,
 				F7BCBD551D1783C2002207AD /* MCheckOrder.m in Sources */,
 				F72816E81D14EC520036098A /* PresaleInfoHeader.m in Sources */,
@@ -3620,9 +3656,9 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
-				PRODUCT_NAME = "Island Life";
-				PROVISIONING_PROFILE = "36537a48-a228-426d-bdf4-fa0df2dcbe76";
-				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Debug;
+				PRODUCT_NAME = TUTTI;
+				PROVISIONING_PROFILE = "a7495988-8939-4224-99a6-491066b804c9";
+				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Release;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
@@ -3704,9 +3740,9 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
-				PRODUCT_NAME = "Island Life";
-				PROVISIONING_PROFILE = "36537a48-a228-426d-bdf4-fa0df2dcbe76";
-				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Debug;
+				PRODUCT_NAME = TUTTI;
+				PROVISIONING_PROFILE = "a7495988-8939-4224-99a6-491066b804c9";
+				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Release;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s";

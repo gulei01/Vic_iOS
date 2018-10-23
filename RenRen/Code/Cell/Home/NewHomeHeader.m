@@ -54,6 +54,7 @@ static NSString* const cellIdentifier =  @"HomeCategoryCell";
     categoryHeight = 0;//70
     self.bannerView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, topHeight) imageURLStringsGroup:nil];
     self.bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
+    [self.bannerView setAutoScrollTimeInterval:3.5f];
     self.bannerView.delegate = self;
     self.bannerView.dotColor = [UIColor whiteColor]; // 自定义分页控件小圆标颜色
     self.bannerView.translatesAutoresizingMaskIntoConstraints = NO;

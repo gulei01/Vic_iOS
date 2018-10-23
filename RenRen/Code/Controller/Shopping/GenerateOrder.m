@@ -16,9 +16,10 @@
 #import <AlipaySDK/AlipaySDK.h>
 #import "AppDelegate.h"
 #import "WXApi.h"
+#import "CreditPay.h"
 
 
-@interface GenerateOrder ()<UIPickerViewDataSource,UIPickerViewDelegate,UIScrollViewDelegate>
+@interface GenerateOrder ()<UIPickerViewDataSource,UIPickerViewDelegate,UIScrollViewDelegate,UITextFieldDelegate>
 @property(nonatomic,strong) UIView* headerView;
 @property(nonatomic,strong) UIButton* lineTop;
 @property(nonatomic,strong) UIButton* lineBottom;
@@ -46,6 +47,16 @@
 @property(nonatomic,strong) UIImageView* imgAli;
 @property(nonatomic,strong) UIButton* btnFacePay;
 @property(nonatomic,strong) UIImageView* imgFace;
+@property(nonatomic,strong) UIButton* btnCredit;
+@property(nonatomic,strong) UIImageView* imgCredit;
+
+@property(nonatomic,strong) UIView* tipView;
+@property(nonatomic,strong) UILabel* tipLabel;
+@property(nonatomic,strong) UILabel* tipFeeLabel;
+@property(nonatomic,strong) UISegmentedControl* tipSeg;
+@property(nonatomic,strong) UITextField* tipTxt;
+
+@property(nonatomic,assign) double tip_fee;
 
 @property(nonatomic,strong) UIView* sumView;
 /**
@@ -119,6 +130,8 @@
  *  优惠金额 (红包)
  */
 @property(nonatomic,assign) double discountPrice;
+//税费
+@property(nonatomic,assign) double taxPrice;
 
 @property(nonatomic,copy) NSString* orderNo;
 
@@ -149,6 +162,7 @@
 
 @property(nonatomic,assign)int myFontSize;
 
+@property(nonatomic,assign)BOOL isHaveDian;
 @end
 
 @implementation GenerateOrder
@@ -317,6 +331,21 @@
     [self.imgFace setImage:[UIImage imageNamed:@"icon-address-default"]];
     [self.btnFacePay addSubview:self.imgFace];
     
+    self.btnCredit = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.btnCredit setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
+    NSMutableAttributedString* creditStr = [[NSMutableAttributedString alloc]initWithString:Localized(@"Credit_card")];
+    [self.btnCredit setAttributedTitle:creditStr forState:UIControlStateNormal];
+    self.btnCredit.backgroundColor =theme_default_color;
+    self.btnCredit.titleLabel.font = [UIFont systemFontOfSize:14.f];
+    self.btnCredit.contentEdgeInsets =UIEdgeInsetsMake(0, 10, 0, 0);
+    self.btnCredit.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.btnCredit addTarget:self action:@selector(btnPayWay:) forControlEvents:UIControlEventTouchUpInside];
+    [self.footerView addSubview:self.btnCredit];
+    
+    self.imgCredit = [[UIImageView alloc]init];
+    [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
+    [self.btnCredit addSubview:self.imgCredit];
+    
     self.sumView = [[UIView alloc]init];
     self.sumView.backgroundColor = theme_default_color;
     [self.footerView addSubview:self.sumView];
@@ -377,7 +406,7 @@
     [self.sumView addSubview:self.labelSumPrice];
     
     self.btnPay = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.btnPay.backgroundColor = [UIColor colorWithRed:229/255.f green:0/255.f blue:71/255.f alpha:1.0];
+    self.btnPay.backgroundColor = [UIColor redColor];
     [self.btnPay setTitleColor:theme_default_color forState:UIControlStateNormal];
     [self.btnPay setTitle:Localized(@"Submit_order") forState:UIControlStateNormal];
     self.btnPay.titleLabel.font = [UIFont systemFontOfSize:20.f];
@@ -385,8 +414,6 @@
     self.btnPay.layer.cornerRadius = 5.f;
     [self.btnPay addTarget:self action:@selector(generalOrderTouch:) forControlEvents:UIControlEventTouchUpInside];
     [self.sumView addSubview:self.btnPay];
-    
-    
     
     self.tableView.tableHeaderView = self.headerView;
     self.tableView.tableFooterView = self.footerView;
@@ -420,7 +447,42 @@
     [toolBar setItems:[NSArray arrayWithObjects:cancelButton, [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil], doneButton, nil]];
     self.txtRedPicker.inputAccessoryView = toolBar;
     
+    self.tipView = [[UIView alloc]init];
+    self.tipView.backgroundColor =theme_default_color;
+    [self.footerView addSubview:self.tipView];
     
+    self.tipLabel = [[UILabel alloc] init];
+    self.tipLabel.text = Localized(@"Tip_txt");
+    [self.tipView addSubview:self.tipLabel];
+    
+    self.tipFeeLabel = [[UILabel alloc] init];
+    self.tipFeeLabel.text = @"$0.00";
+    [self.tipView addSubview:self.tipFeeLabel];
+    
+    self.tipSeg = [[UISegmentedControl alloc] init];
+    [self.tipSeg insertSegmentWithTitle:@"15%" atIndex:0 animated:true];
+    [self.tipSeg insertSegmentWithTitle:@"20%" atIndex:1 animated:true];
+    [self.tipSeg insertSegmentWithTitle:@"25%" atIndex:2 animated:true];
+    self.tipSeg.layer.borderColor = theme_navigation_color.CGColor;
+    self.tipSeg.tintColor = theme_navigation_color;
+    [self.tipSeg setSelectedSegmentIndex:0];
+    
+    [self.tipSeg addTarget:self action:@selector(tip_select) forControlEvents:UIControlEventValueChanged];
+    
+    [self.tipView addSubview:self.tipSeg];
+    
+    self.tipTxt = [[UITextField alloc] init];
+    self.tipTxt.leftView = [self leftView:[NSString stringWithFormat:@"  %@:$",Localized(@"Self_tip")]];
+    self.tipTxt.leftViewMode =UITextFieldViewModeAlways;
+    self.tipTxt.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
+    self.tipTxt.placeholder = @"0.00";
+    self.tipTxt.layer.masksToBounds = YES;
+    self.tipTxt.layer.cornerRadius = 5.f;
+    self.tipTxt.backgroundColor = theme_line_color;
+    self.tipTxt.delegate = self;
+    [self.tipTxt addTarget:self action:@selector(changeTip) forControlEvents:UIControlEventEditingChanged];
+    
+    [self.tipView addSubview:self.tipTxt];
 }
 -(void)layoutConstraints{
     self.lineTop.translatesAutoresizingMaskIntoConstraints = NO;
@@ -465,9 +527,17 @@
     self.btnWeXinPay.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnAlipay.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnFacePay.translatesAutoresizingMaskIntoConstraints = NO;
+    self.btnCredit.translatesAutoresizingMaskIntoConstraints = NO;
     self.imgWeiXin.translatesAutoresizingMaskIntoConstraints = NO;
     self.imgAli.translatesAutoresizingMaskIntoConstraints = NO;
     self.imgFace.translatesAutoresizingMaskIntoConstraints  = NO;
+    self.imgCredit.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    self.tipView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tipLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tipFeeLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tipSeg.translatesAutoresizingMaskIntoConstraints = NO;
+    self.tipTxt.translatesAutoresizingMaskIntoConstraints = NO;
     
     self.sumView.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelGoodsPrice.translatesAutoresizingMaskIntoConstraints = NO;
@@ -499,6 +569,37 @@
     [self.btnFacePay addConstraint:[NSLayoutConstraint constraintWithItem:self.imgFace attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.btnFacePay attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.f]];
     [self.btnFacePay addConstraint:[NSLayoutConstraint constraintWithItem:self.imgFace attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.btnFacePay attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
+    [self.btnCredit addConstraint:[NSLayoutConstraint constraintWithItem:self.btnCredit attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:40.f]];
+    [self.btnCredit addConstraint:[NSLayoutConstraint constraintWithItem:self.btnCredit attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnCredit attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnFacePay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:1.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnCredit attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
+    
+    [self.imgCredit addConstraint:[NSLayoutConstraint constraintWithItem:self.imgCredit attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.imgCredit addConstraint:[NSLayoutConstraint constraintWithItem:self.imgCredit attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.btnCredit addConstraint:[NSLayoutConstraint constraintWithItem:self.imgCredit attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.btnCredit attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.f]];
+    [self.btnCredit addConstraint:[NSLayoutConstraint constraintWithItem:self.imgCredit attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.btnCredit attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnCredit attribute:NSLayoutAttributeBottom multiplier:1.0 constant:1.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
+    
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeTop multiplier:1.0 constant:10.f]];
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipFeeLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeTop multiplier:1.0 constant:10.f]];
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipFeeLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
+    [self.tipSeg addConstraint:[NSLayoutConstraint constraintWithItem:self.tipSeg attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:30.f]];
+    [self.tipSeg addConstraint:[NSLayoutConstraint constraintWithItem:self.tipSeg attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:SCREEN_WIDTH - 20]];
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipSeg attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tipLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipSeg attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    [self.tipTxt addConstraint:[NSLayoutConstraint constraintWithItem:self.tipTxt attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:SCREEN_WIDTH - 20]];
+    [self.tipTxt addConstraint:[NSLayoutConstraint constraintWithItem:self.tipTxt attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:35.f]];
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipTxt attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tipSeg attribute:NSLayoutAttributeBottom multiplier:1.0 constant:10.f]];
+    [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipTxt attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
     [self.btnWeXinPay addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeXinPay attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:40.f]];
     [self.btnWeXinPay addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeXinPay attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeXinPay attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnFacePay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:1.f]];
@@ -522,7 +623,7 @@
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:220.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
     //只有线下支付，恢复在线支付是 toItem：btnAlipay
-    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnFacePay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:20.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:20.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
     
     [self.labelGoodsPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelGoodsPriceTitle attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
@@ -558,8 +659,6 @@
     [self.fullCutView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelCutTitle attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.labelCutIcon attribute:NSLayoutAttributeRight multiplier:1.0 constant:5.f]];
     [self.fullCutView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelCutTitle attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
     [self.fullCutView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelCutTitle attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.labelFullCutPrice attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-10.f]];
-    
-    
     
     [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
@@ -717,6 +816,7 @@
             self.packagePrice = [[response objectForKey:@"packing_fee"] doubleValue];//打包费用
             self.shipPrice = [[response objectForKey:@"ship_fee"] doubleValue];//配送费用
             
+            
             self.fullCut = [[response objectForKey: @"full_discount"]doubleValue]; //满减金额
             if(self.fullCut>0.00){
                 /* dispatch_async(dispatch_get_main_queue(), ^{
@@ -741,6 +841,7 @@
 //            self.paySumPrice =self.onLinePrice+self.packagePrice+self.shipPrice;
             //加上税费后的实际需要支付的金额
             self.paySumPrice = [[response objectForKey: @"total_pay_price"]doubleValue];
+            self.taxPrice = self.paySumPrice - (self.onLinePrice + self.shipPrice + self.packagePrice);
             [self updatePrice];
             
         }else if(react == 400){
@@ -1301,28 +1402,60 @@
         self.btnWeXinPay.selected = YES;
         self.btnAlipay.selected = NO;
         self.btnFacePay.selected = NO;
+        self.btnCredit.selected = NO;
         [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-enter"]];
         [self.imgAli setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgFace setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
         self.goodsSumPrice = self.onLinePrice;
     }else if(sender == self.btnAlipay){
         self.btnWeXinPay.selected = NO;
         self.btnAlipay.selected = YES;
         self.btnFacePay.selected = NO;
+        self.btnCredit.selected = NO;
         [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgAli setImage:[UIImage imageNamed:@"icon-address-enter"]];
         [self.imgFace setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
         self.goodsSumPrice = self.onLinePrice;
+    }else if(sender == self.btnCredit){
+        self.btnWeXinPay.selected = NO;
+        self.btnAlipay.selected = NO;
+        self.btnFacePay.selected = NO;
+        self.btnCredit.selected = YES;
+        [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgAli setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgFace setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-enter"]];
+        self.goodsSumPrice = self.onLinePrice;
+        self.tipView.hidden = NO;
+        for(NSLayoutConstraint* con in [self.tipView constraints]){
+            if([con firstAttribute] == NSLayoutAttributeHeight){
+                [self.tipView removeConstraint:con];
+                [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
+            }
+        }
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 500);
     }else{
         self.btnWeXinPay.selected = NO;
         self.btnAlipay.selected = NO;
         self.btnFacePay.selected = YES;
+        self.btnCredit.selected = NO;
         [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgAli setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgFace setImage:[UIImage imageNamed:@"icon-address-enter"]];
+        [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
         self.discountPrice =0.00;
         self.goodsSumPrice = self.offLinePrice;
         self.useRed = NO;
+        self.tipView.hidden = YES;
+        for(NSLayoutConstraint* con in [self.tipView constraints]){
+            if([con firstAttribute] == NSLayoutAttributeHeight){
+                [self.tipView removeConstraint:con];
+                [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0.f]];
+            }
+        }
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 390);
     }
     [self updatePrice];
     [self.HUD hide:YES afterDelay:1];
@@ -1342,6 +1475,8 @@
                 payType = @"2";
             else if (self.btnAlipay.selected)//支付宝支付
                 payType = @"1";
+            else if(self.btnCredit.selected)//信用卡支付
+                payType = @"3";
             else //货到付款
                 payType = @"0";
             
@@ -1366,7 +1501,7 @@
             NSString *str = [self.txtRemark.text stringByAppendingString:_endString];
             
             //NSDictionary* arg = @{@"ince":@"save_order_cer",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"addr_item_id":item.rowID,@"pay_type":payType,@"order_mark":str,@"bonus_use":bonus_use_id,@"cer_type":@"2"};
-            NSDictionary* arg = @{@"a":@"saveOrder",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"addr_item_id":item.rowID,@"pay_type":payType,@"order_mark":str,@"bonus_use":bonus_use_id,@"cer_type":@"3"};
+            NSDictionary* arg = @{@"a":@"saveOrder",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"addr_item_id":item.rowID,@"pay_type":payType,@"order_mark":str,@"bonus_use":bonus_use_id,@"cer_type":@"3",@"tip":[NSString stringWithFormat:@"%.2f",self.tip_fee]};
             
             NSLog(@"我神奇的口味字符串%@",str);
             
@@ -1379,6 +1514,8 @@
                         [self wxPay:[response objectForKey:@"main_id"]];
                     else if (self.btnAlipay.selected)//支付宝支付
                         [self aliPay:[response objectForKey:@"main_id"]];
+                    else if(self.btnCredit.selected)
+                        [self creditPay:[response objectForKey:@"main_id"]];
                     else{ //货到付款 不需要修改订单状态这里直接跳转到订单页就可以了。
                         [self payResult:nil];
                     }
@@ -1425,8 +1562,22 @@
     }
 }
 -(IBAction)cancelTouch:(id)sender{
-    
     [self dismissViewControllerAnimated:YES completion:nil];
+//    [self creditPay:@"1"];
+}
+
+-(void)creditPay:(NSString*)order_id{
+    CreditPay* controller = [[CreditPay alloc]init];
+    controller.tip_price = self.tip_fee;
+    controller.total_price = self.paySumPrice;
+    controller.order_id = order_id;
+    
+    UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
+    nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [nav.navigationBar setBackgroundColor:theme_navigation_color];
+    [nav.navigationBar setBarTintColor:theme_navigation_color];
+    [nav.navigationBar setTintColor:theme_default_color];
+    [self.parentViewController presentViewController:nav animated:YES completion:nil];
 }
 #pragma mark =====================================================  UIPickerView 协议实现
 
@@ -1470,6 +1621,10 @@
     self.labelExpectPrice.text = [NSString stringWithFormat:@"$%.2f",self.shipPrice];
     self.labelGoodsPrice.text = [NSString stringWithFormat:@"$%.2f",self.goodsSumPrice];
     self.labelSumPrice.text =[NSString stringWithFormat:@"$%.2f",self.paySumPrice];
+    self.labelTaxNum.text = [NSString stringWithFormat:@"$%.2f",self.taxPrice];
+    
+    [self changeTip];
+    
     [self.tableView reloadData];
 }
 #pragma mark 微信支付
@@ -1634,6 +1789,128 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:NotificationChangeOrderPayStatus object:nil];
     }];
 }
+
+-(void)tip_select{
+    //NSLog(@"garfunkel_log:tip:%ld",self.tipSeg.selectedSegmentIndex);
+    [self changeTip];
+}
+
+-(void)changeTip{
+    NSArray* tipArr;
+    if(self.tipSeg.selectedSegmentIndex == -1){
+        self.tip_fee = [self.tipTxt.text doubleValue];
+    }else{
+        self.tipTxt.text = @"";
+        if (self.paySumPrice > 20) {
+            NSArray* tipArr = @[@"15",@"20",@"25"];
+            self.tip_fee = self.paySumPrice * [[tipArr objectAtIndex:self.tipSeg.selectedSegmentIndex] integerValue]/100;
+            NSInteger i = 0;
+            for(NSString* tText in tipArr){
+                NSString* Stxt = [NSString stringWithFormat:@"%@%@",tText,@"%"];
+                [self.tipSeg setTitle:Stxt forSegmentAtIndex:i];
+                i++;
+            }
+        }else{
+            NSArray* tipArr = @[@"3",@"4",@"5"];
+            self.tip_fee = [[tipArr objectAtIndex:self.tipSeg.selectedSegmentIndex] doubleValue];
+            NSInteger i = 0;
+            for(NSString* tText in tipArr){
+                NSString* Stxt = [NSString stringWithFormat:@"$%@",tText];
+                [self.tipSeg setTitle:Stxt forSegmentAtIndex:i];
+                i++;
+            }
+        }
+    }
+    
+    self.tipFeeLabel.text = [NSString stringWithFormat:@"$%.2f",self.tip_fee];
+    if (self.btnCredit.selected) {
+        self.labelSumPrice.text =[NSString stringWithFormat:@"$%.2f",self.paySumPrice + self.tip_fee];
+    }
+}
+                                      
+#pragma mark =====================================================
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    /*
+     * 不能输入.0-9以外的字符。
+     * 设置输入框输入的内容格式
+     * 只能有一个小数点
+     * 小数点后最多能输入两位
+     * 如果第一位是.则前面加上0.
+     * 如果第一位是0则后面必须输入点，否则不能输入。
+     */
+    
+    // 判断是否有小数点
+    if ([textField.text containsString:@"."]) {
+        self.isHaveDian = YES;
+    }else{
+        self.isHaveDian = NO;
+    }
+    
+    if (string.length > 0) {
+        
+        //当前输入的字符
+        unichar single = [string characterAtIndex:0];
+        
+        // 不能输入.0-9以外的字符
+        if (!((single >= '0' && single <= '9') || single == '.'))
+        {
+            [self alertHUD:Localized(@"Enter_Error")];
+            return NO;
+        }
+        
+        // 只能有一个小数点
+        if (self.isHaveDian && single == '.') {
+            [self alertHUD:Localized(@"Enter_Error")];
+            return NO;
+        }
+        
+        // 如果第一位是.则前面加上0.
+        if ((textField.text.length == 0) && (single == '.')) {
+            textField.text = @"0";
+        }
+        
+        // 如果第一位是0则后面必须输入点，否则不能输入。
+        if ([textField.text hasPrefix:@"0"]) {
+            if (textField.text.length > 1) {
+                NSString *secondStr = [textField.text substringWithRange:NSMakeRange(1, 1)];
+                if (![secondStr isEqualToString:@"."]) {
+                    [self alertHUD:Localized(@"Enter_Error")];
+                    return NO;
+                }
+            }else{
+                if (![string isEqualToString:@"."]) {
+                    [self alertHUD:Localized(@"Enter_Error")];
+                    return NO;
+                }
+            }
+        }
+        
+        // 小数点后最多能输入两位
+        if (self.isHaveDian) {
+            NSRange ran = [textField.text rangeOfString:@"."];
+            // 由于range.location是NSUInteger类型的，所以这里不能通过(range.location - ran.location)>2来判断
+            if (range.location > ran.location) {
+                if ([textField.text pathExtension].length > 1) {
+                    [self alertHUD:Localized(@"Enter_Error")];
+                    return NO;
+                }
+            }
+        }
+        
+    }
+    //NSLog(@"garfunkel_log:%ld,%ld",textField.text.length,string.length);
+    if(textField.text.length == 0 && string.length == 1){
+        [self.tipSeg setSelectedSegmentIndex:-1];
+    }
+    if(textField.text.length == 1 && string.length == 0){
+        [self.tipSeg setSelectedSegmentIndex:0];
+    }
+    
+    return YES;
+}
+
+
 #pragma mark =====================================================  属性封装
 -(NSMutableArray *)arrayData{
     if(!_arrayData)
@@ -1707,6 +1984,14 @@
         _labelFullCutPrice.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelFullCutPrice;
+}
+
+-(UILabel*)leftView:(NSString*)title{
+    UILabel* leftView = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 80, 40.f)];
+    leftView.textColor = [UIColor grayColor];
+    leftView.font = [UIFont systemFontOfSize:14.f];
+    leftView.text = title;
+    return leftView;
 }
 
 

@@ -36,6 +36,8 @@
 @property(nonatomic,strong) UIView* contentView;
 @property(nonatomic,strong) UIView* topView;
 @property(nonatomic,strong) UIImageView* storeLogo;
+@property(nonatomic,strong) UILabel* closeLabel;
+@property(nonatomic,strong) UIView* logoMask;
 @property(nonatomic,strong) UIView* rightView;
 
 @property(nonatomic,strong) UICollectionView* subCollectionView;
@@ -59,7 +61,10 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
     
     [self.contentView addSubview:self.topView];
     [self.topView addSubview:self.storeLogo];
+    [self.topView addSubview:self.logoMask];
+    [self.topView addSubview:self.closeLabel];
     [self.topView addSubview:self.rightView];
+    
     
     [self.rightView addSubview:self.labelStoreName];
     [self.rightView addSubview:self.line];
@@ -99,6 +104,8 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
                          @"H:|-defEdge-[topView]-defEdge-|",@"H:|-defEdge-[subCollectionView]-defEdge-|",
                          @"V:|-defEdge-[topView(==topHeight)][subCollectionView]-defEdge-|",
                          @"H:|-leftEdge-[storeLogo(==90)]-leftEdge-[rightView]-defEdge-|", @"V:|-topEdge-[storeLogo]-topEdge-|", @"V:|-topEdge-[rightView]-topEdge-|",
+                         @"H:|-leftEdge-[logoMask(==90)]",@"V:|-topEdge-[logoMask]-topEdge-|",
+                         @"H:|-leftEdge-[closeLabel(==90)]",@"V:[closeLabel(==30)]-topEdge-|",
                          @"H:|-defEdge-[labelStoreName]-50-|",@"H:|-defEdge-[shipView]-defEdge-|",@"H:|-defEdge-[saleView]-defEdge-|",@"H:|-defEdge-[deliView]-defEdge-|",
                          @"V:|-defEdge-[labelStoreName][shipView][saleView]-2-[deliView]-defEdge-|",
                          @"H:|-defEdge-[labelShip(==60)]",@"H:[labelShipTime][labelDistance]-leftEdge-|",
@@ -112,7 +119,7 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
     NSDictionary* views = @{ @"contentView":self.contentView,
                              @"imgRecommend":self.imgRecommend,
                              @"topView":self.topView,  @"subCollectionView":self.subCollectionView,
-                             @"storeLogo":self.storeLogo, @"rightView":self.rightView,
+                             @"storeLogo":self.storeLogo, @"rightView":self.rightView,@"logoMask":self.logoMask,@"closeLabel":self.closeLabel,
                              @"labelStoreName":self.labelStoreName, @"shipView":self.shipView, @"saleView":self.saleView,@"deliView":self.deliView,
                              @"labelShip":self.labelShip, @"labelShipTime":self.labelShipTime,@"labelDistance":self.labelDistance,
                              @"starView":self.starView, @"labelSale":self.labelSale,
@@ -179,14 +186,21 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
         [self.storeLogo sd_setImageWithURL:[NSURL URLWithString:[item objectForKey: @"logo"]] placeholderImage:[UIImage imageNamed:kDefStoreLogo]];
         self.labelStoreName.text = [item objectForKey: @"site_name"];
         if((BOOL)[item objectForKey:@"delivery_system"]){
-            self.labelShip.text = @"平台配送";
+            self.labelShip.text = Localized(@"Platform_deli");
+        }
+        if([[item objectForKey:@"is_close"] integerValue] == 1){
+            self.logoMask.hidden = NO;
+            self.closeLabel.hidden = NO;
+        }else{
+            self.logoMask.hidden = YES;
+            self.closeLabel.hidden = YES;
         }
         //self.labelShip.text = @"平台配送";//[item objectForKey: @"send"];
-        self.labelShipTime.text = [NSString stringWithFormat:@"%@分钟",[item objectForKey: @"time"]];
+        self.labelShipTime.text = [NSString stringWithFormat:@"%@ %@",[item objectForKey: @"time"],Localized(@"MINUTES_TXT")];
         self.labelDistance.text = [NSString stringWithFormat:@" | %@",[item objectForKey:@"range"]];
-        self.labelSale.text = [NSString stringWithFormat: @" | 月售%@单",[item objectForKey: @"shop_sale"]];
-        self.labelDelivery.text = [NSString stringWithFormat:@"配送费:$%@",[item objectForKey:@"delivery_money"]];
-        self.labelPacking.text = [NSString stringWithFormat:@" | 打包费:$%@",[item objectForKey:@"pack_fee"]];
+        self.labelSale.text = [NSString stringWithFormat: @" | %@:%@",Localized(@"Month_sale_num"),[item objectForKey: @"shop_sale"]];
+        self.labelDelivery.text = [NSString stringWithFormat:@"%@:$%@",Localized(@"Delivery_fee"),[item objectForKey:@"delivery_money"]];
+        self.labelPacking.text = [NSString stringWithFormat:@" | %@:$%@",Localized(@"Packing_fee"),[item objectForKey:@"pack_fee"]];
         NSInteger star = [[item objectForKey: @"score"] integerValue];
         for (UIButton *btn in self.arrayStar) {
             if(btn.tag< star){
@@ -241,6 +255,30 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
         _storeLogo.translatesAutoresizingMaskIntoConstraints= NO;
     }
     return _storeLogo;
+}
+
+-(UIView*)logoMask{
+    if(!_logoMask){
+        _logoMask = [[UIView alloc]init];
+        _logoMask.backgroundColor = [UIColor blackColor];
+        _logoMask.layer.masksToBounds = YES;
+        _logoMask.layer.cornerRadius = 5.f;
+        _logoMask.alpha = 0.5f;
+        _logoMask.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    
+    return _logoMask;
+}
+
+-(UILabel*)closeLabel{
+    if(!_closeLabel){
+        _closeLabel = [[UILabel alloc]init];
+        _closeLabel.textColor = [UIColor redColor];
+        _closeLabel.text = Localized(@"Resting_txt");
+        _closeLabel.textAlignment = NSTextAlignmentCenter;
+        _closeLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _closeLabel;
 }
 
 -(UIView *)rightView{
@@ -302,6 +340,8 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
         _labelShip.textAlignment = NSTextAlignmentCenter;
         _labelShip.layer.masksToBounds = YES;
         _labelShip.translatesAutoresizingMaskIntoConstraints = NO;
+        //garfunkel add
+        _labelShip.hidden = YES;
     }
     return _labelShip;
 }
@@ -386,6 +426,8 @@ static NSString *const cellIdentifier =  @"NewHomeCell";
         _imgRecommend = [[UIImageView alloc]init];
         [_imgRecommend setImage:[UIImage imageNamed: @"icon-recommend"]];
         _imgRecommend.translatesAutoresizingMaskIntoConstraints = NO;
+        //garfunkel add
+        _imgRecommend.hidden = YES;
     }
     return _imgRecommend;
 }

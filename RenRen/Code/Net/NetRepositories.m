@@ -15,10 +15,12 @@ NSString* const AppNetSubPath = @"index.php?g=Api";
 NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 
+
 @implementation NetRepositories
 
 -(void)netConfirm:(NSDictionary *)arg complete:(responseDictBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
@@ -51,7 +53,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 @implementation NetRepositories (Store)
 -(void)queryStore:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -78,7 +81,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryStore:(NSDictionary *)arg page:(NetPage *)page complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -104,7 +108,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)searchStore:(NSDictionary *)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -130,7 +135,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 @implementation NetRepositories (Goods)
 
 -(void)queryGoods:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -157,7 +163,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryGoods:(NSDictionary *)arg page:(NetPage *)page complete:(responseListBlockXiaolong)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -259,7 +266,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryGoodsWithSearch:(NSDictionary *)arg page:(NetPage *)page complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -298,7 +306,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)searchGoods:(NSDictionary *)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -320,7 +329,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)querySubType:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -351,7 +361,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 @implementation NetRepositories (Comment)
 
 -(void)queryComment:(NSDictionary*)arg complete:(responseListAndOtherBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -391,7 +402,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
     
 }
 -(void)queryComment:(NSDictionary*)arg page:(NetPage*)page complete:(responseListAndOtherBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -450,7 +462,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
     }];
 }
 -(void)updateComment:(NSDictionary*)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -473,7 +486,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 @implementation NetRepositories (Order)
 -(void)queryOrder:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -499,7 +513,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
     
 }
 -(void)queryOrder:(NSDictionary *)arg page:(NetPage *)page complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -548,7 +563,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryOrderStatus:(NSDictionary *)arg complete:(responseListAndDictBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -584,7 +600,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 //登录的网络请求
 -(void)login:(NSDictionary *)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -607,7 +624,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)register:(NSDictionary *)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -625,8 +643,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)searchUserInfo:(NSDictionary *)arg complete:(responseItemBlock)complete{
-    
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -649,7 +667,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryAddress:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -675,7 +694,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryAddress:(NSDictionary *)arg page:(NetPage *)page complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -712,7 +732,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)searchAddres:(NSDictionary *)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -739,7 +760,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)updateAddres:(NSDictionary *)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -757,7 +779,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryRedEnvelop:(NSDictionary*)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -784,7 +807,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryRedEnvelop:(NSDictionary *)arg page:(NetPage*)page complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -824,7 +848,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 @implementation NetRepositories (ShopCar)
 -(void)queryShopCar:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -851,7 +876,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryShopCar_V2:(NSDictionary *)arg complete:(void (^)(NSInteger, MCar *, NSString *))complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -869,7 +895,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)updateShopCar:(NSDictionary *)arg complete :(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -887,7 +914,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)checkShopCar:(NSDictionary *)arg complete:(responseBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -904,7 +932,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)submitShopCarCheck:(NSDictionary*)arg complete:(responseDictBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -928,7 +957,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 @implementation NetRepositories (Location)
 -(void)queryArea:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -955,7 +985,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryCircle:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -986,7 +1017,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 @implementation NetRepositories (Advertisement)
 
 -(void)queryAdvertisement:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1012,7 +1044,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryAdvertZT:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1039,7 +1072,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryAdvertBanner:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1066,7 +1100,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)searchNotice:(NSDictionary *)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1094,6 +1129,7 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 @implementation NetRepositories (PointsMall)
 
 -(void)queryPointMallIndex:(NSDictionary *)arg page:(NetPage*)page complete:(responseItemBlock)complete{
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
     [[NetClient sharedClient] POST:AppNetSubPath_Points parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
@@ -1135,6 +1171,7 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryPointRecord:(NSDictionary *)arg page:(NetPage *)page complete:(responseListBlock)complete{
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
     [[NetClient sharedClient] POST:AppNetSubPath_Points parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
@@ -1180,6 +1217,7 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryPointExchange:(NSDictionary *)arg page:(NetPage *)page complete:(responseListBlock)complete{
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
     [[NetClient sharedClient] POST:AppNetSubPath_Points parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
@@ -1225,6 +1263,7 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)searchPoint:(NSDictionary *)arg complete:(responseItemBlock)complete{
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
     [[NetClient sharedClient] POST:AppNetSubPath_Points parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
@@ -1248,6 +1287,7 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)exchangeGoods:(NSDictionary *)arg complete:(responseItemBlock)complete{
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
     [[NetClient sharedClient] POST:AppNetSubPath_Points parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
@@ -1270,7 +1310,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 @implementation NetRepositories (BuyNow)
 -(void)queryBuyNow:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1296,7 +1337,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryBuyNow:(NSDictionary *)arg page:(NetPage *)page complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1332,7 +1374,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)searchBuyNow:(NSDictionary *)arg complete:(responseListAndOtherBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1368,7 +1411,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 @implementation NetRepositories (Presale)
 -(void)queryPresale:(NSDictionary *)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1394,7 +1438,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryPresale:(NSDictionary *)arg page:(NetPage *)page complte:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1430,7 +1475,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)searchPresale:(NSDictionary *)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1458,7 +1504,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 @implementation NetRepositories (PintuangouVC)
 
 -(void)queryPintuangouVC:(NSDictionary*)arg complete:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1484,7 +1531,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryPintuangouVC:(NSDictionary*)arg page:(NetPage*)page complte:(responseListBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1519,7 +1567,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)searchPintuangouVC:(NSDictionary*)arg complete:(responseItemBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
@@ -1541,7 +1590,8 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 }
 
 -(void)queryMyFightGroup:(NSDictionary*)arg page:(NetPage*)page complte:(responseDictBlock)complete{
-    [[NetClient sharedClient] POST:AppNetSubPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
+    [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;

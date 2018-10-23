@@ -21,7 +21,7 @@
  */
 @property(nonatomic,copy) NSString* userID;
 /**
- *  支付方式 付款类型：0货到付款；1，3支付宝；2微信
+ *  支付方式 付款类型：0货到付款；1支付宝；2微信;3 moneris
  */
 @property(nonatomic,copy) NSString* payType;
 /**
@@ -79,5 +79,10 @@
 
 @property(nonatomic,copy) NSString* tuanID;
 @property(nonatomic,copy) NSString* showDel;
+
+@property(nonatomic,copy) NSString* tip_fee;
+@property(nonatomic,copy) NSString* total_price;
+@property(nonatomic,copy) NSString* paid;
+@property(nonatomic,copy) NSString* order_id;
 
 @end

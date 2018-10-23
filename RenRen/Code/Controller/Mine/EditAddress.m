@@ -128,7 +128,7 @@
                           @"V:|-13-[arrow]-13-|",
                           ];
     
-    NSDictionary* metorics = @{ @"titleWidth": @(80.f), @"titleHeight":@(40.f), @"confirmWidth":@(SCREEN_WIDTH/2), @"confirmHeight":@(40.f)};
+    NSDictionary* metorics = @{ @"titleWidth": @(120.f), @"titleHeight":@(40.f), @"confirmWidth":@(SCREEN_WIDTH/2), @"confirmHeight":@(40.f)};
     NSDictionary* views = @{ @"titleView":self.labelTitle, @"btnArea":self.btnArea, @"txtMapNumber":self.txtMapNumber,@"txtZipcode":self.txtZipcode, @"txtUserName":self.txtUserName, @"txtPhone":self.txtPhone, @"btnConfirm":self.btnConfirm, @"iconLocation":self.iconLocation, @"labelMapAddress":self.labelMapAddress, @"arrow":self.arrow};
     
     for (NSString* format in formats) {
@@ -228,7 +228,7 @@
         [self hidHUD];
         [self alertHUD:Localized(@"Rece_person_not_empty")];
         return NO;
-    }else if (![WMHelper isValidateMobile:self.txtPhone.text]){
+    }else if ([WMHelper isEmptyOrNULLOrnil:self.txtPhone.text]){
         [self hidHUD];
         [self alertHUD:Localized(@"Phone_error")];
         return NO;
@@ -369,7 +369,7 @@
 }
 
 -(UILabel*)leftView:(NSString*)title{
-    UILabel* leftView = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 80, 40.f)];
+    UILabel* leftView = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 120, 40.f)];
     leftView.textColor = theme_Fourm_color;
     leftView.font = [UIFont systemFontOfSize:14.f];
     leftView.text = title;

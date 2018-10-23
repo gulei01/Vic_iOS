@@ -7,6 +7,7 @@
 //
 
 #import "Car.h"
+#import "Shopping.h"
 
 @interface Car ()
 
@@ -152,7 +153,7 @@
                 dispatch_async(dispatch_get_main_queue(), ^(void) {
                     [UIView animateWithDuration:0.7 animations:^{
                         self.labelNum.text = [WMHelper integerConvertToString:self.sumNum];
-                        if(self.sumPrice>=[@"9.00" floatValue]){
+                        if(self.sumPrice>=[@"0.00" floatValue]){
                             self.labelSumPrice.frame = CGRectMake(0, 0, SCREEN_WIDTH*2/3-10, 45.f);
                             self.labelOtherPrice.hidden = YES;
                             self.btnBuy.hidden = NO;
@@ -160,7 +161,7 @@
                             self.labelSumPrice.frame = CGRectMake(0, 0, SCREEN_WIDTH/2-10, 45.f);
                             self.labelOtherPrice.hidden = NO;
                             self.btnBuy.hidden = YES;
-                            self.labelOtherPrice.text =[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),[@"9.00" floatValue] - self.sumPrice];
+                            self.labelOtherPrice.text =[NSString stringWithFormat:@"%@ $%.2f",Localized(@"Still_need_num"),[@"0.00" floatValue] - self.sumPrice];
                         }
                         self.labelSumPrice.text = [NSString stringWithFormat:@"%@ $%.2f",Localized(@"Subtotal_txt"),self.sumPrice];
                     }];
@@ -172,7 +173,7 @@
                 self.labelSumPrice.text =[NSString stringWithFormat:@"%@ $0.00  ",Localized(@"Subtotal_txt")];
                 self.labelOtherPrice.hidden = NO;
                 self.btnBuy.hidden = YES;
-                self.labelOtherPrice.text =[NSString stringWithFormat:@"%@ $9.00",Localized(@"Still_need_num")] ;
+                self.labelOtherPrice.text =[NSString stringWithFormat:@"%@ $0.00",Localized(@"Still_need_num")] ;
             }
 
         }];
@@ -182,10 +183,22 @@
 }
 #pragma mark =====================================================  SEL
 -(IBAction)goBuy:(id)sender{
-    if(self.tabBarController.selectedIndex ==1){
-        [self.navigationController popToRootViewControllerAnimated:YES];
+    if(self.Identity.userInfo.isLogin){
+        if(self.tabBarController.selectedIndex ==1){
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }else{
+            self.tabBarController.selectedIndex = 1;
+        }
+        if([[self.tabBarController.selectedViewController visibleViewController] isMemberOfClass:[Shopping class]]){
+            Shopping* shop = (Shopping*)[self.tabBarController.selectedViewController visibleViewController];
+            shop.from = self.StoreID;
+        }
     }else{
-    self.tabBarController.selectedIndex = 1;
+        UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Login alloc]init]];
+        [nav.navigationBar setBackgroundColor:theme_navigation_color];
+        [nav.navigationBar setBarTintColor:theme_navigation_color];
+        [nav.navigationBar setTintColor:theme_default_color];
+        [self presentViewController:nav animated:YES completion:nil];
     }
 }
 
@@ -195,6 +208,10 @@
             [self.navigationController popToRootViewControllerAnimated:YES];
         }else{
             self.tabBarController.selectedIndex = 1;
+        }
+        if([[self.tabBarController.selectedViewController visibleViewController] isMemberOfClass:[Shopping class]]){
+            Shopping* shop = (Shopping*)[self.tabBarController.selectedViewController visibleViewController];
+            shop.from = self.StoreID;
         }
     }else{
         UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Login alloc]init]];
@@ -241,7 +258,7 @@
         _labelOtherPrice.backgroundColor = [UIColor darkGrayColor];
         _labelOtherPrice.alpha=0.7f;
         _labelOtherPrice.textColor = [UIColor whiteColor];
-        _labelOtherPrice.text =[NSString stringWithFormat:@"%@ $9.00",Localized(@"Still_need_num")];
+        _labelOtherPrice.text =[NSString stringWithFormat:@"%@ $0.00",Localized(@"Still_need_num")];
         _labelOtherPrice.textAlignment = NSTextAlignmentCenter;
         _labelOtherPrice.font = [UIFont systemFontOfSize:15.f];
         _labelOtherPrice.hidden = NO;
@@ -294,6 +311,12 @@
         _labelNum.font = [UIFont systemFontOfSize:12.f];
     }
     return _labelNum;
+}
+
+-(void)setStoreID:(NSString *)StoreID{
+    if(StoreID){
+        _StoreID = StoreID;
+    }
 }
 
 

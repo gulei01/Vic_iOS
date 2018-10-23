@@ -14,6 +14,7 @@
 #import "TQStarRatingView.h"
 #import "WXApi.h"
 #import "GoodsSpecController.h"
+#import "Shopping.h"
 
 @interface Store ()<UMSocialUIDelegate>
 @property(nonatomic,strong) UIView* topView;
@@ -88,7 +89,7 @@
     UIImage *image = [UIImage imageNamed:@"lALO0RuFbcy-zQKA_640_190.png_620x10000q90g.jpg"];
     UIImageView *bgView = [[UIImageView alloc]initWithImage:image];
     bgView.userInteractionEnabled = YES;
-    bgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 135);
+    bgView.frame = CGRectMake(0, 0, SCREEN_WIDTH, StatusBarAndNavigationBarHeight + 71);
     [self.view addSubview:bgView];
     
        // self.navigationItem.titleView =self.labelNavTitle;
@@ -106,7 +107,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed: @"icon-share"] style:UIBarButtonItemStylePlain target:self action:@selector(shareTouch:)];
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed: @"icon-share"] style:UIBarButtonItemStylePlain target:self action:@selector(shareTouch:)];
     
     self.navigationItem.leftBarButtonItem = self.leftBarItem;
 }
@@ -149,18 +150,18 @@
     
     NSArray* formats = @[@"H:|-defEdge-[topView]-defEdge-|",@"H:|-defEdge-[activeView]-defEdge-|",@"H:|-defEdge-[menuView]-defEdge-|", @"H:|-defEdge-[mainScroll]-defEdge-|",
                          @"V:|-defEdge-[topView(==topHeight)][activeView][menuView(==menuHeight)][mainScroll]-defEdge-|",
-                         @"H:|-defEdge-[storeView]-defEdge-|",@"V:|-64-[storeView(==storeHeight)]-defEdge-|",
+                         @"H:|-defEdge-[storeView]-defEdge-|",@"V:|-navTop-[storeView(==storeHeight)]-defEdge-|",
                          @"H:|-leftEdge-[storeLogo(==logoSize)]-leftEdge-[rightView]-defEdge-|", @"V:|-defEdge-[storeLogo(==logoSize)]-topEdge-|", @"V:|-defEdge-[rightView]-topEdge-|",
                          @"H:|-defEdge-[labelShip]-defEdge-|",@"H:|-defEdge-[iconHorn(==hornSize)]-leftEdge-[labelNotice]-defEdge-|",
                          @"V:|-topEdge-[labelShip(==shipHeight)][iconHorn(==hornSize)]-topEdge-|", @"V:|-topEdge-[labelShip][labelNotice(==hornSize)]-topEdge-|",
                          @"H:|-leftEdge-[labelIcon(==30)]-leftEdge-[labelActive]-defEdge-|", @"V:|-defEdge-[labelIcon]-defEdge-|", @"V:|-defEdge-[labelActive]-defEdge-|",
                          @"H:|-defEdge-[btnMenu][btnComment(btnMenu)][btnStore(btnMenu)]-defEdge-|", @"V:|-defEdge-[btnMenu]-defEdge-|", @"V:|-defEdge-[btnComment]-defEdge-|", @"V:|-defEdge-[btnStore]-defEdge-|",
                          @"H:|-defEdge-[labelSymbol(==symbolWidth)]", @"V:[labelSymbol(==3)]-defEdge-|",
-                         @"H:|-defEdge-[goodsView(==defWidth)][commentView(goodsView)][storeInfoView(goodsView)]-defEdge-|", @"V:|-defEdge-[goodsView]-defEdge-|", @"V:|-defEdge-[commentView]-defEdge-|", @"V:|-defEdge-[storeInfoView]-defEdge-|"
+                         @"H:|-defEdge-[goodsView(==defWidth)][commentView(goodsView)][storeInfoView(goodsView)]-defEdge-|", @"V:|-defEdge-[goodsView]-bSize-|", @"V:|-defEdge-[commentView]-bSize-|", @"V:|-defEdge-[storeInfoView]-bSize-|"
                          ];
-    NSDictionary* metrics = @{ @"defEdge":@(0), @"leftEdge":@(10), @"topEdge":@(10), @"topHeight":@(64+70), @"logoSize":@(60), @"storeHeight":@(70),
+    NSDictionary* metrics = @{ @"defEdge":@(0), @"leftEdge":@(10), @"topEdge":@(10),@"navTop":@(StatusBarAndNavigationBarHeight), @"topHeight":@(StatusBarAndNavigationBarHeight+70), @"logoSize":@(60), @"storeHeight":@(70),
                                @"storeNameHeight":@(30), @"shipHeight":@(20), @"hornSize":@(15), @"symbolWidth":@(SCREEN_WIDTH/3),
-                               @"defWidth":@(SCREEN_WIDTH),@"menuHeight":@(40)};
+                               @"defWidth":@(SCREEN_WIDTH),@"menuHeight":@(40),@"bSize":@(TabbarSafeBottomMargin)};
     NSDictionary* views = @{ @"topView":self.topView, @"menuView":self.menuView, @"mainScroll":self.mainScroll,
                              @"storeView":self.storeView, @"activeView":self.activeView,
                              @"storeLogo":self.storeLogo, @"rightView":self.rightView,
@@ -325,7 +326,9 @@
         if(self.scrollConstraint){
             [self.goodsView removeConstraint:self.scrollConstraint];
         }
-        self.scrollConstraint =[NSLayoutConstraint constraintWithItem:self.goodsView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:(SCREEN_HEIGHT-174)];
+        
+        NSInteger bSize = StatusBarAndNavigationBarHeight + TabbarSafeBottomMargin + 70 + 40;
+        self.scrollConstraint =[NSLayoutConstraint constraintWithItem:self.goodsView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:(SCREEN_HEIGHT-bSize)];
         self.scrollConstraint.priority = 999;
         [self.goodsView addConstraint: self.scrollConstraint];
         
@@ -414,6 +417,10 @@
 
 -(IBAction)goBack:(id)sender{
     [self.navigationController popViewControllerAnimated:YES];
+    if([[self.tabBarController.selectedViewController visibleViewController] isMemberOfClass:[Shopping class]]){
+        Shopping* shop = (Shopping*)[self.tabBarController.selectedViewController visibleViewController];
+        shop.from = self.entity.rowID;
+    }
 }
 
 -(IBAction)tapStoreTouch:(id)sender{
@@ -772,7 +779,7 @@
 -(UILabel *)labelNavTitle{
     if(!_labelNavTitle){
     _labelNavTitle = [[UILabel alloc]init];
-        _labelNavTitle.frame = CGRectMake(-110, 0, SCREEN_WIDTH, 40);
+    _labelNavTitle.frame = CGRectMake(-110, 0, SCREEN_WIDTH, 40);
     _labelNavTitle.font = [UIFont systemFontOfSize:15.f];
     _labelNavTitle.textColor = [UIColor whiteColor];
     }

@@ -209,6 +209,8 @@
         if([storeItem.status integerValue] == 0){
             self.btnSelected.selected = NO;
             self.btnSelected.userInteractionEnabled = NO;
+        }else{
+            self.btnSelected.userInteractionEnabled = YES;
         }
     }
 }

@@ -96,7 +96,7 @@
                              @"labelGoodsNum":self.labelGoodsNum, @"labelStoreName":self.labelStoreName, @"labelPrice":self.labelPrice,
                              @"btnPay":self.btnPay, @"btnCancel":self.btnCancel, @"btnComment":self.btnComment, @"btnDelete":self.btnDelete, @"labelPayStatus":self.labelPayStatus};
     [formats enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSLog( @"%@ %@",[self class],obj);
+        //NSLog( @"%@ %@",[self class],obj);
         NSArray* constraints = [NSLayoutConstraint constraintsWithVisualFormat:obj options:0 metrics:metrics views:views];
         [self addConstraints:constraints];
     }];
@@ -146,15 +146,26 @@
         
         
         if([entity.status integerValue]==0){ //未付款
-            self.labelPayStatus.hidden = YES;
-            self.btnPay.hidden = NO;
-            self.btnCancel.hidden = NO;
-            if([entity.payType isEqualToString:@"0"]){ //货到付款只显示订单状态
-                self.labelPayStatus.hidden = NO;
-                self.btnCancel.hidden = YES;
+//            self.labelPayStatus.hidden = YES;
+//            self.btnPay.hidden = NO;
+//            self.btnCancel.hidden = NO;
+//            if([entity.payType isEqualToString:@"0"]){ //货到付款只显示订单状态
+//                self.labelPayStatus.hidden = NO;
+//                self.btnCancel.hidden = YES;
+//                self.btnPay.hidden = YES;
+//                self.labelPayStatus.textColor = theme_navigation_color;
+//                self.labelPayStatus.text = [NSString stringWithFormat:@"%@/%@",entity.statusName,entity.payTypeName];
+//            }
+            //garfunkel:status 0 未处理 如果paid==0表示未付款 暂时屏蔽（取消订单功能）
+            self.btnCancel.hidden = YES;
+            if([entity.paid integerValue] == 0){
+                self.btnPay.hidden = NO;
+                self.labelPayStatus.hidden = YES;
+            }else{
                 self.btnPay.hidden = YES;
+                self.labelPayStatus.hidden = NO;
                 self.labelPayStatus.textColor = theme_navigation_color;
-                self.labelPayStatus.text = [NSString stringWithFormat:@"%@/%@",entity.statusName,entity.payTypeName];
+                self.labelPayStatus.text = [NSString stringWithFormat:@"%@",entity.statusName];
             }
         }else if ([entity.status integerValue]==1){//已发货x
             self.labelPayStatus.hidden = NO;
@@ -167,7 +178,7 @@
             self.btnCancel.hidden = YES;
             self.btnPay.hidden = YES;
             self.labelPayStatus.textColor = theme_navigation_color;
-            self.labelPayStatus.text = [NSString stringWithFormat:@"%@/%@",entity.statusName,entity.payTypeName];
+            self.labelPayStatus.text = [NSString stringWithFormat:@"%@",entity.statusName];
         }else if ([entity.status integerValue]==3){//退款中
             self.labelPayStatus.hidden = NO;
             self.btnCancel.hidden = YES;
@@ -184,7 +195,7 @@
                 self.btnComment.hidden = YES;
             }
             self.labelPayStatus.textColor = [UIColor colorWithRed:64/255.f green:156/255.f blue:107/255.f alpha:1.0];
-            self.labelPayStatus.text = [NSString stringWithFormat:@"%@/%@",entity.statusName,entity.payTypeName];
+            self.labelPayStatus.text = [NSString stringWithFormat:@"%@",entity.statusName];
         }else if ([entity.status integerValue]==5){//取消
             self.labelPayStatus.hidden = NO;
             self.btnCancel.hidden = YES;
@@ -346,6 +357,7 @@
         _btnComment.titleLabel.font =[UIFont systemFontOfSize:14.f];
         _btnComment.layer.masksToBounds = YES;
         _btnComment.layer.cornerRadius =5.f;
+        _btnComment.hidden = YES;
         [_btnComment addTarget:self action:@selector(btnCommentTouch:) forControlEvents:UIControlEventTouchUpInside];
         _btnComment.translatesAutoresizingMaskIntoConstraints = NO;
     }

@@ -97,7 +97,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
     [self.view addSubview:self.carView];
     
     NSArray* formats = @[@"H:|-lefEdge-[collectionView]-defEdge-|",@"H:|-defEdge-[carView]-defEdge-|", @"V:|-defEdge-[collectionView][carView(==carHeight)]-defEdge-|"];
-    NSDictionary* metrics = @{ @"lefEdge":@(collectionCellWidth),@"defEdge":@(0), @"carHeight":@(45)};
+    NSDictionary* metrics = @{ @"lefEdge":@(collectionCellWidth),@"defEdge":@(0),@"bSize":@(TabbarSafeBottomMargin), @"carHeight":@(45)};
     NSDictionary* views = @{ @"collectionView":self.collectionView, @"carView":self.carView};
     [formats enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         //NSLog( @"%@ %@",[self class],obj);
@@ -228,13 +228,14 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
 #pragma mark =====================================================  数据源
 //自己更改分组数据
 -(void)queryData{
-    
+    [self showHUD];
     NSDictionary* arg = @{@"a":@"getStoreGoods",@"sid":self.storeID ,@"page":[WMHelper integerConvertToString:self.netPage.pageIndex]};
     
     NetRepositories* reposiories = [[NetRepositories alloc]init];
     
     
     [reposiories queryGoods:arg page:self.netPage complete:^(NSInteger react, NSArray *list, NSString *message,NSArray *groupArray) {
+        [self hidHUD];
         if(self.netPage.pageIndex == 1){
             [self.arrayData removeAllObjects];
         }
@@ -616,6 +617,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
 -(UIView *)carView{
     if(!_carView){
         Car* car = [[Car alloc]init];
+        car.StoreID = self.storeID;
         [self addChildViewController:car];
         _carView = car.view;
         _carView.translatesAutoresizingMaskIntoConstraints = NO;

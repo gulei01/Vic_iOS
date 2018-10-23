@@ -63,6 +63,7 @@
 @property(nonatomic,strong) UIButton *changeCity;
 
 @property(nonatomic,strong) CLLocationManager* localManager;
+@property(nonatomic,strong) NetPage* page;
 
 @end
 
@@ -85,7 +86,7 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
         [self.tabBarItem setImage:[UIImage imageNamed:@"tab-home-default"]];
         [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"tab-home-enter"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         [self.tabBarItem setTitle:Localized(@"Home_txt")];
-
+        
         self.tabBarItem.tag=0;
     }
     return self;
@@ -98,13 +99,19 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
     // Do any additional setup after loading the view
     titleSize = CGSizeMake((SCREEN_WIDTH-20), 30);
     self.view.backgroundColor = [UIColor whiteColor];
-    self.automaticallyAdjustsScrollViewInsets = NO;
+//    if (@available(iOS 11.0, *)) {
+//        self.collectionView.contentInsetAdjustmentBehavior = UIApplicationBackgroundFetchIntervalNever;
+//    } else {
+//        self.automaticallyAdjustsScrollViewInsets = NO;
+//    }
+    
     self.titleView.userInteractionEnabled = YES;
     self.navigationItem.titleView = self.titleView;
     
     _changeCity = [[UIButton alloc]initWithFrame:CGRectMake( SCREEN_WIDTH - 100, 0, 80, 30)];
     [_changeCity setTitle:Localized(@"Change_city") forState:UIControlStateNormal];
     _changeCity.titleLabel.textColor = [UIColor blackColor];
+    _changeCity.hidden = YES;
     _delegate = self;
     [_changeCity addTarget:self action:@selector(changeMyCity) forControlEvents:UIControlEventTouchUpInside];
     
@@ -218,10 +225,12 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
             self.currentNavigationBarBackgroundView.alpha = empty;
         }];
         }else{
+            NSLog(@"garfunkel_log:backload");
+            [self layoutUI];
             [UIView animateWithDuration:0.3 animations:^{
                 self.currentNavigationBarBackgroundView.alpha = 1.0;
                 self.txtSearch.alpha = 0.f;
-                _changeCity.alpha = 1.f;
+//                _changeCity.alpha = 1.f;
                 self.btnSearch.alpha = 1.0;
                 self.btnTitle.alpha = 1.0;
             }];
@@ -273,7 +282,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         }
         UIImageView *imageView = [self.navigationController.navigationBar viewWithTag:111];
         if (!imageView) {
-            imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, -20, SCREEN_WIDTH, 64)];
+            imageView=[[UIImageView alloc] initWithFrame:CGRectMake(0, -StatusBarHeight, SCREEN_WIDTH, StatusBarAndNavigationBarHeight)];
             _currentNavigationBarBackgroundView = imageView;
             imageView.tag = 111;
             [imageView setBackgroundColor:barBackgroundColor];
@@ -348,8 +357,8 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 #pragma mark =====================================================  Data Source
 -(void)queryData{
     NetRepositories* repositories = [[NetRepositories alloc]init];
-//    NSDictionary* arg = @{ @"long": @"-123.364257", @"lat":@"48.430707"};
-    NSDictionary* arg = @{@"long":self.mapLocation.mapLng,@"lat":self.mapLocation.mapLat};
+//    NSDictionary* arg = @{ @"long": @"-123.364257", @"lat":@"48.430707",@"page":[NSString stringWithFormat:@"%ld",(long)self.page.pageIndex]};
+    NSDictionary* arg = @{@"long":self.mapLocation.mapLng,@"lat":self.mapLocation.mapLat,@"page":[NSString stringWithFormat:@"%ld",(long)self.page.pageIndex]};
     [repositories requestPost:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
         [self hidHUD];
         if(react ==1){
@@ -421,7 +430,17 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
             }
             
             NSDictionary* best = [data objectForKey: @"best"];
-            [self.arrayStore removeAllObjects];
+            if(self.page.pageIndex == 1)
+                [self.arrayStore removeAllObjects];
+            
+            self.page.recordCount = [[best objectForKey:@"count"] integerValue];
+            self.page.pageSize = 5;
+            if(self.page.recordCount%self.page.pageSize == 0){
+                self.page.pageCount = self.page.recordCount/self.page.pageSize;
+            }else{
+                self.page.pageCount = (self.page.recordCount/self.page.pageSize)+1;
+            }
+            
             if([[best objectForKey: @"status"] integerValue]==1){
                 NSArray *empty = [best objectForKey: @"info"];
                 [empty enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -431,7 +450,14 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
             self.collectionView.scrollEnabled = YES;
             self.collectionView.backgroundView = nil;
             [self.collectionView reloadData];
-            [self.collectionView.mj_header endRefreshing];
+            if(self.page.pageCount<=self.page.pageIndex){
+                [self.collectionView.mj_footer endRefreshingWithNoMoreData];
+            }else{
+                [self.collectionView.mj_footer endRefreshing];
+            }
+            if(self.page.pageIndex==1){
+                [self.collectionView.mj_header endRefreshing];
+            }
         }else if(react == 400){
             [self netWifiOrLocationFail];
         }else{
@@ -443,8 +469,15 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 -(void)refreshDataSource{
     __weak typeof(self) weakSelf = self;
     MJRefreshNormalHeader* header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        weakSelf.page.pageIndex = 1;
         [weakSelf queryData];
     }];
+    
+    self.collectionView.mj_footer = [MJRefreshAutoStateFooter footerWithRefreshingBlock:^{
+        weakSelf.page.pageIndex ++;
+        [weakSelf queryData];
+    }];
+    
     self.collectionView.mj_header =  header;
     [self.collectionView.mj_header beginRefreshing];
 }
@@ -621,12 +654,15 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 #pragma mark =====================================================  <UIScrollViewDelegate>
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     
-    //NSLog( @"%.2f %.2f",scrollView.contentOffset.x,scrollView.contentOffset.y);
-    if(scrollView.contentOffset.y<0.00){
+    NSLog( @"%.2f %.2f",scrollView.contentOffset.x,scrollView.contentOffset.y);
+    if(scrollView.contentOffset.y<=0.00){
         [UIView animateWithDuration:0.3 animations:^{
             self.txtSearch.hidden = YES;
             self.txtSearch.alpha = 1.0;
+            self.btnSearch.alpha = 1.0;
+            self.btnTitle.alpha = 1.0;
             _changeCity.alpha = 0;
+            self.currentNavigationBarBackgroundView.alpha = 1.0;
         }];
     }else if (scrollView.contentOffset.y >= 0.00){
         [UIView animateWithDuration:0.3 animations:^{
@@ -839,6 +875,9 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 
 -(void)cancelEdit{
     self.txtSearch.text =  @"";
+    [self.titleView removeConstraints:self.titleView.constraints];
+    self.btnSearch.alpha = 0;
+    self.btnTitle.alpha = 0;
     [self.view endEditing:YES];
 }
 -(void)changePositionNotification:(NSNotification*)notification{
@@ -1222,6 +1261,14 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         }
     }
     return _mapLocation;
+}
+
+-(NetPage *)page{
+    if(!_page){
+        _page = [[NetPage alloc]init];
+        _page.pageIndex = 1;
+    }
+    return _page;
 }
 
 
