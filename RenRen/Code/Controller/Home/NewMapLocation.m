@@ -163,10 +163,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if(buttonIndex == 0){
         // UIApplicationOpenSettingsURLString
-        NSURL *url = [NSURL URLWithString: @"prefs:root=LOCATION_SERVICES"];
-        if ([[UIApplication sharedApplication] canOpenURL:url]) {
-            [[UIApplication sharedApplication] openURL:url];
-        }
+        [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
 }
 

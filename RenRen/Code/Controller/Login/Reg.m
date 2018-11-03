@@ -54,7 +54,7 @@
     _backView.userInteractionEnabled = YES;
     [self.navigationController.view addSubview:_backView];
     
-    UIButton *btn =  [[UIButton alloc]initWithFrame:CGRectMake(15, StatusBarHeight + 5, 40, 20)];
+    UIButton *btn =  [[UIButton alloc]initWithFrame:CGRectMake(15, StatusBarHeight + 5, 60, 20)];
     [btn setTitle:Localized(@"Log_in") forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:15];
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -209,7 +209,7 @@
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.vcodeTLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:60.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.vcodeTLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:220.f]];
     
-    [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
+    [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:80.f]];
     [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:180.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-SCREEN_WIDTH/2+30]];

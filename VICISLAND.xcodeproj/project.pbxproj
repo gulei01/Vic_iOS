@@ -12,12 +12,14 @@
 		322FD70D2154CDD00092AB56 /* NewMapLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 322FD70C2154CDD00092AB56 /* NewMapLocation.m */; };
 		324729DC215A418F00B6AF48 /* Language.m in Sources */ = {isa = PBXBuildFile; fileRef = 324729DB215A418F00B6AF48 /* Language.m */; };
 		324729E6215A597E00B6AF48 /* Language.strings in Resources */ = {isa = PBXBuildFile; fileRef = 324729E8215A597E00B6AF48 /* Language.strings */; };
+		3275FBFC218840EE00A27EE9 /* Agreement.m in Sources */ = {isa = PBXBuildFile; fileRef = 3275FBFB218840EE00A27EE9 /* Agreement.m */; };
 		32874D0B214E55BE0009F127 /* GoodsSpecController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32874D0A214E55BE0009F127 /* GoodsSpecController.m */; };
 		32874D0D214E90160009F127 /* icon-close-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 32874D0C214E90160009F127 /* icon-close-gray.png */; };
 		329566C22178685700DDD92C /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 329566C12178685700DDD92C /* Card.m */; };
 		329566C52178764600DDD92C /* CardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 329566C42178764600DDD92C /* CardCell.m */; };
 		329566C82178828800DDD92C /* EditCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 329566C72178828800DDD92C /* EditCard.m */; };
 		329566CA2178A96600DDD92C /* credit_card.png in Resources */ = {isa = PBXBuildFile; fileRef = 329566C92178A96500DDD92C /* credit_card.png */; };
+		32B376FA218AF73900E9C31E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 32B376F9218AF73900E9C31E /* libc++.tbd */; };
 		32F88B6E2135354C0007C6CD /* Reg.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F88B6D2135354C0007C6CD /* Reg.m */; };
 		6101FA321D90E9BA009E8393 /* HRAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6101FA311D90E9BA009E8393 /* HRAdView.m */; };
 		61070D231D9216DC00EFA36C /* RandomShowOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61070D221D9216DC00EFA36C /* RandomShowOrderCell.m */; };
@@ -489,7 +491,6 @@
 		F7A5D62D1BF32E62000BDBCF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A5D62C1BF32E62000BDBCF /* Security.framework */; };
 		F7A5D62F1BF32EA7000BDBCF /* libiconv.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A5D62E1BF32EA7000BDBCF /* libiconv.2.dylib */; };
 		F7A5D6311BF32ECA000BDBCF /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A5D6301BF32ECA000BDBCF /* CoreGraphics.framework */; };
-		F7A5D6331BF32F08000BDBCF /* libstdc++.6.0.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F7A5D6321BF32F08000BDBCF /* libstdc++.6.0.9.dylib */; };
 		F7A7E1051CE1CB2700A5689B /* PointGoods.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A7E1021CE1CB2700A5689B /* PointGoods.m */; };
 		F7A7E1061CE1CB2700A5689B /* PointRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A7E1041CE1CB2700A5689B /* PointRecord.m */; };
 		F7A7E1091CE1CB9A00A5689B /* PointRecordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F7A7E1081CE1CB9A00A5689B /* PointRecordCell.m */; };
@@ -560,6 +561,8 @@
 		324729E7215A597E00B6AF48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Language.strings; sourceTree = "<group>"; };
 		324729E9215A59A400B6AF48 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Language.strings"; sourceTree = "<group>"; };
 		3274052A212567CB00579642 /* vicisland.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vicisland.entitlements; sourceTree = "<group>"; };
+		3275FBFA218840EE00A27EE9 /* Agreement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agreement.h; sourceTree = "<group>"; };
+		3275FBFB218840EE00A27EE9 /* Agreement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Agreement.m; sourceTree = "<group>"; };
 		32874D09214E55BE0009F127 /* GoodsSpecController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsSpecController.h; sourceTree = "<group>"; };
 		32874D0A214E55BE0009F127 /* GoodsSpecController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsSpecController.m; sourceTree = "<group>"; };
 		32874D0C214E90160009F127 /* icon-close-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-close-gray.png"; sourceTree = "<group>"; };
@@ -570,6 +573,7 @@
 		329566C62178828800DDD92C /* EditCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCard.h; sourceTree = "<group>"; };
 		329566C72178828800DDD92C /* EditCard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditCard.m; sourceTree = "<group>"; };
 		329566C92178A96500DDD92C /* credit_card.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = credit_card.png; sourceTree = "<group>"; };
+		32B376F9218AF73900E9C31E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.1.sdk/usr/lib/libc++.tbd"; sourceTree = DEVELOPER_DIR; };
 		32F88B6C2135354C0007C6CD /* Reg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reg.h; sourceTree = "<group>"; };
 		32F88B6D2135354C0007C6CD /* Reg.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reg.m; sourceTree = "<group>"; };
 		6101FA301D90E9BA009E8393 /* HRAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRAdView.h; sourceTree = "<group>"; };
@@ -1248,7 +1252,7 @@
 		F7A194451BF6DB34001A04BA /* SelectAddressCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectAddressCell.m; sourceTree = "<group>"; };
 		F7A536B11BE9AF2700654077 /* ShoppingCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShoppingCell.h; sourceTree = "<group>"; };
 		F7A536B21BE9AF2700654077 /* ShoppingCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShoppingCell.m; sourceTree = "<group>"; };
-		F7A5956F1BE1E1330013BBF2 /* TUTTI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TUTTI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7A5956F1BE1E1330013BBF2 /* Tutti.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tutti.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F7A595731BE1E1330013BBF2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F7A595751BE1E1330013BBF2 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F7A595761BE1E1330013BBF2 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -1443,10 +1447,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				32B376FA218AF73900E9C31E /* libc++.tbd in Frameworks */,
 				616D91861D1FDB9C00E39F8D /* libicucore.A.dylib in Frameworks */,
 				F7B321961BE7428700EBAE86 /* libz.1.dylib in Frameworks */,
 				61439E011D1E344B00D0A98A /* JavaScriptCore.framework in Frameworks */,
-				F7A5D6331BF32F08000BDBCF /* libstdc++.6.0.9.dylib in Frameworks */,
 				F749882B1BF59179007144DA /* CFNetwork.framework in Frameworks */,
 				F749882C1BF59179007144DA /* CoreMotion.framework in Frameworks */,
 				618C85F01D1CC7EC00ECF176 /* libcrypto.a in Frameworks */,
@@ -1477,6 +1481,8 @@
 			children = (
 				3222BC942176E1E0004B35A4 /* CreditPay.h */,
 				3222BC952176E1E0004B35A4 /* CreditPay.m */,
+				3275FBFA218840EE00A27EE9 /* Agreement.h */,
+				3275FBFB218840EE00A27EE9 /* Agreement.m */,
 			);
 			path = Pay;
 			sourceTree = "<group>";
@@ -2012,6 +2018,7 @@
 		C8A77DE183FA961A7A7D5EB5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				32B376F9218AF73900E9C31E /* libc++.tbd */,
 				61439E001D1E344B00D0A98A /* JavaScriptCore.framework */,
 				61439DFE1D1E33BD00D0A98A /* libicucore.A.dylib */,
 				618C856E1D1CC44B00ECF176 /* libWeChatSDK.a */,
@@ -2270,7 +2277,7 @@
 		F7A595701BE1E1330013BBF2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F7A5956F1BE1E1330013BBF2 /* TUTTI.app */,
+				F7A5956F1BE1E1330013BBF2 /* Tutti.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2824,7 +2831,7 @@
 			);
 			name = RenRen;
 			productName = RenRen;
-			productReference = F7A5956F1BE1E1330013BBF2 /* TUTTI.app */;
+			productReference = F7A5956F1BE1E1330013BBF2 /* Tutti.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -2840,6 +2847,9 @@
 						DevelopmentTeam = TZL94T5P9A;
 						ProvisioningStyle = Manual;
 						SystemCapabilities = {
+							com.apple.AccessWiFi = {
+								enabled = 0;
+							};
 							com.apple.BackgroundModes = {
 								enabled = 1;
 							};
@@ -3503,6 +3513,7 @@
 				F785147B1BE87D6600AC8B73 /* EditAddress.m in Sources */,
 				F7A7E1091CE1CB9A00A5689B /* PointRecordCell.m in Sources */,
 				F7ABF3B61CE1698500573EDE /* ExchangeRecord.m in Sources */,
+				3275FBFC218840EE00A27EE9 /* Agreement.m in Sources */,
 				F7A5962D1BE1E1A40013BBF2 /* Location.m in Sources */,
 				619FD7971D840BC700A78D52 /* ReceivesAddress.m in Sources */,
 				617E30291DB61ECA00EACACD /* NewHomeSection.m in Sources */,
@@ -3655,8 +3666,117 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DTCoreText\"",
+					"-l\"DTFoundation\"",
+					"-l\"DZNEmptyDataSet\"",
+					"-l\"FMDB\"",
+					"-l\"FMDBHelper\"",
+					"-l\"IQKeyboardManager\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"MJRefresh\"",
+					"-l\"MarqueeLabel\"",
+					"-l\"Reachability\"",
+					"-l\"SDCycleScrollView\"",
+					"-l\"SDWebImage\"",
+					"-l\"SVWebViewController\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"ZQCountDownView\"",
+					"-l\"c++\"",
+					"-l\"iconv\"",
+					"-l\"sqlite3\"",
+					"-l\"xml2\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AMapFoundationKit\"",
+					"-framework",
+					"\"AMapLocationKit\"",
+					"-framework",
+					"\"AMapSearchKit\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"GLKit\"",
+					"-framework",
+					"\"GoogleMaps\"",
+					"-framework",
+					"\"GoogleMapsBase\"",
+					"-framework",
+					"\"GoogleMapsCore\"",
+					"-framework",
+					"\"GooglePlacePicker\"",
+					"-framework",
+					"\"GooglePlaces\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MAMapKit\"",
+					"-framework",
+					"\"MediaPlayer\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"OpenGLES\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
-				PRODUCT_NAME = TUTTI;
+				PRODUCT_NAME = Tutti;
 				PROVISIONING_PROFILE = "a7495988-8939-4224-99a6-491066b804c9";
 				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Release;
 				SDKROOT = iphoneos;
@@ -3739,8 +3859,117 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"AFNetworking\"",
+					"-l\"APOpenSdk\"",
+					"-l\"DTCoreText\"",
+					"-l\"DTFoundation\"",
+					"-l\"DZNEmptyDataSet\"",
+					"-l\"FMDB\"",
+					"-l\"FMDBHelper\"",
+					"-l\"IQKeyboardManager\"",
+					"-l\"LWApiSDK\"",
+					"-l\"MBProgressHUD\"",
+					"-l\"MJRefresh\"",
+					"-l\"MarqueeLabel\"",
+					"-l\"Reachability\"",
+					"-l\"SDCycleScrollView\"",
+					"-l\"SDWebImage\"",
+					"-l\"SVWebViewController\"",
+					"-l\"SocialAlipayShare\"",
+					"-l\"SocialFacebook\"",
+					"-l\"SocialInstagram\"",
+					"-l\"SocialLaiWang\"",
+					"-l\"SocialLine\"",
+					"-l\"SocialQQ\"",
+					"-l\"SocialSinaSSO\"",
+					"-l\"SocialTumblr\"",
+					"-l\"SocialTwitter\"",
+					"-l\"SocialWechat\"",
+					"-l\"SocialWhatsapp\"",
+					"-l\"UMSocial_Sdk_5.2.1\"",
+					"-l\"UMSocial_Sdk_Comment_5.2.1\"",
+					"-l\"WeChatSDK\"",
+					"-l\"WeiboSDK\"",
+					"-l\"ZQCountDownView\"",
+					"-l\"c++\"",
+					"-l\"iconv\"",
+					"-l\"sqlite3\"",
+					"-l\"xml2\"",
+					"-l\"z\"",
+					"-framework",
+					"\"AMapFoundationKit\"",
+					"-framework",
+					"\"AMapLocationKit\"",
+					"-framework",
+					"\"AMapSearchKit\"",
+					"-framework",
+					"\"Accelerate\"",
+					"-framework",
+					"\"Accounts\"",
+					"-framework",
+					"\"CoreData\"",
+					"-framework",
+					"\"CoreGraphics\"",
+					"-framework",
+					"\"CoreLocation\"",
+					"-framework",
+					"\"CoreTelephony\"",
+					"-framework",
+					"\"CoreText\"",
+					"-framework",
+					"\"FBSDKCoreKit\"",
+					"-framework",
+					"\"FBSDKLoginKit\"",
+					"-framework",
+					"\"FBSDKShareKit\"",
+					"-framework",
+					"\"Fabric\"",
+					"-framework",
+					"\"GLKit\"",
+					"-framework",
+					"\"GoogleMaps\"",
+					"-framework",
+					"\"GoogleMapsBase\"",
+					"-framework",
+					"\"GoogleMapsCore\"",
+					"-framework",
+					"\"GooglePlacePicker\"",
+					"-framework",
+					"\"GooglePlaces\"",
+					"-framework",
+					"\"ImageIO\"",
+					"-framework",
+					"\"MAMapKit\"",
+					"-framework",
+					"\"MediaPlayer\"",
+					"-framework",
+					"\"MobileCoreServices\"",
+					"-framework",
+					"\"OpenGLES\"",
+					"-framework",
+					"\"QuartzCore\"",
+					"-framework",
+					"\"Security\"",
+					"-framework",
+					"\"Social\"",
+					"-framework",
+					"\"SystemConfiguration\"",
+					"-framework",
+					"\"TencentOpenAPI\"",
+					"-framework",
+					"\"TwitterCore\"",
+					"-framework",
+					"\"TwitterKit\"",
+					"-framework",
+					"\"UIKit\"",
+					"-framework",
+					"\"UMMobClick\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
-				PRODUCT_NAME = TUTTI;
+				PRODUCT_NAME = Tutti;
 				PROVISIONING_PROFILE = "a7495988-8939-4224-99a6-491066b804c9";
 				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Release;
 				SDKROOT = iphoneos;

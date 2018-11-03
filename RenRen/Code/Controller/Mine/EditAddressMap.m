@@ -63,6 +63,7 @@
     [super viewDidLoad];
     
     _placesClient = [GMSPlacesClient sharedClient];
+    
     self.pageIndex = 1;
     self.keyWordPageIndex = 1;
     self.keyWords =  @"";
@@ -72,13 +73,13 @@
     [self layoutConstraints];
     self.firstLoad =YES;
     //[self refershDataSoruce];
-    [self getAddressByGoogle];
+    //[self getAddressByGoogle];
 }
 
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.title =  @"编辑地址";
+    self.navigationItem.title =  Localized(@"Edit_address");
 }
 
 
@@ -140,7 +141,9 @@
         CLLocationCoordinate2D swBoundsCorner = thood.place.coordinate;
         GMSCoordinateBounds *bounds = [[GMSCoordinateBounds alloc] initWithCoordinate:neBoundsCorner
                                                                            coordinate:swBoundsCorner];
+
         self.resultsTableController.autocompleteBounds = bounds;
+        
         //[self queryAddress];
         
         [self.tableView reloadData];
@@ -440,6 +443,10 @@ didFailAutocompleteWithError:(NSError *)error {
 //        _resultsTableController = [[SearchAddress alloc]init];
 //        _resultsTableController.tableView.delegate = self;
         _resultsTableController = [[GMSAutocompleteResultsViewController alloc]init];
+        
+        GMSAutocompleteFilter* filter = [[GMSAutocompleteFilter alloc]init];
+        filter.type = kGMSPlacesAutocompleteTypeFilterAddress;
+        _resultsTableController.autocompleteFilter = filter;
         _resultsTableController.delegate = self;
     }
     return _resultsTableController;

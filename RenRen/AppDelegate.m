@@ -548,7 +548,7 @@
 }
 
 -(void)registerThirdParty{
-    [WXApi registerApp:@"wx8b65930e48974b35"];
+    [WXApi registerApp:@"wx09a5c8d38a286fd0"];
 }
 #pragma mark =====================================================  配置高德地图
 -(void)configureMAMap{

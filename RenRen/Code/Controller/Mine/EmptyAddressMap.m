@@ -74,7 +74,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-    self.navigationItem.title =  @"编辑地址";
+    self.navigationItem.title =  Localized(@"Edit_address");
 }
 
 
@@ -207,7 +207,7 @@
 // return YES to reload table. called when search string/option changes. convenience methods on top UISearchBar delegate methods
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(nullable NSString *)searchString {
       //NSLog( @"shouldReloadTableForSearchString");
-    [self queryKeyWorkds];
+    //[self queryKeyWorkds];
     return YES;
 }
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption {
@@ -243,6 +243,7 @@
 #pragma mark =====================================================  <AMapSearchDelegate>
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response
 {
+    NSLog(@"garfunkel.log.===========into search");
     if (response.pois.count == 0)
     {
         return;
@@ -367,11 +368,11 @@
     __weak typeof(self) weakSelf = self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         weakSelf.pageIndex =1;
-        [weakSelf queryAround];
+        //[weakSelf queryAround];
     }];
     self.tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         weakSelf.pageIndex++;
-        [weakSelf queryAround];
+        //[weakSelf queryAround];
     }];
 }
 
@@ -455,8 +456,8 @@
 
 -(AMapSearchAPI *)search{
     if(!_search){
-        _search = [[AMapSearchAPI alloc] init];
-        _search.delegate = self;
+        //_search = [[AMapSearchAPI alloc] init];
+        //_search.delegate = self;
     }
     return _search;
 }

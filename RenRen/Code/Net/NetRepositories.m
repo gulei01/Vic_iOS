@@ -225,7 +225,7 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
                             
                             item.rowID = @"0";
                             item.sid = @"263";
-                            item.title = @"全部";
+                            item.title = Localized(@"All_txt");
                             
                             
                         }else {

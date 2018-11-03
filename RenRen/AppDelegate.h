@@ -13,7 +13,7 @@
 
 
 static NSString *appKey = @"72646590972c7cf19f53a1b3";
-static NSString *channel = @"http://wm.wm0530.com";
+static NSString *channel = @"https://www.tutti.app";
 static BOOL isProduction = FALSE;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate>

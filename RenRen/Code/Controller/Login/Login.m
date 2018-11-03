@@ -434,7 +434,7 @@
 }
 #pragma mark =====================================================  私有方法
 -(void)thirdPartyLogin:(NSString*)nick openID:(NSString*)openID face:(NSString*)face sex:(NSString*)sex province:(NSString*)province city:(NSString*)city type:(NSInteger)type{
-    NSLog(@"garfunkel______________________log");
+    NSLog(@"garfunkel______________________log%@",openID);
     self.HUD = [[MBProgressHUD alloc] initWithView:self.view.window];
     [self.view.window addSubview:self.HUD];
     self.HUD.delegate = self;

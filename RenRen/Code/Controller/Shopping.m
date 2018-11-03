@@ -502,6 +502,7 @@
 }
 
 -(void)refreshDataSource{
+    [self showHUD];
     __weak typeof(self) weakSelf = (id)self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf queryData];

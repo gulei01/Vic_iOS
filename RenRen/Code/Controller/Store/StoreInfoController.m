@@ -80,7 +80,7 @@
         [icon setImage:[UIImage imageNamed:@"icon-lock"]];
         NSString* star =[NSString stringWithFormat:@"%ld:00",[self.entity.servicTimeBegin integerValue]/60];
          NSString* end =[NSString stringWithFormat:@"%ld:00",[self.entity.serviceTimerEnd integerValue]/60];
-        label.text = [NSString stringWithFormat:@"%@ : %@",Localized(@"Delivery_time"),self.entity.time];
+        label.text = [NSString stringWithFormat:@"%@ : %@",Localized(@"Business_time"),self.entity.time];
     }else if (indexPath.row == 1){
         [icon setImage:[UIImage imageNamed:@"icon-boll"]];
         label.text = [NSString stringWithFormat:@"%@ : %@",Localized(@"Shop_phone"),[WMHelper isEmptyOrNULLOrnil:self.entity.phone]?self.entity.mobile:self.entity.phone];

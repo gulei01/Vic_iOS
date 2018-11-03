@@ -214,13 +214,13 @@
         }
     }];
 }
-
+//if([WMHelper isEmptyOrNULLOrnil:self.txtMapNumber.text]){
+//    [self hidHUD];
+//    [self alertHUD:Localized(@"Address_not_empty")];
+//    return NO;
+//}else 
 -(BOOL)checkForm{
-    if([WMHelper isEmptyOrNULLOrnil:self.txtMapNumber.text]){
-        [self hidHUD];
-        [self alertHUD:Localized(@"Address_not_empty")];
-        return NO;
-    }else if([WMHelper isEmptyOrNULLOrnil:self.txtZipcode.text]){
+    if([WMHelper isEmptyOrNULLOrnil:self.txtZipcode.text]){
         [self hidHUD];
         [self alertHUD:Localized(@"Zipcode_not_empty")];
         return NO;
@@ -246,7 +246,7 @@
 -(UILabel *)labelTitle{
     if(!_labelTitle){
         _labelTitle = [[UILabel alloc]init];
-        _labelTitle.text = [NSString stringWithFormat:@"    %@",Localized(@"Rece_addr_not_empty")] ;
+        _labelTitle.text = [NSString stringWithFormat:@"    %@",Localized(@"Shipping_address")] ;
         _labelTitle.font = [UIFont systemFontOfSize:14.f];
         _labelTitle.textColor = theme_Fourm_color;
         _labelTitle.backgroundColor = [UIColor whiteColor];
@@ -303,7 +303,7 @@
         _txtMapNumber.leftView = [self leftView:[NSString stringWithFormat:@"    %@",Localized(@"Address_detail")]];
         _txtMapNumber.leftViewMode =UITextFieldViewModeAlways;
         _txtMapNumber.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
-        _txtMapNumber.placeholder = @"";
+        _txtMapNumber.placeholder = @"Instruction to driver";
         _txtMapNumber.font = [UIFont systemFontOfSize:14.f];
         _txtMapNumber.translatesAutoresizingMaskIntoConstraints = NO;
     }

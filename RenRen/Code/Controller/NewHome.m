@@ -117,12 +117,11 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
     
     [self.titleView addSubview:_changeCity];
 
+    [self layoutUI];
     //garfunkel add
     [self getLocationMessage];
-
-    [self layoutUI];
     
-    [self responseData];
+    //[self responseData];
     if(self.Identity.userInfo.isLogin){
         NSUserDefaults* config = [NSUserDefaults standardUserDefaults];
         if([[config objectForKey: kisBindingJPushTag]boolValue]){
@@ -134,30 +133,47 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
         }
     }
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changePositionNotification:) name:NotificationMapLocationChangePosition object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(responseData) name:NotificationGuidanceViewFinished object:nil];
+    //@selector(responseData)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getLocationMessage) name:NotificationGuidanceViewFinished object:nil];
     self.firstLoad = YES;
 }
 
 -(void)getLocationMessage{
+    [self showHUD];
     NSLog(@"garfunkel_log:into getLocation");
+//    self.localManager = [[CLLocationManager alloc]init];
     if([CLLocationManager locationServicesEnabled]){
+        NSLog(@"garfunkel_log:into getLocation OK");
         if(!self.localManager){
             self.localManager = [[CLLocationManager alloc]init];
         }
+        
         self.localManager.delegate = self;
         //使用时运行获得地址
         [self.localManager requestWhenInUseAuthorization];
         self.localManager.desiredAccuracy = kCLLocationAccuracyBest;
         self.localManager.distanceFilter = kCLDistanceFilterNone;
+        
         [self.localManager startUpdatingLocation];
     }else{
-        
+        NSLog(@"garfunkel_log:into getLocation Error");
+        UIAlertView* alert = [[UIAlertView alloc]initWithTitle: Localized(@"Positioning_close") message: [NSString stringWithFormat:@"%@ %@->%@->%@->%@",Localized(@"Please_pos_service"),Localized(@"Setting_txt"),Localized(@"Privacy_txt"),Localized(@"Positioning_service"),Localized(@"Tutti")] delegate:self cancelButtonTitle: Localized(@"Setting_txt") otherButtonTitles: Localized(@"Confirm_txt"),nil];
+        [alert show];
     }
 }
 
 #pragma mark ================================= location delegate
+-(void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    NSLog(@"获取定位失败");
+    [self hidHUD];
+    [self netWifiOrLocationFail];
+    [self.localManager stopUpdatingLocation];
+    
+}
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     [self.localManager stopUpdatingLocation];
+    self.localManager.delegate = nil;
     CLLocation *curLocation = [locations firstObject];
     CLGeocoder* geocoder = [[CLGeocoder alloc]init];
     NSString* longitude = [NSString stringWithFormat:@"%0.6f",curLocation.coordinate.longitude];
@@ -166,6 +182,7 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
     NSLog(@"garfunkel_log:into getLocation first");
     self.mapLocation.mapLng = longitude;
     self.mapLocation.mapLat = latitude;
+    self.mapLocation.isOpen = YES;
     
 //    [geocoder reverseGeocodeLocation:manager.location completionHandler:^(NSArray * _Nullable placemarks, NSError * _Nullable error) {
 //
@@ -178,6 +195,7 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
 //        }
 //    }];
     [geocoder reverseGeocodeLocation:manager.location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        [self hidHUD];
         if (error) {
             NSLog(@"garfunkel_log:into getLocation %@",error);
         }else{
@@ -187,14 +205,53 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
             self.labelTitle.text = placemark.name;
             Boolean flag= [NSKeyedArchiver archiveRootObject:self.mapLocation toFile:[WMHelper archiverMapLocationPath]];
             if(flag){
-                [self.navigationController popToRootViewControllerAnimated:YES];
+                //[self.navigationController popToRootViewControllerAnimated:YES];
             }else{
                 [self alertHUD: Localized(@"Positioning_fail")];
             }
         }
+        [self refreshDataSource];
     }];
     //[self.localManager stopUpdatingLocation];
 }
+
+//-(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+//{
+//    switch (status) {
+//        case kCLAuthorizationStatusNotDetermined:
+//        {
+//            NSLog(@"用户还未决定授权");
+//            break;
+//        }
+//        case kCLAuthorizationStatusRestricted:
+//        {
+//            NSLog(@"访问受限");
+//            break;
+//        }
+//        case kCLAuthorizationStatusDenied:
+//        {
+//            // 类方法，判断是否开启定位服务
+//            if ([CLLocationManager locationServicesEnabled]) {
+//                NSLog(@"定位服务开启，被拒绝");
+//            } else {
+//                NSLog(@"定位服务关闭，不可用");
+//            }
+//            break;
+//        }
+//        case kCLAuthorizationStatusAuthorizedAlways:
+//        {
+//            NSLog(@"获得前后台授权");
+//            break;
+//        }
+//        case kCLAuthorizationStatusAuthorizedWhenInUse:
+//        {
+//            NSLog(@"获得前台授权");
+//            break;
+//        }
+//        default:
+//            break;
+//    }
+//}
 
 //自己更改4
 - (void)changeMyCity {
@@ -467,6 +524,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 }
 //garfunkel 设置下拉刷新
 -(void)refreshDataSource{
+    [self showHUD];
     __weak typeof(self) weakSelf = self;
     MJRefreshNormalHeader* header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         weakSelf.page.pageIndex = 1;
@@ -518,7 +576,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         if(self.arrayStore.count > 0){
             return self.arrayStore.count+1;
         }else{
-            return 0;
+            return 1;
         }
     }else{
         return 0;
@@ -1082,10 +1140,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if(buttonIndex == 0){
         // UIApplicationOpenSettingsURLString
-        NSURL *url = [NSURL URLWithString: @"prefs:root=LOCATION_SERVICES"];
-        if ([[UIApplication sharedApplication] canOpenURL:url]) {
-            [[UIApplication sharedApplication] openURL:url];
-        }
+        [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }
 }
 
@@ -1236,7 +1291,7 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
         btn.titleLabel.font = [UIFont systemFontOfSize:14.f];
         btn.layer.masksToBounds = YES;
         btn.layer.cornerRadius = 13.f;
-        [btn addTarget:self action:@selector(responseData) forControlEvents:UIControlEventTouchUpInside];
+        [btn addTarget:self action:@selector(getLocationMessage) forControlEvents:UIControlEventTouchUpInside];
         [_netException addSubview:btn];
     }
     return _netException;

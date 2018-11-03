@@ -17,6 +17,7 @@
 #import "AppDelegate.h"
 #import "WXApi.h"
 #import "CreditPay.h"
+#import "Agreement.h"
 
 
 @interface GenerateOrder ()<UIPickerViewDataSource,UIPickerViewDelegate,UIScrollViewDelegate,UITextFieldDelegate>
@@ -94,6 +95,11 @@
 @property(nonatomic,strong) UILabel* labelTax;
 @property(nonatomic,strong) UILabel* labelTaxNum;
 
+/**
+ * 用户协议
+ */
+@property(nonatomic,strong) UIButton* agreementBtn;
+@property(nonatomic,strong) UIButton* agreementTxt;
 /**
  *  应付总金额
  */
@@ -196,7 +202,7 @@
     MAddress* item = delegate.globalAddress;
     self.photoLociation.image = [UIImage imageNamed:@"icon-address"];
     self.labelUserName.text = [NSString stringWithFormat:@"%@:%@ %@",Localized(@"Receiver_txt"),item.userName,item.phoneNum];
-    self.labelAddress.text = [NSString stringWithFormat:@"%@:%@ %@ %@ %@",Localized(@"Shipping_address"),self.Identity.location.cityName,item.areaName,item.zoneName,item.address];
+    self.labelAddress.text = [NSString stringWithFormat:@"%@:%@ %@ %@. Postal Code:%@",Localized(@"Shipping_address"),item.zoneName,item.address,item.mapLocation,item.mapNumber];
     
     [self refreshDataSource];
     [self btnPayWay:self.btnFacePay];
@@ -268,7 +274,7 @@
     self.lineblock.backgroundColor = theme_line_color;
     [self.headerView addSubview:self.lineblock];
     
-    self.footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 390)];
+    self.footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 425)];
     self.btnSectionPay = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnSectionPay.backgroundColor = theme_default_color;
     self.btnSectionPay.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
@@ -333,7 +339,7 @@
     
     self.btnCredit = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.btnCredit setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
-    NSMutableAttributedString* creditStr = [[NSMutableAttributedString alloc]initWithString:Localized(@"Credit_card")];
+    NSMutableAttributedString* creditStr = [[NSMutableAttributedString alloc]initWithString:Localized(@"Payment_online")];
     [self.btnCredit setAttributedTitle:creditStr forState:UIControlStateNormal];
     self.btnCredit.backgroundColor =theme_default_color;
     self.btnCredit.titleLabel.font = [UIFont systemFontOfSize:14.f];
@@ -404,6 +410,28 @@
     self.labelSumPrice.textColor=[UIColor redColor];
     self.labelSumPrice.textAlignment = NSTextAlignmentRight;
     [self.sumView addSubview:self.labelSumPrice];
+    
+    self.agreementBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.agreementBtn setImage:[UIImage imageNamed:@"icon-agreement-default"] forState:UIControlStateNormal];
+    [self.agreementBtn setImage:[UIImage imageNamed:@"icon-agreement-enter"] forState:UIControlStateSelected];
+    self.agreementBtn.selected = YES;
+    [self.agreementBtn addTarget:self action:@selector(agreement) forControlEvents:UIControlEventTouchUpInside];
+    [self.sumView addSubview:self.agreementBtn];
+    
+    self.agreementTxt = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.agreementTxt setTitleColor:theme_Fourm_color forState:UIControlStateNormal];
+    NSMutableAttributedString* agreementStr = [[NSMutableAttributedString alloc]initWithString:Localized(@"Agreement_memo")];
+    [self.agreementTxt setAttributedTitle:agreementStr forState:UIControlStateNormal];
+    [agreementStr addAttribute:NSUnderlineStyleAttributeName
+                      value:@(NSUnderlineStyleSingle)
+                      range:(NSRange){0,[agreementStr length]}];
+    self.agreementTxt.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    self.agreementTxt.backgroundColor =theme_default_color;
+    self.agreementTxt.titleLabel.font = [UIFont systemFontOfSize:16.f];
+    self.agreementTxt.contentEdgeInsets =UIEdgeInsetsMake(0, 0, 0, 0);
+    self.agreementTxt.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.agreementTxt addTarget:self action:@selector(agreementMemo) forControlEvents:UIControlEventTouchUpInside];
+    [self.sumView addSubview:self.agreementTxt];
     
     self.btnPay = [UIButton buttonWithType:UIButtonTypeCustom];
     self.btnPay.backgroundColor = [UIColor redColor];
@@ -552,6 +580,8 @@
     self.labelTaxNum.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelSumPrice.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelSumPriceTitle.translatesAutoresizingMaskIntoConstraints = NO;
+    self.agreementBtn.translatesAutoresizingMaskIntoConstraints = NO;
+    self.agreementTxt.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnPay.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.btnSectionPay addConstraint:[NSLayoutConstraint constraintWithItem:self.btnSectionPay attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:40.f]];
@@ -620,7 +650,7 @@
     [self.btnAlipay addConstraint:[NSLayoutConstraint constraintWithItem:self.imgAli attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.btnAlipay attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.f]];
     [self.btnAlipay addConstraint:[NSLayoutConstraint constraintWithItem:self.imgAli attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.btnAlipay attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:220.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:265.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
     //只有线下支付，恢复在线支付是 toItem：btnAlipay
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:20.f]];
@@ -660,24 +690,14 @@
     [self.fullCutView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelCutTitle attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
     [self.fullCutView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelCutTitle attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.labelFullCutPrice attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-10.f]];
     
-    [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
-    [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
-    
-    [self.labelDiscountPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
-    [self.labelDiscountPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
-    
     [self.labelExpectPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPriceTitle attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelExpectPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPriceTitle attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPriceTitle attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPriceTitle attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPriceTitle attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
     
     [self.labelExpectPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPrice attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelExpectPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPrice attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDiscountPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.fullCutView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelExpectPrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
     [self.labelPackage addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackage attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
@@ -690,14 +710,24 @@
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackagePrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelExpectPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackagePrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
+    [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPackage attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    [self.labelDiscountPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelDiscountPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPackagePrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
     [self.labelTax addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelTax addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPackage attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
     
     [self.labelTaxNum addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelTaxNum addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPackagePrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDiscountPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
     [self.labelSumPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPriceTitle attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
@@ -710,6 +740,15 @@
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTaxNum attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
+    [self.agreementBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.agreementBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:26.f]];
+    [self.agreementBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.agreementBtn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:26.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.agreementBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelSumPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.agreementBtn attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    [self.agreementTxt addConstraint:[NSLayoutConstraint constraintWithItem:self.agreementTxt attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:SCREEN_WIDTH - 56]];
+    [self.agreementTxt addConstraint:[NSLayoutConstraint constraintWithItem:self.agreementTxt attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:30.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.agreementTxt attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelSumPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:15.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.agreementTxt attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.agreementBtn attribute:NSLayoutAttributeRight multiplier:1.0 constant:10.f]];
     
     [self.btnPay addConstraint:[NSLayoutConstraint constraintWithItem:self.btnPay attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:40.f]];
     [self.btnPay addConstraint:[NSLayoutConstraint constraintWithItem:self.btnPay attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH-30.f]];
@@ -728,6 +767,7 @@
     NSDictionary* arg = @{@"a":@"confirmCart",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"cer_type":@"2"};
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories netConfirm:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
+        [self hidHUD];
         [self.arrayData removeAllObjects];
         if(react == 1){
             self.expect_time = [response objectForKey:@"expect_time"];
@@ -856,6 +896,7 @@
 }
 
 -(void)refreshDataSource{
+    [self showHUD];
     __weak typeof(self) weakSelf = (id)self;
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
         [weakSelf checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
@@ -1111,6 +1152,29 @@
     
 }
 
+-(void)agreement{
+    self.agreementBtn.selected = !self.agreementBtn.selected;
+    if(self.agreementBtn.selected){
+        self.btnPay.userInteractionEnabled = YES;
+        self.btnPay.backgroundColor = [UIColor redColor];
+    }else{
+        self.btnPay.userInteractionEnabled = NO;
+        self.btnPay.backgroundColor = [UIColor grayColor];
+    }
+}
+
+-(void)agreementMemo{
+//    UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Agreement alloc]init]];
+//    [nav.navigationBar setBackgroundColor:theme_navigation_color];
+//    [nav.navigationBar setBarTintColor:theme_navigation_color];
+//    [nav.navigationBar setTintColor:theme_default_color];
+//    [self.parentViewController presentViewController:nav animated:YES completion:nil];
+    
+    NSURL *URL = [NSURL URLWithString:@"https://www.tutti.app/intro/5.html?app=1"];
+    SVWebViewController *webViewController = [[SVWebViewController alloc] initWithURL:URL];
+    webViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:webViewController animated:YES];
+}
 
 #pragma mark ===================================================自己更改添加口味功能
 - (void)creatGoodsTasteBtn:(UITableViewCell *)cell tasteStr:(NSString *)tasteString indexPath:(NSIndexPath *)indexPath {
@@ -1435,7 +1499,7 @@
                 [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
             }
         }
-        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 500);
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 535);
     }else{
         self.btnWeXinPay.selected = NO;
         self.btnAlipay.selected = NO;
@@ -1455,7 +1519,7 @@
                 [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0.f]];
             }
         }
-        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 390);
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 424);
     }
     [self updatePrice];
     [self.HUD hide:YES afterDelay:1];
@@ -1624,7 +1688,6 @@
     self.labelTaxNum.text = [NSString stringWithFormat:@"$%.2f",self.taxPrice];
     
     [self changeTip];
-    
     [self.tableView reloadData];
 }
 #pragma mark 微信支付
