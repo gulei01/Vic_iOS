@@ -41,6 +41,12 @@
 @property(nonatomic,strong) UILabel* labelShip;
 @property(nonatomic,strong) UILabel* labelShipFee;
 
+@property(nonatomic,strong) UILabel* labelTip;
+@property(nonatomic,strong) UILabel* labelTipFee;
+
+@property(nonatomic,strong) UILabel* labelTax;
+@property(nonatomic,strong) UILabel* labelTaxFee;
+
 @property(nonatomic,strong) UILabel* labelSumPrice;
 @property(nonatomic,strong) UILabel* labelOther;
 @property(nonatomic,strong) UITextField* txtExpressMan;
@@ -95,6 +101,10 @@
     [self.footerView addSubview:self.labelPackgeFee];
     [self.footerView addSubview:self.labelShip];
     [self.footerView addSubview:self.labelShipFee];
+    [self.footerView addSubview:self.labelTip];
+    [self.footerView addSubview:self.labelTipFee];
+    [self.footerView addSubview:self.labelTax];
+    [self.footerView addSubview:self.labelTaxFee];
     [self.footerView addSubview:self.labelSumPrice];
     [self.footerView addSubview:self.labelOther];
     [self.footerView addSubview:self.txtExpressMan];
@@ -114,6 +124,10 @@
     self.labelPackgeFee.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelShip.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelShipFee.translatesAutoresizingMaskIntoConstraints = NO;
+    self.labelTip.translatesAutoresizingMaskIntoConstraints = NO;
+    self.labelTipFee.translatesAutoresizingMaskIntoConstraints = NO;
+    self.labelTax.translatesAutoresizingMaskIntoConstraints = NO;
+    self.labelTaxFee.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelSumPrice.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelOther.translatesAutoresizingMaskIntoConstraints = NO;
     self.txtExpressMan.translatesAutoresizingMaskIntoConstraints = NO;
@@ -166,9 +180,29 @@
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelShipFee attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPackgeFee attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelShipFee attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
+    [self.labelTip addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTip attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelTip addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTip attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/4]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTip attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelShip attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTip attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    [self.labelTipFee addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTipFee attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelTipFee addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTipFee attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/4]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTipFee attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelShipFee attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTipFee attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
+    [self.labelTax addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelTax addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/4]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTip attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    [self.labelTaxFee addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxFee attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelTaxFee addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxFee attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/4]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxFee attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTipFee attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxFee attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
     [self.labelSumPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:45.f]];
     [self.labelSumPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/2]];
-    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelShipFee attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTaxFee attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
     
@@ -292,11 +326,13 @@
     double packageFee = [[self.dictOther objectForKey:@"packing_fee"] doubleValue];
     double shipFee = [[self.dictOther objectForKey:@"ship_fee"] doubleValue];
     double foodFee = [[self.dictOther objectForKey:@"food_amount"] doubleValue];
+    double tipFee = [[self.dictOther objectForKey:@"tip_fee"] doubleValue];
     
     self.labelPackgeFee.text = [NSString stringWithFormat:@" $%.2f",packageFee];
     self.labelShipFee.text = [NSString stringWithFormat:@" $%.2f",shipFee];
+    self.labelTipFee.text = [NSString stringWithFormat:@" $%.2f",tipFee];
+    self.labelTaxFee.text = [NSString stringWithFormat:@" $%.2f",(packageFee+shipFee+foodFee)*0.05];
     
-    self.labelSumPrice.text = [NSString stringWithFormat:@"%@    $%.2f",Localized(@"Product_price"),(packageFee+shipFee+foodFee)];
     self.txtExpressMan.text = [self.dictOther objectForKey:@"empname"];
     self.txtOrderNO.text = [self.dictOther objectForKey:@"order_id"];
     self.txtExpressDate.text = [self.dictOther objectForKey:@"expect_time"];
@@ -331,7 +367,7 @@
             }
         });
     }
- 
+    self.labelSumPrice.text = [NSString stringWithFormat:@"%@    $%.2f",Localized(@"Product_price"),((packageFee+shipFee+foodFee)*1.05+tipFee-self.fullCut)];
 }
 
 
@@ -450,7 +486,7 @@
 
 -(UIView *)footerView{
     if(!_footerView){
-        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 370.f)];
+        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 520.f)];
         _footerView.backgroundColor = theme_default_color;
     }
     return _footerView;
@@ -543,6 +579,48 @@
         _labelShipFee.textAlignment = NSTextAlignmentRight;
     }
     return _labelShipFee;
+}
+
+-(UILabel *)labelTip{
+    if(!_labelTip){
+        _labelTip = [[UILabel alloc]init];
+        _labelTip.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
+        _labelTip.font = [UIFont systemFontOfSize:14.f];
+        _labelTip.textAlignment = NSTextAlignmentLeft;
+        _labelTip.text =  Localized(@"Tip_txt");
+    }
+    return _labelTip;
+}
+
+-(UILabel *)labelTipFee{
+    if(!_labelTipFee){
+        _labelTipFee =[[UILabel alloc]init];
+        _labelTipFee.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
+        _labelTipFee.font = [UIFont systemFontOfSize:14.f];
+        _labelTipFee.textAlignment = NSTextAlignmentRight;
+    }
+    return _labelTipFee;
+}
+
+-(UILabel *)labelTax{
+    if(!_labelTax){
+        _labelTax = [[UILabel alloc]init];
+        _labelTax.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
+        _labelTax.font = [UIFont systemFontOfSize:14.f];
+        _labelTax.textAlignment = NSTextAlignmentLeft;
+        _labelTax.text =  Localized(@"Tax_fee");
+    }
+    return _labelTax;
+}
+
+-(UILabel *)labelTaxFee{
+    if(!_labelTaxFee){
+        _labelTaxFee =[[UILabel alloc]init];
+        _labelTaxFee.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
+        _labelTaxFee.font = [UIFont systemFontOfSize:14.f];
+        _labelTaxFee.textAlignment = NSTextAlignmentRight;
+    }
+    return _labelTaxFee;
 }
 
 -(UILabel *)labelSumPrice{

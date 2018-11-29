@@ -21,6 +21,7 @@
 #import "MyTuanInfo.h"
 #import "GroupBuy.h"
 #import "CreditPay.h"
+#import "PaySelect.h"
 
 
 @interface OrderVC ()<UITableViewDataSource,UITableViewDelegate,DZNEmptyDataSetDelegate,DZNEmptyDataSetSource,OrderCellDelegate,UIAlertViewDelegate>
@@ -294,19 +295,29 @@
 
 //自己更改走的支付的协议方法
 -(void)orderGoPay:(MOrder *)item{
-    if ([item.payType isEqualToString:@"moneris"]) {
-        CreditPay* controller = [[CreditPay alloc]init];
-        controller.tip_price = [item.tip_fee doubleValue];
-        controller.total_price = [item.total_price doubleValue];
-        controller.order_id = item.order_id;
-        
-        UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
-//        nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [nav.navigationBar setBackgroundColor:theme_navigation_color];
-        [nav.navigationBar setBarTintColor:theme_navigation_color];
-        [nav.navigationBar setTintColor:theme_default_color];
-        [self.parentViewController presentViewController:nav animated:YES completion:nil];
-    }
+    PaySelect* controller = [[PaySelect alloc]init];
+    controller.hidesBottomBarWhenPushed = YES;
+    controller.tip_price = [item.tip_fee doubleValue];
+    controller.total_price = [item.total_price doubleValue] - [item.discount doubleValue];
+    controller.order_id = item.order_id;
+    controller.order_type = @"shop";
+    controller.payType = item.payType;
+    
+    [self.navigationController pushViewController:controller animated:YES];
+//调用信用卡支付
+//    if ([item.payType isEqualToString:@"moneris"]) {
+//        CreditPay* controller = [[CreditPay alloc]init];
+//        controller.tip_price = [item.tip_fee doubleValue];
+//        controller.total_price = [item.total_price doubleValue] - [item.discount doubleValue];
+//        controller.order_id = item.order_id;
+//
+//        UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
+////        nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+//        [nav.navigationBar setBackgroundColor:theme_navigation_color];
+//        [nav.navigationBar setBarTintColor:theme_navigation_color];
+//        [nav.navigationBar setTintColor:theme_default_color];
+//        [self.parentViewController presentViewController:nav animated:YES completion:nil];
+//    }
 //    [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
 //        if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
 //            self.orderNo = item.rowID;
@@ -354,14 +365,14 @@
 //    }];
 }
 -(void)orderCancelOrder:(MOrder *)item{
-    self.orderNo = item.rowID;
+    self.orderNo = item.order_id;
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"Want_to_cancel_order") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     alert.tag = 9999;
     [alert show];
 }
 
 -(void)orderAddComment:(MOrder *)item{
-    AddComment* controller = [[AddComment alloc]initWithOrderID:item.rowID];
+    AddComment* controller = [[AddComment alloc]initWithOrderID:item.order_id];
     controller.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:controller animated:YES];
 }
@@ -378,8 +389,8 @@
     if(alertView.tag == 9999){
         if (buttonIndex==1){
             [self showHUD];
-            
-            NSDictionary* arg = @{@"ince":@"update_user_order_status",@"uid":self.Identity.userInfo.userID,@"order_id":self.orderNo,@"orderstatus":@"5"};
+            //NSDictionary* arg = @{@"ince":@"update_user_order_status",@"uid":self.Identity.userInfo.userID,@"order_id":self.orderNo,@"orderstatus":@"5"};
+            NSDictionary* arg = @{@"a":@"cancelOrder",@"uid":self.Identity.userInfo.userID,@"order_id":self.orderNo};
             NetRepositories* repositories = [[NetRepositories alloc]init];
             [repositories netConfirm:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
                 if(react == 1){
@@ -398,15 +409,17 @@
         if (buttonIndex==1){
             [self showHUD];
             NetRepositories* repositories = [[NetRepositories alloc]init];
-            [repositories requestPost:@{ @"ince": @"del_user_order", @"uid":self.Identity.userInfo.userID, @"order_id":self.temporaryOrder.rowID} complete:^(NSInteger react, NSDictionary *response, NSString *message) {
+            NSDictionary* arg = @{@"a":@"delOrder",@"uid":self.Identity.userInfo.userID,@"order_id":self.temporaryOrder.order_id};
+            [repositories netConfirm:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
                 if(react==1){
-                    [self hidHUD];
-                    if (self.arrayData.count > 0) {
-                        [self.arrayData removeObjectAtIndex:self.temporaryIndex];
-                    }
-                    
-//                    [self.arrayData removeObjectAtIndex:self.temporaryIndex];
-                    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:self.temporaryIndex inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                    [self hidHUD:Localized(@"Order_cancel_success")];
+//                    if (self.arrayData.count > 0) {
+//                        [self.arrayData removeObjectAtIndex:self.temporaryIndex];
+//                    }
+//
+////                    [self.arrayData removeObjectAtIndex:self.temporaryIndex];
+//                    [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:[NSIndexPath indexPathForRow:self.temporaryIndex inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+                    [self.tableView.mj_header beginRefreshing];
                 }else{
                     [self hidHUD:message];
                 }

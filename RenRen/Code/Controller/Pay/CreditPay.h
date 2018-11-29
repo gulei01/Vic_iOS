@@ -11,4 +11,5 @@
 @property(nonatomic,assign) double tip_price;
 @property(nonatomic,assign) double total_price;
 @property(nonatomic,copy) NSString* order_id;
+@property(nonatomic,copy) NSString* order_type;
 @end

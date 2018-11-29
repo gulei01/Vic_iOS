@@ -84,5 +84,6 @@
 @property(nonatomic,copy) NSString* total_price;
 @property(nonatomic,copy) NSString* paid;
 @property(nonatomic,copy) NSString* order_id;
+@property(nonatomic,copy) NSString* discount;
 
 @end

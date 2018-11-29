@@ -153,7 +153,7 @@
     self.ExpiryLabel.leftView = [self leftView:[NSString stringWithFormat:@"%@:",Localized(@"EXPRIRY_DATE")]];
     self.ExpiryLabel.leftViewMode =UITextFieldViewModeAlways;
     self.ExpiryLabel.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
-    self.ExpiryLabel.placeholder = @"YYMM";
+    self.ExpiryLabel.placeholder = @"MMYY";
     self.ExpiryLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.ExpiryLabel.keyboardType = UIKeyboardTypeNumberPad;
     self.ExpiryLabel.delegate = self;
@@ -352,11 +352,14 @@
 
 -(void)sendPayment{
     [self showHUD];
-    NSString* new_order_id = [NSString stringWithFormat:@"tutti_%@",self.order_id];
-    NSDictionary* arg = @{@"a":@"credit_pay",@"uid":self.Identity.userInfo.userID,@"order_id":new_order_id,@"charge_total":[NSString stringWithFormat:@"%.2f", self.total_price + self.tip_price],@"tip":[NSString stringWithFormat:@"%.2f", self.tip_price],@"card_num":self.CardNum.text,@"expiry":self.ExpiryLabel.text,@"name":self.CardName.text,@"save":self.isSave};
+    if(!self.order_type){
+        self.order_type = @"shop";
+    }
+    NSString* new_order_id = [NSString stringWithFormat:@"tutti%@_%@",self.order_type,self.order_id];
+    NSDictionary* arg = @{@"a":@"credit_pay",@"uid":self.Identity.userInfo.userID,@"order_id":new_order_id,@"charge_total":[NSString stringWithFormat:@"%.2f", self.total_price + self.tip_price],@"tip":[NSString stringWithFormat:@"%.2f", self.tip_price],@"card_num":self.CardNum.text,@"expiry":self.ExpiryLabel.text,@"name":self.CardName.text,@"save":self.isSave,@"order_type":self.order_type};
     
     if([self.userCard isEqualToString:@"0"] && self.credit_id){
-        arg = @{@"a":@"credit_pay",@"uid":self.Identity.userInfo.userID,@"order_id":new_order_id,@"charge_total":[NSString stringWithFormat:@"%.2f", self.total_price + self.tip_price],@"tip":[NSString stringWithFormat:@"%.2f", self.tip_price],@"credit_id":self.credit_id};
+        arg = @{@"a":@"credit_pay",@"uid":self.Identity.userInfo.userID,@"order_id":new_order_id,@"charge_total":[NSString stringWithFormat:@"%.2f", self.total_price + self.tip_price],@"tip":[NSString stringWithFormat:@"%.2f", self.tip_price],@"credit_id":self.credit_id,@"order_type":self.order_type};
     }
     
     NetRepositories* repositories = [[NetRepositories alloc]init];

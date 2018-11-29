@@ -99,7 +99,7 @@
     self.ExpiryLabel.leftView = [self leftView:[NSString stringWithFormat:@"%@:",Localized(@"EXPRIRY_DATE")]];
     self.ExpiryLabel.leftViewMode =UITextFieldViewModeAlways;
     self.ExpiryLabel.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
-    self.ExpiryLabel.placeholder = @"YYMM";
+    self.ExpiryLabel.placeholder = @"MMYY";
     self.ExpiryLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.ExpiryLabel.keyboardType = UIKeyboardTypeNumberPad;
     self.ExpiryLabel.delegate = self;

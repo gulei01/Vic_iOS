@@ -91,7 +91,7 @@
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
     
-    self.navigationItem.title =  @"选择地址";
+    self.navigationItem.title =  Localized(@"Shipping_address");
 }
 
 #pragma mark =====================================================  user interface layout

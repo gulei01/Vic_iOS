@@ -296,7 +296,7 @@
     [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
             [self showHUD];
-            NSDictionary* arg = @{@"ince":@"delete_user_addr",@"uid":self.Identity.userInfo.userID,@"itemid":self.emptyItem.rowID};
+            NSDictionary* arg = @{@"a":@"delUserAddress",@"uid":self.Identity.userInfo.userID,@"itemid":self.emptyItem.rowID};
             NetRepositories* repositories = [[NetRepositories alloc]init];
             [repositories updateAddres:arg complete:^(NSInteger react, id obj, NSString *message) {
                 if(react == 1){

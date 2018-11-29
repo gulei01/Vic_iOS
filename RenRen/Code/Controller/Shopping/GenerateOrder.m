@@ -18,6 +18,7 @@
 #import "WXApi.h"
 #import "CreditPay.h"
 #import "Agreement.h"
+#import "CouponSelect.h"
 
 
 @interface GenerateOrder ()<UIPickerViewDataSource,UIPickerViewDelegate,UIScrollViewDelegate,UITextFieldDelegate>
@@ -50,6 +51,8 @@
 @property(nonatomic,strong) UIImageView* imgFace;
 @property(nonatomic,strong) UIButton* btnCredit;
 @property(nonatomic,strong) UIImageView* imgCredit;
+@property(nonatomic,strong) UIButton* btnBalance;
+@property(nonatomic,strong) UIImageView* imgBalance;
 
 @property(nonatomic,strong) UIView* tipView;
 @property(nonatomic,strong) UILabel* tipLabel;
@@ -138,6 +141,8 @@
 @property(nonatomic,assign) double discountPrice;
 //税费
 @property(nonatomic,assign) double taxPrice;
+//账户余额
+@property(nonatomic,assign) double balance;
 
 @property(nonatomic,copy) NSString* orderNo;
 
@@ -169,6 +174,9 @@
 @property(nonatomic,assign)int myFontSize;
 
 @property(nonatomic,assign)BOOL isHaveDian;
+
+//是否从优惠券选择回来
+@property(nonatomic,assign)BOOL isCoupon;
 @end
 
 @implementation GenerateOrder
@@ -194,6 +202,8 @@
     [self layoutConstraints];
     self.redIndex = 0;
     self.useRed = NO;
+    self.isCoupon = NO;
+    [self btnPayWay:self.btnCredit];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -205,11 +215,14 @@
     self.labelAddress.text = [NSString stringWithFormat:@"%@:%@ %@ %@. Postal Code:%@",Localized(@"Shipping_address"),item.zoneName,item.address,item.mapLocation,item.mapNumber];
     
     [self refreshDataSource];
-    [self btnPayWay:self.btnFacePay];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(paySuccessNotification:) name:NotificationPaySuccess object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(payUserCancelNotification:) name:NotificationPayUserCancel object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(PayFailureNotification:) name:NotificationPayFailure object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appBackNotification:) name:NotificationAppBack object:nil];
+    
+    //优惠券返回调用
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(CouponReturn:) name:NotificationCouponReturn object:nil];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -351,6 +364,22 @@
     self.imgCredit = [[UIImageView alloc]init];
     [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
     [self.btnCredit addSubview:self.imgCredit];
+    
+    self.btnBalance = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.btnBalance setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.btnBalance setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
+    NSString* balanceStr = [NSString stringWithFormat:@"%@ ($%@)" ,Localized(@"BALANCE_PAYMENT"),@"0.00"];
+    [self.btnBalance setTitle:balanceStr forState:UIControlStateNormal];
+    self.btnBalance.backgroundColor =theme_default_color;
+    self.btnBalance.titleLabel.font = [UIFont systemFontOfSize:14.f];
+    self.btnBalance.contentEdgeInsets =UIEdgeInsetsMake(0, 10, 0, 0);
+    self.btnBalance.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.btnBalance addTarget:self action:@selector(btnPayWay:) forControlEvents:UIControlEventTouchUpInside];
+    [self.footerView addSubview:self.btnBalance];
+    
+    self.imgBalance = [[UIImageView alloc]init];
+    [self.imgBalance setImage:[UIImage imageNamed:@"icon-address-default"]];
+    [self.btnBalance addSubview:self.imgBalance];
     
     self.sumView = [[UIView alloc]init];
     self.sumView.backgroundColor = theme_default_color;
@@ -556,10 +585,12 @@
     self.btnAlipay.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnFacePay.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnCredit.translatesAutoresizingMaskIntoConstraints = NO;
+    self.btnBalance.translatesAutoresizingMaskIntoConstraints = NO;
     self.imgWeiXin.translatesAutoresizingMaskIntoConstraints = NO;
     self.imgAli.translatesAutoresizingMaskIntoConstraints = NO;
     self.imgFace.translatesAutoresizingMaskIntoConstraints  = NO;
     self.imgCredit.translatesAutoresizingMaskIntoConstraints = NO;
+    self.imgBalance.translatesAutoresizingMaskIntoConstraints = NO;
     
     self.tipView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tipLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -589,9 +620,20 @@
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnSectionPay attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnSectionPay attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
     
+    [self.btnBalance addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBalance attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:40.f]];
+    [self.btnBalance addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBalance attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBalance attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnSectionPay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBalance attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
+    
+    [self.imgBalance addConstraint:[NSLayoutConstraint constraintWithItem:self.imgBalance attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.imgBalance addConstraint:[NSLayoutConstraint constraintWithItem:self.imgBalance attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
+    [self.btnBalance addConstraint:[NSLayoutConstraint constraintWithItem:self.imgBalance attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.btnBalance attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.f]];
+    [self.btnBalance addConstraint:[NSLayoutConstraint constraintWithItem:self.imgBalance attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.btnBalance attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
+    
     [self.btnFacePay addConstraint:[NSLayoutConstraint constraintWithItem:self.btnFacePay attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:40.f]];
     [self.btnFacePay addConstraint:[NSLayoutConstraint constraintWithItem:self.btnFacePay attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
-    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnFacePay attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnSectionPay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnFacePay attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnBalance attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnFacePay attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
     
     [self.imgFace addConstraint:[NSLayoutConstraint constraintWithItem:self.imgFace attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
@@ -772,7 +814,24 @@
         if(react == 1){
             self.expect_time = [response objectForKey:@"expect_time"];
             self.arrayGoods = [response objectForKey:@"info"];
-            self.arrayRed  = [response objectForKey:@"hongbao"];
+//            self.arrayRed  = [response objectForKey:@"hongbao"];
+            self.arrayRed  = [response objectForKey:@"coupon"];
+            //余额
+            self.balance = [[response objectForKey:@"now_money"] doubleValue];
+            if(self.balance > 0){
+                NSString* balanceStr = [NSString stringWithFormat:@"%@ ($%.2f)" ,Localized(@"BALANCE_PAYMENT"),self.balance];
+                [self.btnBalance setTitle:balanceStr forState:UIControlStateNormal];
+//                [self.btnBalance setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+            }else{
+                self.btnBalance.hidden = YES;
+                for(NSLayoutConstraint* con in [self.btnBalance constraints]){
+                    if([con firstAttribute] == NSLayoutAttributeHeight){
+                        [self.btnBalance removeConstraint:con];
+                        [self.btnBalance addConstraint:[NSLayoutConstraint constraintWithItem:self.btnBalance attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0.f]];
+                    }
+                }
+            }
+            ///////
             
             NSMutableArray *myArray = [[NSMutableArray alloc]init];
             
@@ -848,8 +907,18 @@
             
             [self.arrayData addObject:self.arrayGoods];
             [self.arrayData addObject:[[NSArray alloc]init]];
-            if(self.arrayRed.count>0)
+            NSLog(@"garfunkel:red:%ld %@",self.arrayRed.count,self.isCoupon?@"YES":@"NO");
+            if(self.arrayRed.count>0){
                 [self.arrayData addObject:self.arrayRed];
+                if(!self.isCoupon){
+                    MRedEnvelopes* redlop = [[MRedEnvelopes alloc]init];
+                    [redlop setValuesForKeysWithDictionary:[self.arrayRed firstObject]];
+                    self.discountPrice = [redlop.money doubleValue];
+                    self.redIndex = 0;
+                    self.useRed = YES;
+                }
+            }
+                
             
             self.offLinePrice =[[response objectForKey:@"total_market_price"] doubleValue];//线下支付等于市场价格
             self.onLinePrice = [[response objectForKey:@"food_total_price"] doubleValue];//在线支付
@@ -912,15 +981,14 @@
 #pragma mark =====================================================  UITableView  协议实现
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    if( self.btnFacePay.selected)
-        return 2;
-    
+//    if( self.btnFacePay.selected)
+//        return 3;
+//    NSLog(@"garfunkel_log:sections-%ld",self.arrayData.count);
     return self.arrayData.count;
 }
 
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    
     if(section == 0 )
 //        + count>0?count:0
 //        + _stockCount
@@ -1101,31 +1169,75 @@
         return cell;
     }else if(indexPath.section == 2 ){
         UITableViewCell* cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"UITableViewCell"];
-        self.txtRedPicker.frame =CGRectMake(10, 5, SCREEN_WIDTH*2/3, 35);
-        [cell addSubview:self.txtRedPicker];
-        NSDictionary* item = self.arrayRed[self.redIndex];
-        self.txtRedPicker.text =[NSString stringWithFormat:@"[%@]%@",[item objectForKey:@"type_money"],[item objectForKey:@"type_name"]];
+//        self.txtRedPicker.frame =CGRectMake(10, 5, SCREEN_WIDTH*2/3, 35);
+//        [cell addSubview:self.txtRedPicker];
+//        NSDictionary* item = self.arrayRed[self.redIndex];
+//        self.txtRedPicker.text =[NSString stringWithFormat:@"[%@]%@",[item objectForKey:@"type_money"],[item objectForKey:@"type_name"]];
+//
+//        UIButton* btnUse = [UIButton buttonWithType:UIButtonTypeCustom];
+//        btnUse.frame = CGRectMake(SCREEN_WIDTH-90, 5, 80, 35);
+//        [btnUse setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//        [btnUse setTitleColor:[UIColor darkGrayColor] forState:UIControlStateSelected];
+//        [btnUse setTitle:Localized(@"Use_txt") forState:UIControlStateNormal];
+//        [btnUse setTitle:Localized(@"Used_txt") forState:UIControlStateSelected];
+//        btnUse.layer.masksToBounds = YES;
+//        btnUse.layer.cornerRadius = 5.f;
+//        btnUse.layer.borderColor = theme_line_color.CGColor;
+//        btnUse.layer.borderWidth = 1.f;
+//        btnUse.selected = self.useRed;
+//        //btnUse.enabled = self.useRed;
+//        [btnUse addTarget:self action:@selector(useRedTouch:) forControlEvents:UIControlEventTouchUpInside];
+//        [cell.contentView addSubview:btnUse];
+        UIButton* coupon_btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        coupon_btn.frame = CGRectMake(0, 0, SCREEN_WIDTH,45);
+        [coupon_btn addTarget:self action:@selector(coupon_select) forControlEvents:UIControlEventTouchUpInside];
+        UILabel* coupon_name = [[UILabel alloc]init];
+        coupon_name.frame = CGRectMake(10, 5, SCREEN_WIDTH*2/3, 35);
+        UILabel* coupon_distance = [[UILabel alloc]init];
+        coupon_distance.textColor = [UIColor redColor];
+        coupon_distance.textAlignment = NSTextAlignmentRight;
+        coupon_distance.frame = CGRectMake(SCREEN_WIDTH-100, 5, 80, 35);
         
-        UIButton* btnUse = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnUse.frame = CGRectMake(SCREEN_WIDTH-90, 5, 80, 35);
-        [btnUse setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [btnUse setTitleColor:[UIColor darkGrayColor] forState:UIControlStateSelected];
-        [btnUse setTitle:Localized(@"Use_txt") forState:UIControlStateNormal];
-        [btnUse setTitle:Localized(@"Used_txt") forState:UIControlStateSelected];
-        btnUse.layer.masksToBounds = YES;
-        btnUse.layer.cornerRadius = 5.f;
-        btnUse.layer.borderColor = theme_line_color.CGColor;
-        btnUse.layer.borderWidth = 1.f;
-        btnUse.selected = self.useRed;
-        //btnUse.enabled = self.useRed;
-        [btnUse addTarget:self action:@selector(useRedTouch:) forControlEvents:UIControlEventTouchUpInside];
-        [cell.contentView addSubview:btnUse];
+        UIImageView* img_view = [[UIImageView alloc]init];
+        [img_view setImage:[UIImage imageNamed:@"icon-arrow-right"]];
+        img_view.frame = CGRectMake(SCREEN_WIDTH - 15, 15, 8, 14);
+        if(self.useRed){
+            MRedEnvelopes* redlop = [[MRedEnvelopes alloc]init];
+            [redlop setValuesForKeysWithDictionary:[self.arrayRed objectAtIndex:self.redIndex]];
+            
+            coupon_name.text = redlop.name;
+            coupon_distance.text = [NSString stringWithFormat:@"$%.2f",[redlop.money doubleValue]];
+        }else{
+            coupon_name.text = @"";
+            coupon_distance.text = [NSString stringWithFormat:@"$%.2f",self.discountPrice];
+        }
         
+        [cell addSubview:coupon_btn];
+        [coupon_btn addSubview:coupon_name];
+        [coupon_btn addSubview:coupon_distance];
+        [coupon_btn addSubview:img_view];
         return cell;
-        
     }
     
     return nil;
+}
+
+-(void)coupon_select{
+    NSLog(@"garfunkel_log:select_coupon");
+    CouponSelect* controller = [[CouponSelect alloc]init];
+    NSMutableArray* couponArray = [[NSMutableArray alloc]init];
+    for(NSDictionary* dict in self.arrayRed){
+        MRedEnvelopes* redlop = [[MRedEnvelopes alloc]init];
+        [redlop setValuesForKeysWithDictionary:dict];
+        [couponArray addObject:redlop];
+    }
+    controller.arrayData = couponArray;
+    UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
+    //        nav.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    [nav.navigationBar setBackgroundColor:theme_navigation_color];
+    [nav.navigationBar setBarTintColor:theme_navigation_color];
+    [nav.navigationBar setTintColor:theme_default_color];
+    [self.parentViewController presentViewController:nav animated:YES completion:nil];
 }
 
 -(void)guigeBtnClicked:(UIButton *)button {
@@ -1351,7 +1463,7 @@
     
     _remarkLable.numberOfLines = 10;
     
-    NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndex:1];
+    NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndex:2];
     [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
@@ -1467,30 +1579,36 @@
         self.btnAlipay.selected = NO;
         self.btnFacePay.selected = NO;
         self.btnCredit.selected = NO;
+        self.btnBalance.selected = NO;
         [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-enter"]];
         [self.imgAli setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgFace setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgBalance setImage:[UIImage imageNamed:@"icon-address-default"]];
         self.goodsSumPrice = self.onLinePrice;
     }else if(sender == self.btnAlipay){
         self.btnWeXinPay.selected = NO;
         self.btnAlipay.selected = YES;
         self.btnFacePay.selected = NO;
         self.btnCredit.selected = NO;
+        self.btnBalance.selected = NO;
         [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgAli setImage:[UIImage imageNamed:@"icon-address-enter"]];
         [self.imgFace setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgBalance setImage:[UIImage imageNamed:@"icon-address-default"]];
         self.goodsSumPrice = self.onLinePrice;
     }else if(sender == self.btnCredit){
         self.btnWeXinPay.selected = NO;
         self.btnAlipay.selected = NO;
         self.btnFacePay.selected = NO;
         self.btnCredit.selected = YES;
+        self.btnBalance.selected = NO;
         [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgAli setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgFace setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-enter"]];
+        [self.imgBalance setImage:[UIImage imageNamed:@"icon-address-default"]];
         self.goodsSumPrice = self.onLinePrice;
         self.tipView.hidden = NO;
         for(NSLayoutConstraint* con in [self.tipView constraints]){
@@ -1499,19 +1617,42 @@
                 [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
             }
         }
-        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 535);
-    }else{
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 575);
+    }else if(sender == self.btnBalance){
+        self.btnWeXinPay.selected = NO;
+        self.btnAlipay.selected = NO;
+        self.btnFacePay.selected = NO;
+        self.btnCredit.selected = NO;
+        self.btnBalance.selected = YES;
+        [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgAli setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgFace setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
+        [self.imgBalance setImage:[UIImage imageNamed:@"icon-address-enter"]];
+        self.tipView.hidden = NO;
+        for(NSLayoutConstraint* con in [self.tipView constraints]){
+            if([con firstAttribute] == NSLayoutAttributeHeight){
+                [self.tipView removeConstraint:con];
+                [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
+            }
+        }
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 575);
+    }
+    else
+    {
         self.btnWeXinPay.selected = NO;
         self.btnAlipay.selected = NO;
         self.btnFacePay.selected = YES;
         self.btnCredit.selected = NO;
+        self.btnBalance.selected = NO;
         [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgAli setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgFace setImage:[UIImage imageNamed:@"icon-address-enter"]];
         [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
-        self.discountPrice =0.00;
-        self.goodsSumPrice = self.offLinePrice;
-        self.useRed = NO;
+        [self.imgBalance setImage:[UIImage imageNamed:@"icon-address-default"]];
+//        self.discountPrice = 0.00;
+//        self.goodsSumPrice = self.offLinePrice;
+//        self.useRed = NO;
         self.tipView.hidden = YES;
         for(NSLayoutConstraint* con in [self.tipView constraints]){
             if([con firstAttribute] == NSLayoutAttributeHeight){
@@ -1519,7 +1660,7 @@
                 [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0.f]];
             }
         }
-        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 424);
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 464);
     }
     [self updatePrice];
     [self.HUD hide:YES afterDelay:1];
@@ -1541,6 +1682,8 @@
                 payType = @"1";
             else if(self.btnCredit.selected)//信用卡支付
                 payType = @"3";
+            else if(self.btnBalance.selected)//余额支付
+                payType = @"4";
             else //货到付款
                 payType = @"0";
             
@@ -1551,21 +1694,30 @@
             
             
             /*begin zeng jun  2015-12-27  得到使用红包的编号 */
-            NSString* bonus_use_id;
-            if(self.useRed){
-                NSString* emptybonus_use_id = [self.arrayRed[self.redIndex] objectForKey:@"items"];
-                bonus_use_id = emptybonus_use_id;
-            }else{
-                bonus_use_id = @"0";
-            }
+//            NSString* bonus_use_id;
+//            if(self.useRed){
+//                NSString* emptybonus_use_id = [self.arrayRed[self.redIndex] objectForKey:@"items"];
+//                bonus_use_id = emptybonus_use_id;
+//            }else{
+//                bonus_use_id = @"0";
+//            }
             /*end zeng jun  2015-12-27*/
             
             
            
             NSString *str = [self.txtRemark.text stringByAppendingString:_endString];
             
+            //优惠券
+            NSString *coupon_id = @"-1";
+            if(self.useRed){
+                MRedEnvelopes* redlop = [[MRedEnvelopes alloc]init];
+                [redlop setValuesForKeysWithDictionary:[self.arrayRed objectAtIndex:self.redIndex]];
+                
+                coupon_id = redlop.rowiID;
+            }
+            
             //NSDictionary* arg = @{@"ince":@"save_order_cer",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"addr_item_id":item.rowID,@"pay_type":payType,@"order_mark":str,@"bonus_use":bonus_use_id,@"cer_type":@"2"};
-            NSDictionary* arg = @{@"a":@"saveOrder",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"addr_item_id":item.rowID,@"pay_type":payType,@"order_mark":str,@"bonus_use":bonus_use_id,@"cer_type":@"3",@"tip":[NSString stringWithFormat:@"%.2f",self.tip_fee]};
+            NSDictionary* arg = @{@"a":@"saveOrder",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"addr_item_id":item.rowID,@"pay_type":payType,@"order_mark":str,@"cer_type":@"3",@"tip":[NSString stringWithFormat:@"%.2f",self.tip_fee],@"coupon_id":coupon_id};
             
             NSLog(@"我神奇的口味字符串%@",str);
             
@@ -1580,7 +1732,7 @@
                         [self aliPay:[response objectForKey:@"main_id"]];
                     else if(self.btnCredit.selected)
                         [self creditPay:[response objectForKey:@"main_id"]];
-                    else{ //货到付款 不需要修改订单状态这里直接跳转到订单页就可以了。
+                    else{ //货到付款&余额支付 不需要修改订单状态这里直接跳转到订单页就可以了。
                         [self payResult:nil];
                     }
                 }else if(react == 400){
@@ -1633,7 +1785,7 @@
 -(void)creditPay:(NSString*)order_id{
     CreditPay* controller = [[CreditPay alloc]init];
     controller.tip_price = self.tip_fee;
-    controller.total_price = self.paySumPrice;
+    controller.total_price = self.paySumPrice - self.discountPrice;
     controller.order_id = order_id;
     
     UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
@@ -1678,16 +1830,18 @@
 }
 #pragma mark =====================================================  私有方法
 -(void)updatePrice{
+    NSLog(@"garfunkel_log:in updatePrice");
     //self.paySumPrice =self.goodsSumPrice-self.discountPrice+self.packagePrice+self.shipPrice-self.fullCut;
     self.labelFullCutPrice.text = [NSString stringWithFormat:@"-$%.2f",self.fullCut];
     self.labelDiscountPrice.text = [NSString stringWithFormat:@"-$%.2f",self.discountPrice];
     self.labelPackagePrice.text = [NSString stringWithFormat:@"$%.2f",self.packagePrice];
     self.labelExpectPrice.text = [NSString stringWithFormat:@"$%.2f",self.shipPrice];
     self.labelGoodsPrice.text = [NSString stringWithFormat:@"$%.2f",self.goodsSumPrice];
-    self.labelSumPrice.text =[NSString stringWithFormat:@"$%.2f",self.paySumPrice];
+    self.labelSumPrice.text =[NSString stringWithFormat:@"$%.2f",self.paySumPrice - self.discountPrice];
     self.labelTaxNum.text = [NSString stringWithFormat:@"$%.2f",self.taxPrice];
     
     [self changeTip];
+    self.isCoupon = NO;
     [self.tableView reloadData];
 }
 #pragma mark 微信支付
@@ -1829,6 +1983,22 @@
     [self payResult:message];
 }
 
+-(void)CouponReturn:(NSNotification*)notification{
+    NSLog(@"garfunkel_log:CouponReturn");
+    NSInteger coupone_row = [[notification object] integerValue];
+    self.isCoupon = YES;
+    if(coupone_row == -1){
+        self.useRed = NO;
+        self.discountPrice = 0.00;
+    }else{
+        self.useRed = YES;
+        self.redIndex = coupone_row;
+        MRedEnvelopes* redlop = [[MRedEnvelopes alloc]init];
+        [redlop setValuesForKeysWithDictionary:[self.arrayRed objectAtIndex:self.redIndex]];
+        self.discountPrice = [redlop.money doubleValue];
+    }
+}
+
 -(void)payUserCancelNotification:(NSNotification*)notification{
     NSString* message = [notification object];
     [self payResult:message];
@@ -1886,8 +2056,18 @@
     }
     
     self.tipFeeLabel.text = [NSString stringWithFormat:@"$%.2f",self.tip_fee];
-    if (self.btnCredit.selected) {
-        self.labelSumPrice.text =[NSString stringWithFormat:@"$%.2f",self.paySumPrice + self.tip_fee];
+    double totalPrice = self.paySumPrice - self.discountPrice + self.tip_fee;
+    //是否可以使用余额支付
+    if (totalPrice <= self.balance) {
+        self.btnBalance.enabled = YES;
+    }else{
+        self.btnBalance.enabled = NO;
+        if(self.btnBalance.selected){
+            [self btnPayWay:self.btnCredit];
+        }
+    }
+    if (self.btnCredit.selected || self.btnBalance.selected) {
+        self.labelSumPrice.text =[NSString stringWithFormat:@"$%.2f",totalPrice];
     }
 }
                                       

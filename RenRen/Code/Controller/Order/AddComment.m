@@ -71,7 +71,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
     self.mark = Localized(@"Let_review");
     [self layoutUI];
     self.automaticallyAdjustsScrollViewInsets = YES;
-    [self queryData];
+    //[self queryData];
     
 }
 
@@ -113,10 +113,10 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
     [self.commentView addSubview:self.labelComment];
     [self.commentView addSubview:self.txtComment];
     
-    NSArray* formats = @[@"H:|-defEdge-[mainScroll]-defEdge-|",@"H:|-defEdge-[btnConfirm]-defEdge-|", @"V:|-defEdge-[mainScroll][btnConfirm(==bottomHeight)]-defEdge-|",
+    NSArray* formats = @[@"H:|-defEdge-[mainScroll]-defEdge-|",@"H:|-defEdge-[btnConfirm]-defEdge-|", @"V:|-defEdge-[mainScroll][btnConfirm(==bottomHeight)]-bottomMargin-|",
                          @"H:|-defEdge-[timeView(==defWidth)]-defEdge-|",@"H:|-defEdge-[scoreView]-defEdge-|",@"H:|-defEdge-[collectionView]-defEdge-|",@"H:|-defEdge-[commentView]-defEdge-|",
                          @"V:|-defEdge-[timeView(==60)][scoreView(==140)][collectionView][commentView(==150)]-defEdge-|",
-                         @"H:|-leftEdge-[labelTime(==titleWidth)][btnOnTime][btnTimeOut]-leftEdge-|",
+                         @"H:|-leftEdge-[labelTime(==titleWidth)][btnOnTime(==150)][btnTimeOut]-leftEdge-|",
                          @"V:|-30-[labelTime]-defEdge-|", @"V:|-30-[btnOnTime]-defEdge-|", @"V:|-30-[btnTimeOut]-defEdge-|",
                          @"H:|-leftEdge-[labelScore]-leftEdge-|",
                          @"H:|-leftEdge-[labelTotal(==titleWidth)]-leftEdge-[starTotal(==125)]",
@@ -127,7 +127,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
                          @"H:|-leftEdge-[labelComment]-leftEdge-|",@"H:|-defEdge-[txtComment]-defEdge-|",
                          @"V:|-defEdge-[labelComment(==lineHeight)][txtComment]-defEdge-|"
                          ];
-    NSDictionary* metrics = @{ @"defEdge":@(0), @"leftEdge":@(10), @"topEdge":@(10), @"bottomHeight":@(50), @"titleWidth":@(80), @"defWidth":@(SCREEN_WIDTH), @"lineHeight":@(30)};
+    NSDictionary* metrics = @{ @"defEdge":@(0), @"leftEdge":@(10), @"topEdge":@(10), @"bottomHeight":@(50), @"bottomMargin":@(TabbarSafeBottomMargin),@"titleWidth":@(120), @"defWidth":@(SCREEN_WIDTH), @"lineHeight":@(30)};
     NSDictionary* views = @{ @"mainScroll":self.mainScroll, @"btnConfirm":self.btnConfirm,
                              @"timeView":self.timeView, @"scoreView":self.scoreView, @"collectionView":self.collectionView, @"commentView":self.commentView,
                              @"labelTime":self.labelTime, @"btnOnTime":self.btnOnTime, @"btnTimeOut":self.btnTimeOut,
@@ -266,10 +266,12 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
 
 #pragma mark =====================================================  SEL
 -(IBAction)confirmTouch:(id)sender{
+    [self showHUD];
     if ([self checkForm]) {
-        NSDictionary* arg = @{@"ince":@"add_comment",@"order_id":self.orderID,@"comment":self.txtComment.text,@"score":self.scoreToal,@"score1":self.scoreFood,@"score2":self.scoreService,@"righttime":self.onTime};    
+        NSDictionary* arg = @{@"a":@"add_comment",@"order_id":self.orderID,@"comment":self.txtComment.text,@"score":self.scoreToal,@"score1":self.scoreFood,@"score2":self.scoreService,@"righttime":self.onTime,@"uid":self.Identity.userInfo.userID};
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories updateComment:arg complete:^(NSInteger react, id obj, NSString *message) {
+            [self hidHUD];
             if(react == 1){
                 [self alertHUD: Localized(@"Success_txt") complete:^{
                     [self.navigationController popViewControllerAnimated:YES];

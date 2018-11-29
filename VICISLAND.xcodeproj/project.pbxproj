@@ -12,13 +12,18 @@
 		322FD70D2154CDD00092AB56 /* NewMapLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 322FD70C2154CDD00092AB56 /* NewMapLocation.m */; };
 		324729DC215A418F00B6AF48 /* Language.m in Sources */ = {isa = PBXBuildFile; fileRef = 324729DB215A418F00B6AF48 /* Language.m */; };
 		324729E6215A597E00B6AF48 /* Language.strings in Resources */ = {isa = PBXBuildFile; fileRef = 324729E8215A597E00B6AF48 /* Language.strings */; };
+		324B63F921A3BE5300FA8143 /* StoreMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 324B63F821A3BE5300FA8143 /* StoreMap.m */; };
 		3275FBFC218840EE00A27EE9 /* Agreement.m in Sources */ = {isa = PBXBuildFile; fileRef = 3275FBFB218840EE00A27EE9 /* Agreement.m */; };
 		32874D0B214E55BE0009F127 /* GoodsSpecController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32874D0A214E55BE0009F127 /* GoodsSpecController.m */; };
 		32874D0D214E90160009F127 /* icon-close-gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 32874D0C214E90160009F127 /* icon-close-gray.png */; };
+		3287C22A219D7F6000FEC9F3 /* CouponSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 3287C229219D7F6000FEC9F3 /* CouponSelect.m */; };
 		329566C22178685700DDD92C /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = 329566C12178685700DDD92C /* Card.m */; };
 		329566C52178764600DDD92C /* CardCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 329566C42178764600DDD92C /* CardCell.m */; };
 		329566C82178828800DDD92C /* EditCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 329566C72178828800DDD92C /* EditCard.m */; };
 		329566CA2178A96600DDD92C /* credit_card.png in Resources */ = {isa = PBXBuildFile; fileRef = 329566C92178A96500DDD92C /* credit_card.png */; };
+		32A3FDAA219ED7A70001C739 /* CouponCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A3FDA9219ED7A70001C739 /* CouponCode.m */; };
+		32A44DE921A652DB00AD1A8C /* Recharge.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A44DE821A652DB00AD1A8C /* Recharge.m */; };
+		32B3145C21ACE06B00E4FB6F /* PaySelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 32B3145B21ACE06B00E4FB6F /* PaySelect.m */; };
 		32B376FA218AF73900E9C31E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 32B376F9218AF73900E9C31E /* libc++.tbd */; };
 		32F88B6E2135354C0007C6CD /* Reg.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F88B6D2135354C0007C6CD /* Reg.m */; };
 		6101FA321D90E9BA009E8393 /* HRAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6101FA311D90E9BA009E8393 /* HRAdView.m */; };
@@ -560,12 +565,16 @@
 		324729DB215A418F00B6AF48 /* Language.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Language.m; sourceTree = "<group>"; };
 		324729E7215A597E00B6AF48 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Language.strings; sourceTree = "<group>"; };
 		324729E9215A59A400B6AF48 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Language.strings"; sourceTree = "<group>"; };
+		324B63F721A3BE5300FA8143 /* StoreMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StoreMap.h; sourceTree = "<group>"; };
+		324B63F821A3BE5300FA8143 /* StoreMap.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StoreMap.m; sourceTree = "<group>"; };
 		3274052A212567CB00579642 /* vicisland.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vicisland.entitlements; sourceTree = "<group>"; };
 		3275FBFA218840EE00A27EE9 /* Agreement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agreement.h; sourceTree = "<group>"; };
 		3275FBFB218840EE00A27EE9 /* Agreement.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Agreement.m; sourceTree = "<group>"; };
 		32874D09214E55BE0009F127 /* GoodsSpecController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsSpecController.h; sourceTree = "<group>"; };
 		32874D0A214E55BE0009F127 /* GoodsSpecController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsSpecController.m; sourceTree = "<group>"; };
 		32874D0C214E90160009F127 /* icon-close-gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-close-gray.png"; sourceTree = "<group>"; };
+		3287C228219D7F6000FEC9F3 /* CouponSelect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CouponSelect.h; sourceTree = "<group>"; };
+		3287C229219D7F6000FEC9F3 /* CouponSelect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CouponSelect.m; sourceTree = "<group>"; };
 		329566C02178685700DDD92C /* Card.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
 		329566C12178685700DDD92C /* Card.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
 		329566C32178764600DDD92C /* CardCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CardCell.h; sourceTree = "<group>"; };
@@ -573,6 +582,12 @@
 		329566C62178828800DDD92C /* EditCard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EditCard.h; sourceTree = "<group>"; };
 		329566C72178828800DDD92C /* EditCard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EditCard.m; sourceTree = "<group>"; };
 		329566C92178A96500DDD92C /* credit_card.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = credit_card.png; sourceTree = "<group>"; };
+		32A3FDA8219ED7A70001C739 /* CouponCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CouponCode.h; sourceTree = "<group>"; };
+		32A3FDA9219ED7A70001C739 /* CouponCode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CouponCode.m; sourceTree = "<group>"; };
+		32A44DE721A652DB00AD1A8C /* Recharge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Recharge.h; sourceTree = "<group>"; };
+		32A44DE821A652DB00AD1A8C /* Recharge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Recharge.m; sourceTree = "<group>"; };
+		32B3145A21ACE06B00E4FB6F /* PaySelect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaySelect.h; sourceTree = "<group>"; };
+		32B3145B21ACE06B00E4FB6F /* PaySelect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaySelect.m; sourceTree = "<group>"; };
 		32B376F9218AF73900E9C31E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.1.sdk/usr/lib/libc++.tbd"; sourceTree = DEVELOPER_DIR; };
 		32F88B6C2135354C0007C6CD /* Reg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reg.h; sourceTree = "<group>"; };
 		32F88B6D2135354C0007C6CD /* Reg.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reg.m; sourceTree = "<group>"; };
@@ -1483,6 +1498,8 @@
 				3222BC952176E1E0004B35A4 /* CreditPay.m */,
 				3275FBFA218840EE00A27EE9 /* Agreement.h */,
 				3275FBFB218840EE00A27EE9 /* Agreement.m */,
+				32B3145A21ACE06B00E4FB6F /* PaySelect.h */,
+				32B3145B21ACE06B00E4FB6F /* PaySelect.m */,
 			);
 			path = Pay;
 			sourceTree = "<group>";
@@ -2584,6 +2601,10 @@
 				329566C12178685700DDD92C /* Card.m */,
 				329566C62178828800DDD92C /* EditCard.h */,
 				329566C72178828800DDD92C /* EditCard.m */,
+				32A3FDA8219ED7A70001C739 /* CouponCode.h */,
+				32A3FDA9219ED7A70001C739 /* CouponCode.m */,
+				32A44DE721A652DB00AD1A8C /* Recharge.h */,
+				32A44DE821A652DB00AD1A8C /* Recharge.m */,
 			);
 			path = Mine;
 			sourceTree = "<group>";
@@ -2622,6 +2643,8 @@
 				F792FCAD1BEB20F000866FB5 /* GenerateOrder.m */,
 				F7F874BF1D113B5100544669 /* Car.h */,
 				F7F874C01D113B5100544669 /* Car.m */,
+				3287C228219D7F6000FEC9F3 /* CouponSelect.h */,
+				3287C229219D7F6000FEC9F3 /* CouponSelect.m */,
 			);
 			path = Shopping;
 			sourceTree = "<group>";
@@ -2644,6 +2667,8 @@
 				F7A595C51BE1E1A40013BBF2 /* StoreList.m */,
 				32874D09214E55BE0009F127 /* GoodsSpecController.h */,
 				32874D0A214E55BE0009F127 /* GoodsSpecController.m */,
+				324B63F721A3BE5300FA8143 /* StoreMap.h */,
+				324B63F821A3BE5300FA8143 /* StoreMap.m */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -3406,6 +3431,7 @@
 				617E30241DB6076B00EACACD /* HomeActive.m in Sources */,
 				816F8D1A1ED81EC50071B30E /* CustomSearchView.m in Sources */,
 				F7B00D611D17B5C500306D53 /* OrderConfirmCell.m in Sources */,
+				32B3145C21ACE06B00E4FB6F /* PaySelect.m in Sources */,
 				F79B05B51BED940C000FC5BB /* OrderCell.m in Sources */,
 				F7E3EE7F1BF2CAF600072108 /* GoodsFooter.m in Sources */,
 				6184DE781D3F4C5300FD874F /* FruitList.m in Sources */,
@@ -3425,6 +3451,7 @@
 				F7C704051D0FF25400504F5E /* BuyNowInfo.m in Sources */,
 				F7A194431BF6DA8B001A04BA /* SelectAddres.m in Sources */,
 				61FE05161DB7171A00ABF306 /* NetRepositories+Wang.m in Sources */,
+				32A3FDAA219ED7A70001C739 /* CouponCode.m in Sources */,
 				61FCCF231D1D0A8700753BE8 /* PresaleInfoFooter.m in Sources */,
 				619FD79A1D840C0700A78D52 /* ReceivesAddressCell.m in Sources */,
 				F7A7E1051CE1CB2700A5689B /* PointGoods.m in Sources */,
@@ -3466,6 +3493,7 @@
 				F7A596371BE1E1A40013BBF2 /* MArea.m in Sources */,
 				F78762AC1CC487310056FA15 /* OrderStatusCell.m in Sources */,
 				613027D61D7D0DA400666142 /* RandomSection.m in Sources */,
+				3287C22A219D7F6000FEC9F3 /* CouponSelect.m in Sources */,
 				F7BCBD5B1D1792EB002207AD /* OrderConfirmHeader.m in Sources */,
 				618C85F21D1CC7EC00ECF176 /* base64.m in Sources */,
 				F72816EB1D14FC1C0036098A /* MPresaleInfo.m in Sources */,
@@ -3499,6 +3527,7 @@
 				F72816E81D14EC520036098A /* PresaleInfoHeader.m in Sources */,
 				F7021C811C3E314600665385 /* About.m in Sources */,
 				F701EA151BE311F500633C7C /* HomeHeaderBanner.m in Sources */,
+				32A44DE921A652DB00AD1A8C /* Recharge.m in Sources */,
 				F701EA1A1BE3141500633C7C /* HomeHeaerZT.m in Sources */,
 				F70258241D05476800FF20C5 /* Presale.m in Sources */,
 				F7D232361D06710D00B9CAB5 /* PresaleCell.m in Sources */,
@@ -3534,6 +3563,7 @@
 				32874D0B214E55BE0009F127 /* GoodsSpecController.m in Sources */,
 				F794358E1BE3370700CE37E2 /* GoodsHeader.m in Sources */,
 				F7A595741BE1E1330013BBF2 /* main.m in Sources */,
+				324B63F921A3BE5300FA8143 /* StoreMap.m in Sources */,
 				F7AE86AB1D13C6F3004819BD /* FightGroupItemHeader.m in Sources */,
 				F7021C8A1C3E540600665385 /* HeaderEnum.m in Sources */,
 				F701EA231BE319EF00633C7C /* SpecialGoods.m in Sources */,

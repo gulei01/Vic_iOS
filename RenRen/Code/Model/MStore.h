@@ -122,5 +122,9 @@
  * 打包费
  */
 @property(nonatomic,strong) NSString* pack_fee;
+//garfunkel add 店铺坐标
+@property(nonatomic,strong) NSString* lng;
+@property(nonatomic,strong) NSString* lat;
+
 
 @end

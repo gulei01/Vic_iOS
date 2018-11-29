@@ -17,6 +17,7 @@
 #warning  notice
 @property(nonatomic,copy) NSString* rowiID;
 @property(nonatomic,copy) NSString* name;
+@property(nonatomic,copy) NSString* desc;
 @property(nonatomic,copy) NSString* limitMoney;
 @property(nonatomic,copy) NSString* money;
 @property(nonatomic,copy) NSString* beginDate;

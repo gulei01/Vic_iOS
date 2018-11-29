@@ -7,6 +7,7 @@
 //
 
 #import "StoreInfoController.h"
+#import "StoreMap.h"
 
 @interface StoreInfoController ()<UIAlertViewDelegate>
 
@@ -156,9 +157,25 @@
     return cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if(indexPath.row == 2){
+        NSLog(@"garfunkel_log:%@ %@",self.entity.lat,self.entity.lng);
+        StoreMap* controller = [[StoreMap alloc]init];
+        controller.store = self.entity;
+        UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:controller];
+        [nav.navigationBar setBackgroundColor:theme_navigation_color];
+        [nav.navigationBar setBarTintColor:theme_navigation_color];
+        [nav.navigationBar setTintColor:theme_default_color];
+        [self.parentViewController presentViewController:nav animated:YES completion:nil];
+    }
+}
+
 #pragma mark =====================================================  <UITableViewDelegate>
 - (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
-    return NO;
+    if(indexPath.row == 2)
+        return YES;
+    else
+        return NO;
 }
 #pragma mark =====================================================  <UIAlertViewDelegate>
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{

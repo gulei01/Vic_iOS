@@ -27,7 +27,7 @@
 
 -(void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
-     self.navigationItem.title = @"我的红包";
+     self.navigationItem.title = Localized(@"My_coupon");
 }
 
 - (void)didReceiveMemoryWarning {
@@ -46,7 +46,7 @@
 #pragma mark =====================================================  数据源
 -(void)queryData{
     
-    NSDictionary* arg = @{@"ince":@"get_user_bonus",@"uid":self.Identity.userInfo.userID};
+    NSDictionary* arg = @{@"a":@"getCouponByUser",@"uid":self.Identity.userInfo.userID};
   
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories queryRedEnvelop:arg complete:^(NSInteger react, NSArray *list, NSString *message) {

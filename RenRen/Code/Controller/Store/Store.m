@@ -235,6 +235,8 @@
             self.entity.time = item.time;
             self.entity.pack_fee = item.pack_fee;
             self.entity.arrayActive = item.arrayActive;
+            self.entity.lng = item.lng;
+            self.entity.lat = item.lat;
             
             [self loadData:self.entity];
         }else{

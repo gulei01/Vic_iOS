@@ -17,6 +17,8 @@
 #import "MyTuan.h"
 #import "Language.h"
 #import "Card.h"
+#import "CouponCode.h"
+#import "Recharge.h"
 
 @interface Mine ()<UIAlertViewDelegate>
 
@@ -25,6 +27,7 @@
 @property(nonatomic,strong) UILabel* labelName;
 @property(nonatomic,strong) UIButton* btnLogout;
 @property(nonatomic,strong) UILabel* labelPoint;
+@property(nonatomic,strong) UIButton* btnRecharge;
 
 @property(nonatomic,strong) NSArray* arrayData;
 @property(nonatomic,strong) NSArray* arrayImage;
@@ -56,9 +59,9 @@
     self.title = Localized(@"Personal_center");
     
 //    self.arrayData = @[@"管理地址",@"我的优惠券", @"我的拼团",@"积分商城",@"意见反馈",@"商务合作",@"帮助中心",@"关于我们", @"清除本地缓存"];
-    self.arrayData = @[Localized(@"Manager_address"),Localized(@"Wallet_txt"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"), Localized(@"Clear_cache")];
+    self.arrayData = @[Localized(@"Manager_address"),Localized(@"Wallet_txt"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"),Localized(@"EXCHANGE_COUPON"), Localized(@"Clear_cache")];
 //    self.arrayImage = @[@"icon-address",@"icon-red",@"icon-mytuan",@"icon-points",@"icon-feedback",@"icon-together",@"icon-help-mine",@"icon-about", @"icon-del"];
-    self.arrayImage = @[@"icon-address",@"credit_card",@"icon-red",@"icon-about",@"icon-help-mine", @"icon-del"];
+    self.arrayImage = @[@"icon-address",@"credit_card",@"icon-red",@"icon-about",@"icon-help-mine",@"icon-preferential", @"icon-del"];
     
     
     [self layoutUI];
@@ -81,7 +84,7 @@
 }
 
 -(void)updateTableText{
-    self.arrayData = @[Localized(@"Manager_address"),Localized(@"Wallet_txt"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"), Localized(@"Clear_cache")];
+    self.arrayData = @[Localized(@"Manager_address"),Localized(@"Wallet_txt"),Localized(@"My_coupon"),Localized(@"About_us"),Localized(@"Language"),Localized(@"EXCHANGE_COUPON"), Localized(@"Clear_cache")];
     [self.tableView reloadData];
 }
 
@@ -120,9 +123,18 @@
     self.labelPoint = [[UILabel alloc]init];
     self.labelPoint.textAlignment = NSTextAlignmentCenter;
     self.labelPoint.textColor = theme_title_color;
-    self.labelPoint.text = [NSString stringWithFormat:@"%@  %@: 0",Localized(@"Ordin_member"),Localized(@"Integral_txt")];
-    self.labelPoint.hidden = YES;
+    self.labelPoint.text = [NSString stringWithFormat:@"%@: $0.00",Localized(@"Balance_txt")];
     [self.headerView addSubview:self.labelPoint];
+    
+    self.btnRecharge = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.btnRecharge.backgroundColor = theme_navigation_color;
+    [self.btnRecharge setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.btnRecharge setTitle:Localized(@"Recharge_txt") forState:UIControlStateNormal];
+    self.btnRecharge.titleLabel.font =[UIFont systemFontOfSize:14.f];
+    self.btnRecharge.layer.masksToBounds = YES;
+    self.btnRecharge.layer.cornerRadius =5.f;
+    [self.btnRecharge addTarget:self action:@selector(recharge) forControlEvents:UIControlEventTouchUpInside];
+    [self.headerView addSubview:self.btnRecharge];
     
     
     self.tableView.tableHeaderView = self.headerView;
@@ -199,9 +211,9 @@
             break;
         case 3:
         {
-//            RedEnvelopes* controller = [[RedEnvelopes alloc]init];
-//            controller.hidesBottomBarWhenPushed = YES;
-//            [self.navigationController pushViewController:controller animated:YES];
+            RedEnvelopes* controller = [[RedEnvelopes alloc]init];
+            controller.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:controller animated:YES];
         }
             break;
             }
@@ -217,6 +229,7 @@
     self.labelName.translatesAutoresizingMaskIntoConstraints = NO;
     self.btnLogout.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelPoint.translatesAutoresizingMaskIntoConstraints = NO;
+    self.btnRecharge.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.PhotoAvatar addConstraint:[NSLayoutConstraint constraintWithItem:self.PhotoAvatar attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:100.f]];
     [self.PhotoAvatar addConstraint:[NSLayoutConstraint constraintWithItem:self.PhotoAvatar attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:100.f]];
@@ -235,9 +248,13 @@
     
     [self.labelPoint addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPoint attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH*2/3]];
     [self.labelPoint addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPoint attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
-    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPoint attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelName attribute:NSLayoutAttributeBottom multiplier:1.0 constant:10.f]];
+    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPoint attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelName attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPoint attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.headerView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.f]];
     
+    [self.btnRecharge addConstraint:[NSLayoutConstraint constraintWithItem:self.btnRecharge attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:SCREEN_WIDTH/4]];
+    [self.btnRecharge addConstraint:[NSLayoutConstraint constraintWithItem:self.btnRecharge attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:40.f]];
+    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnRecharge attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPoint attribute:NSLayoutAttributeBottom multiplier:1.0 constant:8.f]];
+    [self.headerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnRecharge attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.headerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:SCREEN_WIDTH*3/8]];
     
 }
 
@@ -283,19 +300,20 @@
 #pragma mark =====================================================  DataSource
 -(void)queryData{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSDictionary* arg = @{@"ince":@"get_user_info",@"uid":self.Identity.userInfo.userID};
+        NSDictionary* arg = @{@"a":@"get_user_info",@"uid":self.Identity.userInfo.userID};
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories netConfirm:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
             if(react == 1){
                 NSDictionary* dict = [response objectForKey:@"info"];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.labelPoint.text = [NSString stringWithFormat:@"%@  %@: %@",[dict objectForKey:@"level"],Localized(@"Integral_txt"),[dict objectForKey:@"credit"]];
+                    double money = [[dict objectForKey:@"now_money"] doubleValue];
+                    self.labelPoint.text = [NSString stringWithFormat:@"%@: $%.2f",Localized(@"Balance_txt"),money];
                 });
                 
             }else if(react == 400){
                 [self alertHUD:message];
             }else{
-                self.labelPoint.text = [NSString stringWithFormat:@"%@  %@: 0",Localized(@"Ordin_member"),Localized(@"Integral_txt")];
+                self.labelPoint.text = [NSString stringWithFormat:@"%@: .$0.00",Localized(@"Balance_txt")];
                 [self alertHUD:message];
             }
         }];
@@ -390,6 +408,13 @@
             break;
         case 5:
         {
+            CouponCode* controller = [[CouponCode alloc]init];
+            controller.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:controller animated:YES];
+        }
+            break;
+        case 6:
+        {
             if(!self.alertClear){
                 self.alertClear = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"Want_to_clear_cache") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
             }
@@ -410,6 +435,14 @@
     
     
 }
+
+-(void)recharge{
+    NSLog(@"garfunkel_log:clickRecharge");
+    Recharge* controller = [[Recharge alloc]init];
+    controller.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:controller animated:YES];
+}
+
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if(alertView == self.alertClear){

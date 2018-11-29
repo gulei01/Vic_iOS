@@ -441,6 +441,7 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
 //
 //}
 -(void)updateFromCart:(NSNotification*)notification{
+    [self hidHUD];
     MCar* car = (MCar*)[notification object];
 //    for(int i=0; i<[car.arrayStore count];i++){
 //        MStore *store = car.arrayStore[i];
@@ -483,7 +484,9 @@ static NSString * const reuseIdentifier = @"GoodsV2Cell";
 }
 #pragma mark =====================================================  GoodsCell 协议实现
 -(void)addToShopCar:(MGoods *)item num:(NSString *)num{
+    NSLog(@"garfunkel_log:intoLinkAddCar");
     if(self.Identity.userInfo.isLogin){
+        [self showHUD];
         //NSDictionary* arg = @{@"ince":@"addcart",@"fid":item.rowID,@"uid":self.Identity.userInfo.userID,@"num":@"1"};
         NSDictionary* arg = @{@"a":@"addCart",@"fid":item.rowID,@"uid":self.Identity.userInfo.userID,@"num":num};
         NetRepositories* repositories = [[NetRepositories alloc]init];

@@ -13,6 +13,7 @@
 
 //garfunkel add
 #define NotificationRegSuuccess @"NotificationRegSuuccess" //注册成功返回
+#define NotificationCouponReturn @"NotificationCouponReturn" //
 
 #define NotificationPaySuccess @"NotificationPaySuccess" //支付成功
 
