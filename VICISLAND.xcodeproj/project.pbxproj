@@ -25,6 +25,9 @@
 		32A44DE921A652DB00AD1A8C /* Recharge.m in Sources */ = {isa = PBXBuildFile; fileRef = 32A44DE821A652DB00AD1A8C /* Recharge.m */; };
 		32B3145C21ACE06B00E4FB6F /* PaySelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 32B3145B21ACE06B00E4FB6F /* PaySelect.m */; };
 		32B376FA218AF73900E9C31E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 32B376F9218AF73900E9C31E /* libc++.tbd */; };
+		32CCBA1121DDB1F900E06E4D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 32CCBA1021DDB1F900E06E4D /* GoogleService-Info.plist */; };
+		32F0DF9B21E76CB2006A2232 /* TrackingDeliver.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F0DF9A21E76CB2006A2232 /* TrackingDeliver.m */; };
+		32F554DE21E617F9003BC351 /* GoodDetail.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F554DD21E617F9003BC351 /* GoodDetail.m */; };
 		32F88B6E2135354C0007C6CD /* Reg.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F88B6D2135354C0007C6CD /* Reg.m */; };
 		6101FA321D90E9BA009E8393 /* HRAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6101FA311D90E9BA009E8393 /* HRAdView.m */; };
 		61070D231D9216DC00EFA36C /* RandomShowOrderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 61070D221D9216DC00EFA36C /* RandomShowOrderCell.m */; };
@@ -589,6 +592,11 @@
 		32B3145A21ACE06B00E4FB6F /* PaySelect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaySelect.h; sourceTree = "<group>"; };
 		32B3145B21ACE06B00E4FB6F /* PaySelect.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaySelect.m; sourceTree = "<group>"; };
 		32B376F9218AF73900E9C31E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.1.sdk/usr/lib/libc++.tbd"; sourceTree = DEVELOPER_DIR; };
+		32CCBA1021DDB1F900E06E4D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		32F0DF9921E76CB2006A2232 /* TrackingDeliver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TrackingDeliver.h; sourceTree = "<group>"; };
+		32F0DF9A21E76CB2006A2232 /* TrackingDeliver.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrackingDeliver.m; sourceTree = "<group>"; };
+		32F554DC21E617F9003BC351 /* GoodDetail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodDetail.h; sourceTree = "<group>"; };
+		32F554DD21E617F9003BC351 /* GoodDetail.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodDetail.m; sourceTree = "<group>"; };
 		32F88B6C2135354C0007C6CD /* Reg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Reg.h; sourceTree = "<group>"; };
 		32F88B6D2135354C0007C6CD /* Reg.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Reg.m; sourceTree = "<group>"; };
 		6101FA301D90E9BA009E8393 /* HRAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HRAdView.h; sourceTree = "<group>"; };
@@ -2302,6 +2310,7 @@
 		F7A595711BE1E1330013BBF2 /* RenRen */ = {
 			isa = PBXGroup;
 			children = (
+				32CCBA1021DDB1F900E06E4D /* GoogleService-Info.plist */,
 				3274052A212567CB00579642 /* vicisland.entitlements */,
 				F7A5958A1BE1E1A40013BBF2 /* Code */,
 				81D5BC161ED800D400FDDA0B /* Resources */,
@@ -2632,6 +2641,8 @@
 				61A7BDC61D3DFE9A00B33A1C /* KCAnnotation.m */,
 				611496631DBB0019004AB9D1 /* AddCommentV2.h */,
 				611496641DBB0019004AB9D1 /* AddCommentV2.m */,
+				32F0DF9921E76CB2006A2232 /* TrackingDeliver.h */,
+				32F0DF9A21E76CB2006A2232 /* TrackingDeliver.m */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -2669,6 +2680,8 @@
 				32874D0A214E55BE0009F127 /* GoodsSpecController.m */,
 				324B63F721A3BE5300FA8143 /* StoreMap.h */,
 				324B63F821A3BE5300FA8143 /* StoreMap.m */,
+				32F554DC21E617F9003BC351 /* GoodDetail.h */,
+				32F554DD21E617F9003BC351 /* GoodDetail.m */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -3058,6 +3071,7 @@
 				816F8D151ED81EC50071B30E /* citydict.plist in Resources */,
 				81D5BD571ED800D400FDDA0B /* icon-line-ver.png in Resources */,
 				81D5BD761ED800D400FDDA0B /* icon-point-point.png in Resources */,
+				32CCBA1121DDB1F900E06E4D /* GoogleService-Info.plist in Resources */,
 				81D5BD471ED800D400FDDA0B /* icon-fruit-add@2x.png in Resources */,
 				81D5BD601ED800D400FDDA0B /* icon-manjian-home.png in Resources */,
 				81D5BD141ED800D400FDDA0B /* home_newActThree_second@3x.png in Resources */,
@@ -3432,6 +3446,7 @@
 				816F8D1A1ED81EC50071B30E /* CustomSearchView.m in Sources */,
 				F7B00D611D17B5C500306D53 /* OrderConfirmCell.m in Sources */,
 				32B3145C21ACE06B00E4FB6F /* PaySelect.m in Sources */,
+				32F0DF9B21E76CB2006A2232 /* TrackingDeliver.m in Sources */,
 				F79B05B51BED940C000FC5BB /* OrderCell.m in Sources */,
 				F7E3EE7F1BF2CAF600072108 /* GoodsFooter.m in Sources */,
 				6184DE781D3F4C5300FD874F /* FruitList.m in Sources */,
@@ -3509,6 +3524,7 @@
 				32F88B6E2135354C0007C6CD /* Reg.m in Sources */,
 				F7C24A1E1CC0C548005F1E56 /* StoreCommentCell.m in Sources */,
 				F7A596281BE1E1A40013BBF2 /* LocationSection.m in Sources */,
+				32F554DE21E617F9003BC351 /* GoodDetail.m in Sources */,
 				F7A5962E1BE1E1A40013BBF2 /* SearchGoods.m in Sources */,
 				6127E1B61D276B7000EC4D43 /* TuanRuleInfo.m in Sources */,
 				61FA5D131D62BB7600B1FB85 /* MapLocationCurrentCell.m in Sources */,
@@ -3808,7 +3824,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
 				PRODUCT_NAME = Tutti;
 				PROVISIONING_PROFILE = "a7495988-8939-4224-99a6-491066b804c9";
-				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Release;
+				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Debug;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
@@ -4001,7 +4017,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
 				PRODUCT_NAME = Tutti;
 				PROVISIONING_PROFILE = "a7495988-8939-4224-99a6-491066b804c9";
-				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Release;
+				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Debug;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s";

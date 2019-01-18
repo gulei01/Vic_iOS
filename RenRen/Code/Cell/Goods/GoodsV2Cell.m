@@ -19,6 +19,7 @@
 @property(nonatomic,strong) UIButton* btnSub;
 @property(nonatomic,strong) UIButton* btnSelect;
 @property(nonatomic,strong) UILabel* specSelectNum;
+@property(nonatomic,strong) UILabel* labelDeposit;
 
 @end
 
@@ -52,13 +53,18 @@
     [self addSubview:self.btnSub];
     [self addSubview:self.btnSelect];
     [self addSubview:self.specSelectNum];
+    [self addSubview:self.labelDeposit];
    
     
     
 //    [self layoutConstains];
     
     NSArray* formats = @[@"H:|-leftEdge-[imgDefault(==100)]-spaceEdge-|", @"V:|-padding-[imgDefault(==imgSize)]-padding-|",
-                         @"H:[imgDefault]-padding-[labelTitle]-padding-|",@"H:[imgDefault]-padding-[labelMiaoSha(==30)]",@"H:[imgDefault]-padding-[labelPrice]-defEdge-|",@"V:|-padding-[labelTitle(==30)]-(-2)-[labelMiaoSha(==16)]-2-[labelPrice(==18)]-padding-|",
+                         @"H:[imgDefault]-padding-[labelTitle]-padding-|",@"H:[imgDefault]-padding-[labelMiaoSha(==30)]",
+                         @"H:[imgDefault]-padding-[labelPrice]-defEdge-|",
+                         @"H:[imgDefault]-padding-[labelDeposit]-defEdge-|",
+                         @"V:|-padding-[labelTitle(==35)]-(-2)-[labelDeposit(==16)]",
+                         @"V:|-padding-[labelTitle(==35)]-(-2)-[labelMiaoSha(==16)]-2-[labelPrice(==18)]-padding-|",
                          @"H:|-90-[imgRecommend(==30)]",@"V:|-defEdge-[imgRecommend(==30)]",
                           @"H:[btnSub(==iconSize)][addNumLabel(==30)][btnAdd(==iconSize)]-padding-|", @"V:[btnAdd(==iconSize)]-padding-|",
                          @"V:[btnSub(==iconSize)]-padding-|",@"V:[addNumLabel(==iconSize)]-padding-|",
@@ -66,7 +72,7 @@
                          @"H:[specSelectNum(==16)]-2-|",@"V:[specSelectNum(==16)]-25-|"
                          ];
     NSDictionary* metrics = @{ @"defEdge":@(0),@"spaceEdge":@(SCREEN_WIDTH-90-80), @"leftEdge":@(10),  @"padding":@(7),@"topEdge":@(10), @"imgSize":@(imgSize),@"iconSize":@(25),@"selectSize":@(70)};
-    NSDictionary* views = @{ @"imgDefault":self.imgDefault, @"imgRecommend":self.imgRecommend, @"btnAdd":self.btnAdd,@"btnSub":self.btnSub,@"addNumLabel":self.addNumLabel, @"labelTitle":self.labelTitle, @"labelMiaoSha":self.labelMiaoSha, @"labelPrice":self.labelPrice, @"btnSelect":self.btnSelect,@"specSelectNum":self.specSelectNum};
+    NSDictionary* views = @{ @"imgDefault":self.imgDefault, @"imgRecommend":self.imgRecommend, @"btnAdd":self.btnAdd,@"btnSub":self.btnSub,@"addNumLabel":self.addNumLabel, @"labelTitle":self.labelTitle, @"labelMiaoSha":self.labelMiaoSha, @"labelPrice":self.labelPrice, @"btnSelect":self.btnSelect,@"specSelectNum":self.specSelectNum,@"labelDeposit":self.labelDeposit};
     
     [formats enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         //NSLog( @"%@ %@",[self class],obj);
@@ -96,6 +102,10 @@
 //    if([num integerValue] == 1)
 //        [[NSNotificationCenter defaultCenter]postNotificationName:FXLShoppingSelectingBtn object:nil userInfo:@{@"fxlShoppingSelectingBtn":button}];
     //NSLog(@"garfunkel add_cart:%@",num);
+}
+
+-(void)showGoodDetail{
+    [[NSNotificationCenter defaultCenter]postNotificationName:NotificationOpenGoodDetail object:@{@"item":self.entity}];
 }
 
 -(void)selectTouch:(UIButton *)button{
@@ -163,6 +173,12 @@
                 self.addNumLabel.text = entity.quantity;
             }
         }
+        
+        if([entity.deposit floatValue] > 0){
+            self.labelDeposit.text = [NSString stringWithFormat:@"%@:$%@",Localized(@"Deposit_price"),entity.deposit];
+        }else{
+            self.labelDeposit.text = @"";
+        }
     }
 }
 
@@ -170,9 +186,11 @@
 -(UIImageView *)imgDefault{
     if(!_imgDefault){
         _imgDefault = [[UIImageView alloc]init];
-        _imgDefault.userInteractionEnabled = NO;
 //        UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapPhotoTouch:)];
 //        [_imgDefault addGestureRecognizer:tap];
+        _imgDefault.userInteractionEnabled=YES;
+        UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showGoodDetail)];
+        [_imgDefault addGestureRecognizer:labelTapGestureRecognizer];
         _imgDefault.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _imgDefault;
@@ -192,10 +210,14 @@
     if(!_labelTitle){
         _labelTitle = [[UILabel alloc]init];
         _labelTitle.font = [UIFont systemFontOfSize:14.f];
-        _labelTitle.numberOfLines = 2;
-        _labelTitle.lineBreakMode = NSLineBreakByClipping;
+        _labelTitle.numberOfLines = 0;
+        _labelTitle.lineBreakMode = NSLineBreakByWordWrapping;
         _labelTitle.preferredMaxLayoutWidth = self.frame.size.width-10;
         _labelTitle.textAlignment = NSTextAlignmentLeft;
+        _labelTitle.userInteractionEnabled=YES;
+        UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showGoodDetail)];
+        [_labelTitle addGestureRecognizer:labelTapGestureRecognizer];
+        
         _labelTitle.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _labelTitle;
@@ -285,6 +307,19 @@
         _specSelectNum.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _specSelectNum;
+}
+
+-(UILabel *)labelDeposit{
+    if(!_labelDeposit){
+        _labelDeposit = [[UILabel alloc]init];
+        _labelDeposit.textColor = [UIColor grayColor];
+        _labelDeposit.font = [UIFont systemFontOfSize:12.f];
+        
+        _labelDeposit.text = Localized(@"Deposit_price");
+        
+        _labelDeposit.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _labelDeposit;
 }
 
 @end

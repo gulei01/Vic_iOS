@@ -38,5 +38,6 @@ target :RenRen do
     pod 'GoogleMaps'
     pod 'GooglePlaces'
     pod 'GooglePlacePicker'
-    
+    pod 'Firebase/Core'
+    pod 'Firebase/Messaging'
 end

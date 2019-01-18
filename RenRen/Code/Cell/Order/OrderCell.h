@@ -18,6 +18,7 @@
 -(void)orderCancelOrder:(MOrder*)item;
 -(void)orderAddComment:(MOrder*)item;
 -(void)orderDelete:(OrderCell*)tableViewCell item:(MOrder*)item;
+-(void)orderTracking:(MOrder*)item;
 @end
 
 @interface OrderCell : UITableViewCell

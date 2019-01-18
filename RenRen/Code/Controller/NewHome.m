@@ -415,7 +415,13 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 -(void)queryData{
     NetRepositories* repositories = [[NetRepositories alloc]init];
 //    NSDictionary* arg = @{ @"long": @"-123.364257", @"lat":@"48.430707",@"page":[NSString stringWithFormat:@"%ld",(long)self.page.pageIndex]};
-    NSDictionary* arg = @{@"long":self.mapLocation.mapLng,@"lat":self.mapLocation.mapLat,@"page":[NSString stringWithFormat:@"%ld",(long)self.page.pageIndex]};
+    NSDictionary* arg;
+    if(self.Identity.location){
+        arg = @{@"long":self.Identity.location.mapLng,@"lat":self.Identity.location.mapLat,@"page":[NSString stringWithFormat:@"%ld",(long)self.page.pageIndex]};
+    }else{
+        arg = @{@"long":self.mapLocation.mapLng,@"lat":self.mapLocation.mapLat,@"page":[NSString stringWithFormat:@"%ld",(long)self.page.pageIndex]};
+    }
+    
     [repositories requestPost:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
         [self hidHUD];
         if(react ==1){

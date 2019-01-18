@@ -214,3 +214,5 @@ BALANCE_PAYMENT = "Pay by balance";
 Balance_pro = "Balance promotion";
 Deposit_txt = "Deposit";
 Earn_txt = "Earn";
+Deposit_price = "Bottle Deposit";
+Tracking_txt = "Track";

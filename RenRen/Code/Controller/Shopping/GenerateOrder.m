@@ -20,6 +20,15 @@
 #import "Agreement.h"
 #import "CouponSelect.h"
 
+#include <ifaddrs.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+
+#define IOS_CELLULAR    @"pdp_ip0"
+#define IOS_WIFI        @"en0"
+#define IOS_VPN         @"utun0"
+#define IP_ADDR_IPv4    @"ipv4"
+#define IP_ADDR_IPv6    @"ipv6"
 
 @interface GenerateOrder ()<UIPickerViewDataSource,UIPickerViewDelegate,UIScrollViewDelegate,UITextFieldDelegate>
 @property(nonatomic,strong) UIView* headerView;
@@ -97,6 +106,11 @@
  */
 @property(nonatomic,strong) UILabel* labelTax;
 @property(nonatomic,strong) UILabel* labelTaxNum;
+/**
+ * 押金
+ */
+@property(nonatomic,strong) UILabel* labelDeposit;
+@property(nonatomic,strong) UILabel* labelDepositNum;
 
 /**
  * 用户协议
@@ -131,6 +145,8 @@
 @property(nonatomic,assign) double packagePrice;
 
 @property(nonatomic,assign) double shipPrice;
+
+@property(nonatomic,assign) double depositPrice;
 /**
  *  满减金额
  */
@@ -191,7 +207,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     //_endString = @"全部口味默认";
     _endString = @"";
     
@@ -309,7 +324,6 @@
     self.btnWeXinPay.titleLabel.font = [UIFont systemFontOfSize:14.f];
     [self.btnWeXinPay addTarget:self action:@selector(btnPayWay:) forControlEvents:UIControlEventTouchUpInside];
     [self.footerView addSubview:self.btnWeXinPay];
-    self.btnWeXinPay.hidden = YES;//garfunkel add
     
     self.imgWeiXin = [[UIImageView alloc]init];
     [self.imgWeiXin setImage:[UIImage imageNamed:@"icon-address-default"]];
@@ -326,7 +340,6 @@
     self.btnAlipay.titleLabel.font = [UIFont systemFontOfSize:14.f];
     [self.btnAlipay addTarget:self action:@selector(btnPayWay:) forControlEvents:UIControlEventTouchUpInside];
     [self.footerView addSubview:self.btnAlipay];
-    self.btnAlipay.hidden = YES;//garfunkel add
     
     self.imgAli = [[UIImageView alloc]init];
     [self.imgAli setImage:[UIImage imageNamed:@"icon-address-default"]];
@@ -429,6 +442,14 @@
     self.labelTaxNum.text = @"5%";
     self.labelTaxNum.textAlignment = NSTextAlignmentRight;
     [self.sumView addSubview:self.labelTaxNum];
+    
+    self.labelDeposit = [[UILabel alloc]init];
+    self.labelDeposit.text = [NSString stringWithFormat:@"%@:",Localized(@"Deposit_price")];
+    [self.sumView addSubview:self.labelDeposit];
+    
+    self.labelDepositNum = [[UILabel alloc]init];
+    self.labelDepositNum.textAlignment = NSTextAlignmentRight;
+    [self.sumView addSubview:self.labelDepositNum];
     
     self.labelSumPriceTitle = [[UILabel alloc]init];
     self.labelSumPriceTitle.text = [NSString stringWithFormat:@"%@:",Localized(@"Subtotal_price")];
@@ -609,6 +630,8 @@
     self.labelPackagePrice.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelTax.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelTaxNum.translatesAutoresizingMaskIntoConstraints = NO;
+    self.labelDeposit.translatesAutoresizingMaskIntoConstraints = NO;
+    self.labelDepositNum.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelSumPrice.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelSumPriceTitle.translatesAutoresizingMaskIntoConstraints = NO;
     self.agreementBtn.translatesAutoresizingMaskIntoConstraints = NO;
@@ -653,7 +676,7 @@
     
     [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
     [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
-    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnCredit attribute:NSLayoutAttributeBottom multiplier:1.0 constant:1.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnAlipay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:1.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
     
     [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeTop multiplier:1.0 constant:10.f]];
@@ -674,7 +697,7 @@
     
     [self.btnWeXinPay addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeXinPay attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:40.f]];
     [self.btnWeXinPay addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeXinPay attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
-    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeXinPay attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnFacePay attribute:NSLayoutAttributeBottom multiplier:1.0 constant:1.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeXinPay attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.btnCredit attribute:NSLayoutAttributeBottom multiplier:1.0 constant:1.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.btnWeXinPay attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
     
     [self.imgWeiXin addConstraint:[NSLayoutConstraint constraintWithItem:self.imgWeiXin attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
@@ -692,7 +715,7 @@
     [self.btnAlipay addConstraint:[NSLayoutConstraint constraintWithItem:self.imgAli attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.btnAlipay attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.f]];
     [self.btnAlipay addConstraint:[NSLayoutConstraint constraintWithItem:self.imgAli attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.btnAlipay attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:265.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:285.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
     //只有线下支付，恢复在线支付是 toItem：btnAlipay
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.sumView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.tipView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:20.f]];
@@ -752,34 +775,45 @@
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackagePrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelExpectPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelPackagePrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
-    [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
-    [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPackage attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
-    
-    [self.labelDiscountPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
-    [self.labelDiscountPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPackagePrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
-    
     [self.labelTax addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelTax addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPackage attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTax attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
     
     [self.labelTaxNum addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelTaxNum addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDiscountPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelPackagePrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxNum attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
+    [self.labelDeposit addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDeposit attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelDeposit addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDeposit attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDeposit attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTax attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDeposit attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    [self.labelDepositNum addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDepositNum attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelDepositNum addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDepositNum attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDepositNum attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTaxNum attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDepositNum attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
+    
+    [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelDiscountPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDeposit attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    [self.labelDiscountPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelDiscountPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDepositNum attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDiscountPrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
     [self.labelSumPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPriceTitle attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelSumPriceTitle addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPriceTitle attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPriceTitle attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTax attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPriceTitle attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDiscountPriceTitle attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPriceTitle attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
     
     [self.labelSumPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
     [self.labelSumPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/3]];
-    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTaxNum attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
+    [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDiscountPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:5.f]];
     [self.sumView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.sumView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
     [self.agreementBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.agreementBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:26.f]];
@@ -924,7 +958,7 @@
             self.onLinePrice = [[response objectForKey:@"food_total_price"] doubleValue];//在线支付
             self.packagePrice = [[response objectForKey:@"packing_fee"] doubleValue];//打包费用
             self.shipPrice = [[response objectForKey:@"ship_fee"] doubleValue];//配送费用
-            
+            self.depositPrice = [[response objectForKey:@"deposit_price"] doubleValue];
             
             self.fullCut = [[response objectForKey: @"full_discount"]doubleValue]; //满减金额
             if(self.fullCut>0.00){
@@ -950,7 +984,7 @@
 //            self.paySumPrice =self.onLinePrice+self.packagePrice+self.shipPrice;
             //加上税费后的实际需要支付的金额
             self.paySumPrice = [[response objectForKey: @"total_pay_price"]doubleValue];
-            self.taxPrice = self.paySumPrice - (self.onLinePrice + self.shipPrice + self.packagePrice);
+            self.taxPrice = [[response objectForKey:@"tax_price"]doubleValue];
             [self updatePrice];
             
         }else if(react == 400){
@@ -1586,6 +1620,14 @@
         [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgBalance setImage:[UIImage imageNamed:@"icon-address-default"]];
         self.goodsSumPrice = self.onLinePrice;
+        self.tipView.hidden = NO;
+        for(NSLayoutConstraint* con in [self.tipView constraints]){
+            if([con firstAttribute] == NSLayoutAttributeHeight){
+                [self.tipView removeConstraint:con];
+                [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
+            }
+        }
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 675);
     }else if(sender == self.btnAlipay){
         self.btnWeXinPay.selected = NO;
         self.btnAlipay.selected = YES;
@@ -1598,6 +1640,14 @@
         [self.imgCredit setImage:[UIImage imageNamed:@"icon-address-default"]];
         [self.imgBalance setImage:[UIImage imageNamed:@"icon-address-default"]];
         self.goodsSumPrice = self.onLinePrice;
+        self.tipView.hidden = NO;
+        for(NSLayoutConstraint* con in [self.tipView constraints]){
+            if([con firstAttribute] == NSLayoutAttributeHeight){
+                [self.tipView removeConstraint:con];
+                [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
+            }
+        }
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 675);
     }else if(sender == self.btnCredit){
         self.btnWeXinPay.selected = NO;
         self.btnAlipay.selected = NO;
@@ -1617,7 +1667,7 @@
                 [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
             }
         }
-        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 575);
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 675);
     }else if(sender == self.btnBalance){
         self.btnWeXinPay.selected = NO;
         self.btnAlipay.selected = NO;
@@ -1636,7 +1686,7 @@
                 [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:115.f]];
             }
         }
-        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 575);
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 675);
     }
     else
     {
@@ -1660,7 +1710,7 @@
                 [self.tipView addConstraint:[NSLayoutConstraint constraintWithItem:self.tipView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0.f]];
             }
         }
-        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 464);
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 564);
     }
     [self updatePrice];
     [self.HUD hide:YES afterDelay:1];
@@ -1668,10 +1718,10 @@
 
 -(IBAction)generalOrderTouch:(id)sender{
     if(self.btnWeXinPay.selected){
-        if(![WXApi isWXAppInstalled]){
-            [self alertHUD:Localized(@"Not_weixin_payment")];
-            return;
-        }
+//        if(![WXApi isWXAppInstalled]){
+//            [self alertHUD:Localized(@"Not_weixin_payment")];
+//            return;
+//        }
     }
     [self checkNetWorkState:^(AFNetworkReachabilityStatus netWorkStatus) {
         if(netWorkStatus!=AFNetworkReachabilityStatusNotReachable){
@@ -1715,9 +1765,10 @@
                 
                 coupon_id = redlop.rowiID;
             }
-            
+            NSLog(@"IP:%@",[self getIPAddress:YES]);
+            NSString* IPAddress = [self getIPAddress:YES];
             //NSDictionary* arg = @{@"ince":@"save_order_cer",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"addr_item_id":item.rowID,@"pay_type":payType,@"order_mark":str,@"bonus_use":bonus_use_id,@"cer_type":@"2"};
-            NSDictionary* arg = @{@"a":@"saveOrder",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"addr_item_id":item.rowID,@"pay_type":payType,@"order_mark":str,@"cer_type":@"3",@"tip":[NSString stringWithFormat:@"%.2f",self.tip_fee],@"coupon_id":coupon_id};
+            NSDictionary* arg = @{@"a":@"saveOrder",@"uid":self.Identity.userInfo.userID,@"cart_list":self.carJson,@"addr_item_id":item.rowID,@"pay_type":payType,@"order_mark":str,@"cer_type":@"3",@"tip":[NSString stringWithFormat:@"%.2f",self.tip_fee],@"coupon_id":coupon_id,@"ip":IPAddress};
             
             NSLog(@"我神奇的口味字符串%@",str);
             
@@ -1727,9 +1778,10 @@
                     [self hidHUD];
                     [[NSNotificationCenter defaultCenter] postNotificationName:NotificationShopCarChange object:nil];
                     if(self.btnWeXinPay.selected)//微信支付
-                        [self wxPay:[response objectForKey:@"main_id"]];
+                        [self wxPayNew:[response objectForKey:@"result"]];
                     else if (self.btnAlipay.selected)//支付宝支付
-                        [self aliPay:[response objectForKey:@"main_id"]];
+                        //[self aliPay:[response objectForKey:@"main_id"]];
+                        [self aliPayNew:[response objectForKey:@"result"]];
                     else if(self.btnCredit.selected)
                         [self creditPay:[response objectForKey:@"main_id"]];
                     else{ //货到付款&余额支付 不需要修改订单状态这里直接跳转到订单页就可以了。
@@ -1839,6 +1891,7 @@
     self.labelGoodsPrice.text = [NSString stringWithFormat:@"$%.2f",self.goodsSumPrice];
     self.labelSumPrice.text =[NSString stringWithFormat:@"$%.2f",self.paySumPrice - self.discountPrice];
     self.labelTaxNum.text = [NSString stringWithFormat:@"$%.2f",self.taxPrice];
+    self.labelDepositNum.text = [NSString stringWithFormat:@"$%.2f",self.depositPrice];
     
     [self changeTip];
     self.isCoupon = NO;
@@ -1885,6 +1938,45 @@
         [WXApi sendReq:req];
     }
     
+}
+
+-(void)wxPayNew:(NSDictionary*)result{
+    if([[result objectForKey:@"resCode"] isEqualToString:@"SUCCESS"] && [[result objectForKey:@"retCode"] isEqualToString:@"SUCCESS"]){
+        NSDictionary* dict = [result objectForKey:@"payParams"];
+        
+        NSMutableString *stamp  = [dict objectForKey:@"timeStamp"];
+        //调起微信支付
+        PayReq* req             = [[PayReq alloc] init];
+        req.openID              = [dict objectForKey:@"appId"];
+        req.partnerId           = [dict objectForKey:@"partnerId"];
+        req.prepayId            = [dict objectForKey:@"prepayId"];
+        req.nonceStr            = [dict objectForKey:@"nonceStr"];
+        req.timeStamp           = stamp.intValue;
+        req.package             = [dict objectForKey:@"packageValue"];
+        req.sign                = [dict objectForKey:@"sign"];
+        
+        [WXApi sendReq:req];
+    }else{
+        NSString* message = [result objectForKey:@"retMsg"];
+        [self alertHUD:message];
+    }
+}
+
+-(void)aliPayNew:(NSDictionary*)result{
+    NSString *appScheme = @"com.kavl.tutti.user";
+    NSString* orderString = [result objectForKey:@"payParams"];
+    NSLog(@"garfunkel_Alipay:%@",orderString);
+    [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
+        NSInteger flag = [[resultDic objectForKey:@"resultStatus"]integerValue];
+        if(flag == 9000){
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationPaySuccess object:[resultDic objectForKey:@"memo"]];
+        }else if(flag == 4000){
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationPayFailure object:[resultDic objectForKey:@"memo"]];
+        }else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:NotificationPayUserCancel object:[resultDic objectForKey:@"memo"]];
+        }
+         NSLog(@"%@",resultDic);
+    }];
 }
 
 -(void)aliPay:(NSString*)orderID{
@@ -1945,7 +2037,7 @@
     order.showUrl = @"m.alipay.com";
     
     //应用注册scheme,在AlixPayDemo-Info.plist定义URL types
-    NSString *appScheme = @"com.kavl.tutti";
+    NSString *appScheme = @"com.kavl.tutti.user";
     
     //将商品信息拼接成字符串
     NSString *orderSpec = [order description];
@@ -1978,11 +2070,6 @@
 }
 
 #pragma mark =====================================================  通知
--(void)paySuccessNotification:(NSNotification*)notification{
-    NSString* message = [notification object];
-    [self payResult:message];
-}
-
 -(void)CouponReturn:(NSNotification*)notification{
     NSLog(@"garfunkel_log:CouponReturn");
     NSInteger coupone_row = [[notification object] integerValue];
@@ -1997,6 +2084,11 @@
         [redlop setValuesForKeysWithDictionary:[self.arrayRed objectAtIndex:self.redIndex]];
         self.discountPrice = [redlop.money doubleValue];
     }
+}
+
+-(void)paySuccessNotification:(NSNotification*)notification{
+    NSString* message = [notification object];
+    [self payResult:message];
 }
 
 -(void)payUserCancelNotification:(NSNotification*)notification{
@@ -2037,6 +2129,7 @@
         if (self.paySumPrice > 20) {
             NSArray* tipArr = @[@"15",@"20",@"25"];
             self.tip_fee = self.paySumPrice * [[tipArr objectAtIndex:self.tipSeg.selectedSegmentIndex] integerValue]/100;
+            self.tip_fee = [self decimalwithFormat:@"0.00" floatV:self.tip_fee];
             NSInteger i = 0;
             for(NSString* tText in tipArr){
                 NSString* Stxt = [NSString stringWithFormat:@"%@%@",tText,@"%"];
@@ -2066,9 +2159,18 @@
             [self btnPayWay:self.btnCredit];
         }
     }
-    if (self.btnCredit.selected || self.btnBalance.selected) {
+    if (!self.btnFacePay.selected) {
         self.labelSumPrice.text =[NSString stringWithFormat:@"$%.2f",totalPrice];
     }
+}
+
+- (double) decimalwithFormat:(NSString *)format  floatV:(float)floatV
+{
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    
+    [numberFormatter setPositiveFormat:format];
+    
+    return  [[numberFormatter stringFromNumber:[NSNumber numberWithFloat:floatV]] doubleValue];
 }
                                       
 #pragma mark =====================================================
@@ -2237,5 +2339,64 @@
     return leftView;
 }
 
+- (NSString *)getIPAddress:(BOOL)preferIPv4
+{
+    NSArray *searchArray = preferIPv4 ?
+    @[ IOS_VPN @"/" IP_ADDR_IPv4, IOS_VPN @"/" IP_ADDR_IPv6, IOS_WIFI @"/" IP_ADDR_IPv4, IOS_WIFI @"/" IP_ADDR_IPv6, IOS_CELLULAR @"/" IP_ADDR_IPv4, IOS_CELLULAR @"/" IP_ADDR_IPv6 ] :
+    @[ IOS_VPN @"/" IP_ADDR_IPv6, IOS_VPN @"/" IP_ADDR_IPv4, IOS_WIFI @"/" IP_ADDR_IPv6, IOS_WIFI @"/" IP_ADDR_IPv4, IOS_CELLULAR @"/" IP_ADDR_IPv6, IOS_CELLULAR @"/" IP_ADDR_IPv4 ] ;
+    
+    NSDictionary *addresses = [self getIPAddresses];
+    NSLog(@"addresses: %@", addresses);
+    
+    __block NSString *address;
+    [searchArray enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL *stop)
+     {
+         address = addresses[key];
+         if(address) *stop = YES;
+     } ];
+    return address ? address : @"0.0.0.0";
+}
+- (NSDictionary *)getIPAddresses
+{
+    NSMutableDictionary *addresses = [NSMutableDictionary dictionaryWithCapacity:8];
+    
+    // retrieve the current interfaces - returns 0 on success
+    struct ifaddrs *interfaces;
+    if(!getifaddrs(&interfaces)) {
+        // Loop through linked list of interfaces
+        struct ifaddrs *interface;
+        for(interface=interfaces; interface; interface=interface->ifa_next) {
+            if(!(interface->ifa_flags & IFF_UP) /* || (interface->ifa_flags & IFF_LOOPBACK) */ ) {
+                continue; // deeply nested code harder to read
+            }
+            const struct sockaddr_in *addr = (const struct sockaddr_in*)interface->ifa_addr;
+            char addrBuf[ MAX(INET_ADDRSTRLEN, INET6_ADDRSTRLEN) ];
+            if(addr && (addr->sin_family==AF_INET || addr->sin_family==AF_INET6)) {
+                NSString *name = [NSString stringWithUTF8String:interface->ifa_name];
+                NSString *type;
+                if(addr->sin_family == AF_INET) {
+                    if(inet_ntop(AF_INET, &addr->sin_addr, addrBuf, INET_ADDRSTRLEN)) {
+                        type = IP_ADDR_IPv4;
+                    }
+                } else {
+                    const struct sockaddr_in6 *addr6 = (const struct sockaddr_in6*)interface->ifa_addr;
+                    if(inet_ntop(AF_INET6, &addr6->sin6_addr, addrBuf, INET6_ADDRSTRLEN)) {
+                        type = IP_ADDR_IPv6;
+                    }
+                }
+//                if(type) {
+//                    NSString *key = [NSString stringWithFormat:@"%@/%@", name, type];
+//                    addresses[key] = [NSString stringWithUTF8String:addrBuf];
+//                }
+                if(type && [type isEqualToString:IP_ADDR_IPv4]) {
+                    NSString *key = [NSString stringWithFormat:@"%@/%@", name, type];
+                    addresses[key] = [NSString stringWithUTF8String:addrBuf]; }
+                }
+        }
+        // Free memory
+        freeifaddrs(interfaces);
+    }
+    return [addresses count] ? addresses : nil;
+}
 
 @end

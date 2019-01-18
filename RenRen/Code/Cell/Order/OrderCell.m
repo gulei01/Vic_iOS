@@ -22,6 +22,7 @@
 @property(nonatomic,strong) UIButton* btnPay;
 @property(nonatomic,strong) UIButton* btnCancel;
 @property(nonatomic,strong) UIButton* btnComment;
+@property(nonatomic,strong) UIButton* btnDeliver;
 @property(nonatomic,strong) UIButton* btnDelete;
 @property(nonatomic,strong) UILabel* labelPayStatus;
 @property(nonatomic,strong) UIImageView* line;
@@ -71,6 +72,7 @@
     [self.rightView addSubview:self.btnPay];
     [self.rightView addSubview:self.btnCancel];
     [self.rightView addSubview:self.btnComment];
+    [self.rightView addSubview:self.btnDeliver];
     
     [self.rightView addSubview:self.labelPayStatus];
     
@@ -86,7 +88,8 @@
                          @"V:|-defEdge-[labelGoodsNum][labelStoreName(labelGoodsNum)][labelPrice(labelGoodsNum)]-topEdge-|",
                          @"V:|-itemSpace-[btnPay]-itemSpace-[btnCancel(btnPay)]-topEdge-|",
                           @"V:[labelPayStatus]-topEdge-|",
-                         @"H:[btnComment(==btnWidth)]-leftEdge-|",@"V:|-15-[btnComment(==25)]"
+                         @"H:[btnComment(==btnWidth)]-leftEdge-|",@"V:|-15-[btnComment(==25)]",
+                         @"H:[btnDeliver(==btnWidth)]-leftEdge-|",@"V:|-15-[btnDeliver(==25)]"
                          ];
     NSDictionary* metrics = @{ @"defEdge":@(0), @"leftEdge":@(10), @"topEdge":@(10), @"itemSpace":@(itemSpace),@"topHeight":@(topHeight), @"middleHeight":@(middleHeight), @"iconSize":@(iconSize),
                                @"goodsSize":@(goodsSize), @"btnWidth":@(btnWidth), @"statusWidth":@(statusWidth)};
@@ -94,7 +97,7 @@
                              @"photoIcon":self.photoIcon, @"labelOrderNo":self.labelOrderNo, @"labelCreateDate":self.labelCreateDate,
                              @"photoGoods":self.photoGoods, @"rightView":self.rightView,
                              @"labelGoodsNum":self.labelGoodsNum, @"labelStoreName":self.labelStoreName, @"labelPrice":self.labelPrice,
-                             @"btnPay":self.btnPay, @"btnCancel":self.btnCancel, @"btnComment":self.btnComment, @"btnDelete":self.btnDelete, @"labelPayStatus":self.labelPayStatus};
+                             @"btnPay":self.btnPay, @"btnCancel":self.btnCancel, @"btnComment":self.btnComment,@"btnDeliver":self.btnDeliver, @"btnDelete":self.btnDelete, @"labelPayStatus":self.labelPayStatus};
     [formats enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         //NSLog( @"%@ %@",[self class],obj);
         NSArray* constraints = [NSLayoutConstraint constraintsWithVisualFormat:obj options:0 metrics:metrics views:views];
@@ -123,6 +126,11 @@
 -(IBAction)btnDeleteTouch:(id)sender{
     if(self.delegate && [self.delegate respondsToSelector:@selector(orderDelete:item:)]){
         [self.delegate orderDelete:self item:self.entity];
+    }
+}
+-(IBAction)btnTrackingTouch:(id)sender{
+    if(self.delegate && [self.delegate respondsToSelector:@selector(orderTracking:)]){
+        [self.delegate orderTracking:self.entity];
     }
 }
 
@@ -161,10 +169,12 @@
             if([entity.paid integerValue] == 0){
                 self.btnPay.hidden = NO;
                 self.btnCancel.hidden = NO;
+                self.btnDeliver.hidden = YES;
                 self.labelPayStatus.hidden = YES;
             }else{
                 self.btnPay.hidden = YES;
                 self.btnCancel.hidden = YES;
+                self.btnDeliver.hidden = YES;
                 self.labelPayStatus.hidden = NO;
                 entity.showDel = @"1";
                 self.labelPayStatus.textColor = theme_navigation_color;
@@ -176,10 +186,17 @@
             self.btnPay.hidden = YES;
             self.labelPayStatus.textColor = theme_navigation_color;
             self.labelPayStatus.text = [NSString stringWithFormat:@"%@",entity.statusName];
+            
+            if(![WMHelper isEmptyOrNULLOrnil:entity.deliver_name]){
+                self.btnDeliver.hidden = NO;
+            }else{
+                self.btnDeliver.hidden = YES;
+            }
         }else if([entity.status integerValue]==2){//已付款
             self.labelPayStatus.hidden = NO;
             self.btnCancel.hidden = YES;
             self.btnPay.hidden = YES;
+            self.btnDeliver.hidden = YES;
             self.labelPayStatus.textColor = theme_navigation_color;
             if([entity.isComment isEqualToString:@"1"]){
                 self.btnComment.hidden = NO;
@@ -191,24 +208,28 @@
             self.labelPayStatus.hidden = NO;
             self.btnCancel.hidden = YES;
             self.btnPay.hidden = YES;
+            self.btnDeliver.hidden = YES;
             self.labelPayStatus.textColor = theme_navigation_color;
             self.labelPayStatus.text = [NSString stringWithFormat:@"%@",entity.statusName];
         }else if ([entity.status integerValue]==4){//交易成功
             self.labelPayStatus.hidden = NO;
             self.btnCancel.hidden = YES;
             self.btnPay.hidden = YES;
+            self.btnDeliver.hidden = YES;
             self.labelPayStatus.textColor = [UIColor colorWithRed:64/255.f green:156/255.f blue:107/255.f alpha:1.0];
             self.labelPayStatus.text = [NSString stringWithFormat:@"%@",entity.statusName];
         }else if ([entity.status integerValue]==5){//取消
             self.labelPayStatus.hidden = NO;
             self.btnCancel.hidden = YES;
             self.btnPay.hidden = YES;
+            self.btnDeliver.hidden = YES;
             self.labelPayStatus.textColor = theme_Fourm_color;
             self.labelPayStatus.text = [NSString stringWithFormat:@"%@",entity.statusName];
         }else if ([entity.status integerValue]==6){//已退款
             self.labelPayStatus.hidden = NO;
             self.btnCancel.hidden = YES;
             self.btnPay.hidden = YES;
+            self.btnDeliver.hidden = YES;
             self.labelPayStatus.textColor = theme_navigation_color;
             self.labelPayStatus.text = [NSString stringWithFormat:@"%@",entity.statusName];
         }
@@ -366,6 +387,22 @@
         _btnComment.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _btnComment;
+}
+
+-(UIButton *)btnDeliver{
+    if(!_btnDeliver){
+        _btnDeliver = [UIButton buttonWithType:UIButtonTypeCustom];
+        _btnDeliver.backgroundColor = theme_navigation_color;
+        [_btnDeliver setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_btnDeliver setTitle:Localized(@"Tracking_txt") forState:UIControlStateNormal];
+        _btnDeliver.titleLabel.font =[UIFont systemFontOfSize:14.f];
+        _btnDeliver.layer.masksToBounds = YES;
+        _btnDeliver.layer.cornerRadius =5.f;
+        _btnDeliver.hidden = YES;
+        [_btnDeliver addTarget:self action:@selector(btnTrackingTouch:) forControlEvents:UIControlEventTouchUpInside];
+        _btnDeliver.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _btnDeliver;
 }
 
 -(UIButton *)btnDelete{

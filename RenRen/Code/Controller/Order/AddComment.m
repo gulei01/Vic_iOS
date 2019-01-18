@@ -19,7 +19,7 @@
 @property(nonatomic,strong) UIButton* btnOnTime;
 @property(nonatomic,strong) UIButton* btnTimeOut;
 
-@property(nonatomic,strong) UIView* scoreView;
+@property(nonatomic,strong) UIControl* scoreView;
 @property(nonatomic,strong) UILabel* labelScore;
 @property(nonatomic,strong) UILabel* labelTotal;
 @property(nonatomic,strong) TQStarRatingView* starTotal;
@@ -30,7 +30,7 @@
 @property(nonatomic,strong) NSLayoutConstraint* collectionConstraint;
 @property(nonatomic,strong) UICollectionView* collectionView;
 @property(nonatomic,strong) NSArray* arrayTag;
-@property(nonatomic,strong) UIView* commentView;
+@property(nonatomic,strong) UIControl* commentView;
 
 @property(nonatomic,strong) UILabel* labelComment;
 @property(nonatomic,strong) UITextView* txtComment;
@@ -72,7 +72,7 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
     [self layoutUI];
     self.automaticallyAdjustsScrollViewInsets = YES;
     //[self queryData];
-    
+    //UIBarButtonItem* rBtn = [[UIBarButtonItem alloc]initWithTitle:Localized(@"") style:UIBarButtonItemStylePlain target:self action:@selector(hideKeyBoard)];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -91,10 +91,19 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
     // Dispose of any resources that can be recreated.
 }
 
+-(void)hideKeyBoard{
+    NSLog(@"hideKeyBoard");
+    [self.view endEditing:YES];
+}
+
+
 #pragma mark =====================================================  user interface layout
 -(void)layoutUI{
+    UIControl* myView = [[UIControl alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    [myView addTarget:self action:@selector(hideKeyBoard) forControlEvents:UIControlEventTouchUpInside];
     
     [self.view addSubview:self.mainScroll];
+    [self.mainScroll addSubview:myView];
     [self.view addSubview:self.btnConfirm];
     [self.mainScroll addSubview:self.timeView];
     [self.timeView addSubview:self.labelTime];
@@ -251,6 +260,14 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
     if([self.txtComment.text isEqualToString:@""])
         self.txtComment.text  = self.mark;
 }
+//输入换行 隐藏键盘
+//-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
+//    if([text isEqualToString:@"\n"]){
+//        [self.txtComment resignFirstResponder];
+//        return NO;
+//    }
+//    return YES;
+//}
 
 
 #pragma mark =====================================================  <StarRatingViewDelegate>
@@ -266,8 +283,8 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
 
 #pragma mark =====================================================  SEL
 -(IBAction)confirmTouch:(id)sender{
-    [self showHUD];
     if ([self checkForm]) {
+        [self showHUD];
         NSDictionary* arg = @{@"a":@"add_comment",@"order_id":self.orderID,@"comment":self.txtComment.text,@"score":self.scoreToal,@"score1":self.scoreFood,@"score2":self.scoreService,@"righttime":self.onTime,@"uid":self.Identity.userInfo.userID};
         NetRepositories* repositories = [[NetRepositories alloc]init];
         [repositories updateComment:arg complete:^(NSInteger react, id obj, NSString *message) {
@@ -278,9 +295,9 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
                 }];
 
             }else if(react == 400){
-                [self alertHUD:message];
+                [self hidHUD:message];
             }else{
-                 [self alertHUD:message];
+                [self hidHUD:message];
             }
         }];
     }
@@ -301,10 +318,11 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
 
 #pragma mark =====================================================  private method
 -(BOOL)checkForm{
-    if([self.txtComment.text isEqualToString:self.mark]|| self.txtComment.text.length<3){
-        [self alertHUD:Localized(@"Please_enter_three")];
-        return NO;
-    }else if (!([self.scoreToal floatValue]>0.f) || !([self.scoreFood floatValue]>0.f) || !([self.scoreService floatValue]>0.f)){
+//    if([self.txtComment.text isEqualToString:self.mark]|| self.txtComment.text.length<3){
+//        [self alertHUD:Localized(@"Please_enter_three")];
+//        return NO;
+//    }else
+    if (!([self.scoreToal floatValue]>0.f) || !([self.scoreFood floatValue]>0.f) || !([self.scoreService floatValue]>0.f)){
         [self alertHUD:Localized(@"Rating_not_empty")];
         return NO;
     }
@@ -385,15 +403,16 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
     return _btnTimeOut;
 }
 
--(UIView *)scoreView{
+-(UIControl *)scoreView{
     if(!_scoreView){
-        _scoreView = [[UIView alloc]init];
+        _scoreView = [[UIControl alloc]init];
         CALayer* border = [[CALayer alloc]init];
         border.frame = CGRectMake(0, 0, SCREEN_WIDTH, 30);
         border.backgroundColor = theme_table_bg_color.CGColor;
         [_scoreView.layer addSublayer:border];
         _scoreView.backgroundColor = [UIColor whiteColor];
         _scoreView.translatesAutoresizingMaskIntoConstraints = NO;
+        [_scoreView addTarget:self action:@selector(hideKeyBoard) forControlEvents:UIControlEventTouchUpInside];
     }
     return _scoreView;
 }
@@ -485,15 +504,16 @@ static NSString* const cellIdentifier =  @"TagTypeCell";
 }
 
 
--(UIView *)commentView{
+-(UIControl *)commentView{
     if(!_commentView){
-        _commentView = [[UIView alloc]init];
+        _commentView = [[UIControl alloc]init];
         CALayer* border = [[CALayer alloc]init];
         border.frame = CGRectMake(0, 0, SCREEN_WIDTH, 30);
         border.backgroundColor = theme_table_bg_color.CGColor;
         [_commentView.layer addSublayer:border];
         _commentView.backgroundColor = [UIColor whiteColor];
         _commentView.translatesAutoresizingMaskIntoConstraints = NO;
+        [_commentView addTarget:self action:@selector(hideKeyBoard) forControlEvents:UIControlEventTouchUpInside];
     }
     return _commentView;
 }

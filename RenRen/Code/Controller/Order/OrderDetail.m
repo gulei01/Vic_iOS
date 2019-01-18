@@ -11,6 +11,7 @@
 #import "Feedback.h"
 #import <CoreText/CoreText.h>
 #import "Store.h"
+#import <GoogleMaps/GoogleMaps.h>
 //#import "StoreGoods.h"
 
 
@@ -47,6 +48,9 @@
 @property(nonatomic,strong) UILabel* labelTax;
 @property(nonatomic,strong) UILabel* labelTaxFee;
 
+@property(nonatomic,strong) UILabel* labelDeposit;
+@property(nonatomic,strong) UILabel* labelDepositFee;
+
 @property(nonatomic,strong) UILabel* labelSumPrice;
 @property(nonatomic,strong) UILabel* labelOther;
 @property(nonatomic,strong) UITextField* txtExpressMan;
@@ -56,10 +60,12 @@
 @property(nonatomic,strong) UITextView* txtShoppingAddress;
 @property(nonatomic,strong) UITextField* txtPayWay;
 
+@property(nonatomic,strong) UIView* deliverView;
+
 @property(nonatomic,strong) NSArray* arrayFood;
 @property(nonatomic,strong) NSDictionary* dictOther;
 
-
+@property(nonatomic,strong) GMSMapView* mapView;
 
 @end
 
@@ -72,6 +78,15 @@
     [self layoutConstrants];
     
     [self refreshDataSource];
+    
+    GMSCameraPosition *camera = [GMSCameraPosition cameraWithLatitude:0
+                                                            longitude:0
+                                                                 zoom:16];
+    self.mapView = [GMSMapView mapWithFrame:CGRectZero camera:camera];
+    self.mapView.myLocationEnabled = YES;
+    //mapView.autoresizingMask = [UIViewAutoresizingFlexibleWidth, UIViewAutoresizingFlexibleHeight];
+    [self.mapView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    [self.deliverView addSubview:self.mapView];
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -105,6 +120,8 @@
     [self.footerView addSubview:self.labelTipFee];
     [self.footerView addSubview:self.labelTax];
     [self.footerView addSubview:self.labelTaxFee];
+    [self.footerView addSubview:self.labelDeposit];
+    [self.footerView addSubview:self.labelDepositFee];
     [self.footerView addSubview:self.labelSumPrice];
     [self.footerView addSubview:self.labelOther];
     [self.footerView addSubview:self.txtExpressMan];
@@ -112,6 +129,8 @@
     [self.footerView addSubview:self.txtExpressDate];
     [self.footerView addSubview:self.txtAddress];
     [self.footerView addSubview:self.txtPayWay];
+    
+    [self.footerView addSubview:self.deliverView];
     
     [self.tableView registerClass:[OrderDetailCell class] forCellReuseIdentifier:@"OrderDetailCell"];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -128,6 +147,8 @@
     self.labelTipFee.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelTax.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelTaxFee.translatesAutoresizingMaskIntoConstraints = NO;
+    self.labelDeposit.translatesAutoresizingMaskIntoConstraints = NO;
+    self.labelDepositFee.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelSumPrice.translatesAutoresizingMaskIntoConstraints = NO;
     self.labelOther.translatesAutoresizingMaskIntoConstraints = NO;
     self.txtExpressMan.translatesAutoresizingMaskIntoConstraints = NO;
@@ -200,9 +221,19 @@
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxFee attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTipFee attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelTaxFee attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
+    [self.labelDeposit addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDeposit attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelDeposit addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDeposit attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/4]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDeposit attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTax attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDeposit attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    [self.labelDepositFee addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDepositFee attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:20.f]];
+    [self.labelDepositFee addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDepositFee attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/4]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDepositFee attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTaxFee attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelDepositFee attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
+    
     [self.labelSumPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:45.f]];
     [self.labelSumPrice addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH/2]];
-    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelTaxFee attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelDepositFee attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelSumPrice attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-10.f]];
     
     
@@ -211,9 +242,14 @@
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelOther attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelSumPrice attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.labelOther attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.f]];
     
+    [self.deliverView addConstraint:[NSLayoutConstraint constraintWithItem:self.deliverView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:SCREEN_WIDTH]];
+    [self.deliverView addConstraint:[NSLayoutConstraint constraintWithItem:self.deliverView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:200.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.deliverView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelOther attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.deliverView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.f]];
+    
     [self.txtExpressMan addConstraint:[NSLayoutConstraint constraintWithItem:self.txtExpressMan attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:45.f]];
     [self.txtExpressMan addConstraint:[NSLayoutConstraint constraintWithItem:self.txtExpressMan attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH]];
-    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.txtExpressMan attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.labelOther attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
+    [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.txtExpressMan attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.deliverView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.f]];
     [self.footerView addConstraint:[NSLayoutConstraint constraintWithItem:self.txtExpressMan attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.footerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.f]];
     
     [self.txtOrderNO addConstraint:[NSLayoutConstraint constraintWithItem:self.txtOrderNO attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:45.f]];
@@ -327,11 +363,14 @@
     double shipFee = [[self.dictOther objectForKey:@"ship_fee"] doubleValue];
     double foodFee = [[self.dictOther objectForKey:@"food_amount"] doubleValue];
     double tipFee = [[self.dictOther objectForKey:@"tip_fee"] doubleValue];
+    double taxFee = [[self.dictOther objectForKey:@"tax_price"] doubleValue];
+    double depositFee = [[self.dictOther objectForKey:@"deposit_price"] doubleValue];
     
     self.labelPackgeFee.text = [NSString stringWithFormat:@" $%.2f",packageFee];
     self.labelShipFee.text = [NSString stringWithFormat:@" $%.2f",shipFee];
     self.labelTipFee.text = [NSString stringWithFormat:@" $%.2f",tipFee];
-    self.labelTaxFee.text = [NSString stringWithFormat:@" $%.2f",(packageFee+shipFee+foodFee)*0.05];
+    self.labelTaxFee.text = [NSString stringWithFormat:@" $%.2f",taxFee];
+    self.labelDepositFee.text = [NSString stringWithFormat:@" $%.2f",depositFee];
     
     self.txtExpressMan.text = [self.dictOther objectForKey:@"empname"];
     self.txtOrderNO.text = [self.dictOther objectForKey:@"order_id"];
@@ -339,7 +378,7 @@
     self.txtShoppingAddress.text = [NSString stringWithFormat:@"%@ %@ %@ %@",[self.dictOther objectForKey:@"uname"],[self.dictOther objectForKey:@"phone"],[self.dictOther objectForKey:@"address2"],[self.dictOther objectForKey:@"address1"]];
     //NSLog(@"%ld",self.txtShoppingAddress.text.length);
     if(self.txtShoppingAddress.text.length > 40){ self.txtShoppingAddress.font = [UIFont systemFontOfSize:12.f];}
-    self.txtPayWay.text = [self.dictOther objectForKey:@"paymodel"];
+    self.txtPayWay.text = payWay;
     [self.btnStore setTitle:[self.dictOther objectForKey:@"site_name"] forState:UIControlStateNormal];
     //便利店平台负担满减
     double platformDiscount = [[self.dictOther objectForKey: @"promotion_discount"] doubleValue];
@@ -367,7 +406,40 @@
             }
         });
     }
-    self.labelSumPrice.text = [NSString stringWithFormat:@"%@    $%.2f",Localized(@"Product_price"),((packageFee+shipFee+foodFee)*1.05+tipFee-self.fullCut)];
+    double subTotal = [[self.dictOther objectForKey:@"subtotal"] doubleValue];
+    self.labelSumPrice.text = [NSString stringWithFormat:@"%@    $%.2f",Localized(@"Product_price"),subTotal + tipFee - self.fullCut];
+    
+    if(![WMHelper isEmptyOrNULLOrnil:[self.dictOther objectForKey:@"deliver_lng"]]){
+        self.deliverView.hidden = NO;
+        for(NSLayoutConstraint* con in [self.deliverView constraints]){
+            if([con firstAttribute] == NSLayoutAttributeHeight){
+                [self.deliverView removeConstraint:con];
+                [self.deliverView addConstraint:[NSLayoutConstraint constraintWithItem:self.deliverView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:200.f]];
+            }
+        }
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 720.f);
+        
+        double lng = [[self.dictOther objectForKey:@"deliver_lng"] floatValue];
+        double lat = [[self.dictOther objectForKey:@"deliver_lat"] floatValue];
+        self.mapView.camera = [GMSCameraPosition cameraWithLatitude:lat
+                                                          longitude:lng
+                                                               zoom:16];
+        // Creates a marker in the center of the map.
+        GMSMarker *marker = [[GMSMarker alloc] init];
+        marker.position = CLLocationCoordinate2DMake(lat,lng);
+        marker.title = [self.dictOther objectForKey:@"empname"];
+        
+        marker.map = self.mapView;
+    }else{
+        self.deliverView.hidden = YES;
+        self.footerView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 520.f);
+        for(NSLayoutConstraint* con in [self.deliverView constraints]){
+            if([con firstAttribute] == NSLayoutAttributeHeight){
+                [self.deliverView removeConstraint:con];
+                [self.deliverView addConstraint:[NSLayoutConstraint constraintWithItem:self.deliverView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0.f]];
+            }
+        }
+    }
 }
 
 
@@ -486,7 +558,7 @@
 
 -(UIView *)footerView{
     if(!_footerView){
-        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 520.f)];
+        _footerView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 720.f)];
         _footerView.backgroundColor = theme_default_color;
     }
     return _footerView;
@@ -621,6 +693,27 @@
         _labelTaxFee.textAlignment = NSTextAlignmentRight;
     }
     return _labelTaxFee;
+}
+
+-(UILabel *)labelDeposit{
+    if(!_labelDeposit){
+        _labelDeposit = [[UILabel alloc]init];
+        _labelDeposit.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
+        _labelDeposit.font = [UIFont systemFontOfSize:14.f];
+        _labelDeposit.textAlignment = NSTextAlignmentLeft;
+        _labelDeposit.text =  Localized(@"Deposit_price");
+    }
+    return _labelDeposit;
+}
+
+-(UILabel *)labelDepositFee{
+    if(!_labelDepositFee){
+        _labelDepositFee =[[UILabel alloc]init];
+        _labelDepositFee.textColor = [UIColor colorWithRed:71/255.f green:71/255.f blue:71/255.f alpha:1.0];
+        _labelDepositFee.font = [UIFont systemFontOfSize:14.f];
+        _labelDepositFee.textAlignment = NSTextAlignmentRight;
+    }
+    return _labelDepositFee;
 }
 
 -(UILabel *)labelSumPrice{
@@ -780,6 +873,12 @@
     return _txtPayWay;
 }
 
-
+-(UIView *)deliverView{
+    if(!_deliverView){
+        _deliverView = [[UIView alloc] init];
+        _deliverView.translatesAutoresizingMaskIntoConstraints = NO;
+    }
+    return _deliverView;
+}
 
 @end

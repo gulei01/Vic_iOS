@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "706ABF07EC5936786382601206610CDC"
+               BlueprintIdentifier = "D3C0C1CA3DF861272DEF78BE1D8AA6F7"
                BlueprintName = "ZQCountDownView"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "libZQCountDownView.a">

@@ -214,3 +214,5 @@ BALANCE_PAYMENT = "余额支付";
 Balance_pro = "充值活动";
 Deposit_txt = "充值";
 Earn_txt = "返";
+Deposit_price = "Bottle Deposit";
+Tracking_txt = "追踪";

@@ -190,4 +190,7 @@
 @property(nonatomic,copy) NSString* proper;
 @property(nonatomic,copy) NSString* spec_desc;
 @property(nonatomic,copy) NSString* proper_desc;
+
+@property(nonatomic,copy) NSString* deposit;
+@property(nonatomic,copy) NSString* tax_num;
 @end

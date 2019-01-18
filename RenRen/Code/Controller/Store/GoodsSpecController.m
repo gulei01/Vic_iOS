@@ -239,7 +239,14 @@
 -(void)changePric{
     if(![WMHelper isNULLOrnil:self.list] && ![self.list isEqual:@""] && self.list.count > 0){
         NSString* spec_string = @"";
-        for(NSString* spec_id in self.specBtn){
+        NSMutableArray *stringArray = [NSMutableArray arrayWithArray:self.specBtn.allKeys];
+        [stringArray sortUsingComparator: ^NSComparisonResult (NSString *str1, NSString *str2) {
+            NSNumber *number1 = [NSNumber numberWithInteger:str1.floatValue];
+            NSNumber *number2 = [NSNumber numberWithInteger:str2.floatValue];
+            return [number1 compare:number2];
+        }];
+        for(NSString* spec_id in stringArray){
+            NSLog(@"garfunkel_log:%@",spec_id);
             NSArray* btnList = [self.specBtn objectForKey:spec_id];
             for(UIButton* btn in btnList){
                 if(btn.selected){
@@ -251,7 +258,7 @@
                 }
             }
         }
-        
+        NSLog(@"garfunkel_log:%@",spec_string);
         self.spec_str = spec_string;
         NSLog(@"garfunkel_log:spec_str:%@",self.spec_str);
         NSString* price = [[self.list objectForKey:spec_string] objectForKey:@"price"];

@@ -85,5 +85,8 @@
 @property(nonatomic,copy) NSString* paid;
 @property(nonatomic,copy) NSString* order_id;
 @property(nonatomic,copy) NSString* discount;
+@property(nonatomic,copy) NSString* deliver_name;
+@property(nonatomic,copy) NSString* deliver_lng;
+@property(nonatomic,copy) NSString* deliver_lat;
 
 @end

@@ -40,14 +40,17 @@
 
 @import GoogleMaps;
 @import GooglePlaces;
+@import Firebase;
+@import UserNotifications;
 
-@interface AppDelegate ()<UITabBarControllerDelegate,UIAlertViewDelegate>
+@interface AppDelegate ()<UITabBarControllerDelegate,UIAlertViewDelegate,FIRMessagingDelegate,UNUserNotificationCenterDelegate>
 @property(nonatomic,strong) UITabBarController* mainTab;
 
 @end
 
 @implementation AppDelegate
 
+NSString *const kGCMMessageIDKey = @"Tutti.All";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
@@ -55,6 +58,31 @@
     [self setWholeStyle];
     [GMSServices provideAPIKey:googleMapAPIKey];
     [GMSPlacesClient provideAPIKey:googleMapAPIKey];
+    //使用Firebase库配置API
+    [FIRApp configure];
+    [FIRMessaging messaging].delegate = self;
+    
+    if ([UNUserNotificationCenter class] != nil) {
+        // iOS 10 or later
+        // For iOS 10 display notification (sent via APNS)
+        [UNUserNotificationCenter currentNotificationCenter].delegate = self;
+        UNAuthorizationOptions authOptions = UNAuthorizationOptionAlert |
+        UNAuthorizationOptionSound | UNAuthorizationOptionBadge;
+        [[UNUserNotificationCenter currentNotificationCenter]
+         requestAuthorizationWithOptions:authOptions
+         completionHandler:^(BOOL granted, NSError * _Nullable error) {
+             // ...
+         }];
+    } else {
+        // iOS 10 notifications aren't available; fall back to iOS 8-9 notifications.
+        UIUserNotificationType allNotificationTypes =
+        (UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge);
+        UIUserNotificationSettings *settings =
+        [UIUserNotificationSettings settingsForTypes:allNotificationTypes categories:nil];
+        [application registerUserNotificationSettings:settings];
+    }
+    
+    [application registerForRemoteNotifications];
     
     [self setLanguage];
 
@@ -209,7 +237,12 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    if (userInfo[kGCMMessageIDKey]) {
+        NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
+    }
     
+    // Print full message.
+    NSLog(@"%@", userInfo);
     // Required
     // [APService handleRemoteNotification:userInfo];
     [JPUSHService handleRemoteNotification:userInfo];
@@ -221,7 +254,12 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
     
+    if (userInfo[kGCMMessageIDKey]) {
+        NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
+    }
     
+    // Print full message.
+    NSLog(@"%@", userInfo);
     // IOS 7 Support Required
     //[APService handleRemoteNotification:userInfo];
     
@@ -259,7 +297,39 @@
 
 }
 
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    NSDictionary *userInfo = notification.request.content.userInfo;
+    
+    // With swizzling disabled you must let Messaging know about the message, for Analytics
+    // [[FIRMessaging messaging] appDidReceiveMessage:userInfo];
+    
+    // Print message ID.
+    if (userInfo[kGCMMessageIDKey]) {
+        NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
+    }
+    
+    // Print full message.
+    NSLog(@"%@", userInfo);
+    
+    // Change this to your preferred presentation option
+    completionHandler(UNNotificationPresentationOptionNone);
+}
 
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void(^)(void))completionHandler {
+    NSDictionary *userInfo = response.notification.request.content.userInfo;
+    if (userInfo[kGCMMessageIDKey]) {
+        NSLog(@"Message ID: %@", userInfo[kGCMMessageIDKey]);
+    }
+    
+    // Print full message.
+    NSLog(@"%@", userInfo);
+    
+    completionHandler();
+}
 //- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
 //    // Required
 //    NSDictionary * userInfo = notification.request.content.userInfo;
@@ -615,6 +685,7 @@
 #pragma mark =====================================================  WXApi 协议实现
 -(void)onResp:(BaseReq *)resp
 {
+    NSLog(@"garfunkel_log:WeiXinPay Return");
     if([resp isKindOfClass:[SendAuthResp class]])
     {
         
@@ -806,7 +877,24 @@
     }
 }
 
+#pragma mark ===============
+- (void)messaging:(FIRMessaging *)messaging didReceiveRegistrationToken:(NSString *)fcmToken {
+    NSLog(@"FCM registration token: %@", fcmToken);
+    // Notify about received token.
+    NSDictionary *dataDict = [NSDictionary dictionaryWithObject:fcmToken forKey:@"token"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:
+     @"FCMToken" object:nil userInfo:dataDict];
+    // TODO: If necessary send token to application server.
+    // Note: This callback is fired at each app startup and whenever a new token is generated.
+    //用户登录状态 同步一下设备号
+    if([MSingle shareAuhtorization].userInfo.isLogin){
+        NSDictionary* arg = @{@"a":@"userToken",@"uid":[MSingle shareAuhtorization].userInfo.userID,@"token":fcmToken};
+        NetRepositories* repositories = [[NetRepositories alloc]init];
+        [repositories netConfirm:arg complete:^(NSInteger react, NSDictionary *response, NSString *message) {
 
+        }];
+    }
+}
 
 
 @end

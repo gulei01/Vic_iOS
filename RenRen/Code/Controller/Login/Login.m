@@ -13,7 +13,7 @@
 
 #import "AppDelegate.h"
 
-
+@import Firebase;
 @interface Login ()
 
 
@@ -52,7 +52,6 @@
     self.title = Localized(@"Log_in");
     [self layoutUI];
     [self layoutUIConstains];
-    
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(weChatLoginAuthorization:) name:NotificatonWXLoginAuthorization object:nil];
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(regReturn) name:NotificationRegSuuccess object:nil];
 }
@@ -64,22 +63,19 @@
     }
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.view endEditing:YES];
 }
 
 #pragma mark =====================================================  UI布局
 
 
 -(void)layoutUI{
-
-    
     _backView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
     [_backView setImage:[UIImage imageNamed:@"首页"]];
     _backView.userInteractionEnabled = YES;
     [self.navigationController.view addSubview:_backView];
-    
     
      CGFloat itemW = 150;
      CGFloat itemH = 0;
@@ -136,30 +132,22 @@
     [_backView addSubview:_inputView];
     
     //_mobileLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 10, 60, 30)];
-    _mobileLabel = [[UILabel alloc] init];
-    _mobileLabel.text = [NSString stringWithFormat:@"%@:",Localized(@"Mobile_num")];
-    _mobileLabel.textAlignment = NSTextAlignmentRight;
-    _mobileLabel.textColor = [UIColor whiteColor];
-    
-    _passwordLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 50, 60, 30)];
-    _passwordLabel.text = [NSString stringWithFormat:@"%@:",Localized(@"Password_txt")];
-    _passwordLabel.textAlignment = NSTextAlignmentRight;
-    _passwordLabel.textColor = [UIColor whiteColor];
     
     _mobileText = [[UITextField alloc] initWithFrame:CGRectMake(75, 10, 200, 30)];
-    _mobileText.placeholder = Localized(@"Please_enter_mobile");
-    _mobileText.layer.borderWidth = 1.0f;
-    _mobileText.layer.cornerRadius = 5;
-    _mobileText.layer.borderColor = [UIColor grayColor].CGColor;
-    _mobileText.backgroundColor = [UIColor whiteColor];
+    _mobileText.backgroundColor = theme_default_color;
+    _mobileText.borderStyle = UITextBorderStyleNone;
+    _mobileText.leftView = [self leftView:[NSString stringWithFormat:@"    %@",Localized(@"Mobile_num")]];
+    _mobileText.leftViewMode =UITextFieldViewModeAlways;
+    _mobileText.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
+    _mobileText.keyboardType = UIKeyboardTypeNumberPad;
     
     _passwordText = [[UITextField alloc] initWithFrame:CGRectMake(75, 50, 200, 30)];
-    _passwordText.placeholder = Localized(@"Please_enter_password");
     _passwordText.secureTextEntry = YES;
-    _passwordText.layer.borderWidth = 1.0f;
-    _passwordText.layer.cornerRadius = 5;
-    _passwordText.layer.borderColor = [UIColor grayColor].CGColor;
-    _passwordText.backgroundColor = [UIColor whiteColor];
+    _passwordText.backgroundColor = theme_default_color;
+    _passwordText.borderStyle = UITextBorderStyleNone;
+    _passwordText.leftView = [self leftView:[NSString stringWithFormat:@"    %@",Localized(@"Password_txt")]];
+    _passwordText.leftViewMode =UITextFieldViewModeAlways;
+    _passwordText.contentVerticalAlignment= UIControlContentVerticalAlignmentCenter;
     
     [_inputView addSubview:_mobileLabel];
     [_inputView addSubview:_passwordLabel];
@@ -200,25 +188,15 @@
     self.mobileText.translatesAutoresizingMaskIntoConstraints = NO;
     self.passwordText.translatesAutoresizingMaskIntoConstraints = NO;
 
-    [self.mobileLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:100.f]];
-    [self.mobileLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:20.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:30.f]];
-    
-    [self.passwordLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:100.f]];
-    [self.passwordLabel addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:60.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:30.f]];
-    
-    [self.mobileText addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:200.f]];
+    [self.mobileText addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH - 40]];
     [self.mobileText addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:20.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.mobileLabel attribute:NSLayoutAttributeRight multiplier:1.0 constant:10.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.mobileText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:20.f]];
     
-    [self.passwordText addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:200.f]];
+    [self.passwordText addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:SCREEN_WIDTH -40]];
     [self.passwordText addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:60.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.passwordLabel attribute:NSLayoutAttributeRight multiplier:1.0 constant:10.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.passwordText attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:20.f]];
     
     self.loginBtn.translatesAutoresizingMaskIntoConstraints = NO;
     self.regBtn.translatesAutoresizingMaskIntoConstraints = NO;
@@ -226,12 +204,12 @@
     [self.loginBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:60.f]];
     [self.loginBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:110.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:100.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.loginBtn attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:SCREEN_WIDTH/4 - 30]];
     
     [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:80.f]];
     [self.regBtn addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:30.f]];
     [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeTop multiplier:1.0 constant:110.f]];
-    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-100.f]];
+    [self.inputView addConstraint:[NSLayoutConstraint constraintWithItem:self.regBtn attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.inputView attribute:NSLayoutAttributeRight multiplier:1.0 constant:-SCREEN_WIDTH/4 + 40]];
 }
 
 #pragma mark =====================================================  通知
@@ -356,7 +334,10 @@
                     self.HUD.labelText = Localized(@"Login_now");
                     [self.HUD show:YES];
                     
-                    NSDictionary* arg = @{@"a":@"userLogin",@"userName":mobile,@"password":password};
+                    NSString *fcmToken = [FIRMessaging messaging].FCMToken;
+                    NSLog(@"Local FCM registration token: %@", fcmToken);
+                    
+                    NSDictionary* arg = @{@"a":@"userLogin",@"userName":mobile,@"password":password,@"token":fcmToken};
                     NetRepositories* repositories = [[NetRepositories alloc]init];
                     [repositories login:arg complete:^(NSInteger react, id obj, NSString *message) {
                         if(react == 1){
@@ -443,9 +424,9 @@
     self.HUD.labelText = Localized(@"Login_now");
     [self.HUD show:YES];
     
-    
+    NSString *fcmToken = [FIRMessaging messaging].FCMToken;
     //NSDictionary* arg = @{@"ince":@"the_third_reg",@"nickname":nick,@"openid":openID,@"face_pic":face,@"type":[WMHelper integerConvertToString:type]};
-    NSDictionary* arg = @{@"a":@"user_third_Login",@"nickname":nick,@"openid":openID,@"face_pic":face,@"sex":sex,@"province":province,@"city":city,@"type":[WMHelper integerConvertToString:type]};
+    NSDictionary* arg = @{@"a":@"user_third_Login",@"nickname":nick,@"openid":openID,@"face_pic":face,@"sex":sex,@"province":province,@"city":city,@"type":[WMHelper integerConvertToString:type],@"token":fcmToken};
     NSLog(@"garfunkel_log:loginArg:%@",arg);
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories login:arg complete:^(NSInteger react, id obj, NSString *message) {
@@ -472,6 +453,14 @@
     }];
     
     
+}
+
+-(UILabel*)leftView:(NSString*)title{
+    UILabel* leftView = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, 100, 40.f)];
+    leftView.textColor = theme_Fourm_color;
+    leftView.font = [UIFont systemFontOfSize:14.f];
+    leftView.text = title;
+    return leftView;
 }
 
 

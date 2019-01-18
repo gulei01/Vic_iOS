@@ -15,6 +15,7 @@
 #import "WXApi.h"
 #import "GoodsSpecController.h"
 #import "Shopping.h"
+#import "GoodDetail.h"
 
 @interface Store ()<UMSocialUIDelegate>
 @property(nonatomic,strong) UIView* topView;
@@ -43,6 +44,8 @@
 @property(nonatomic,strong) StoreInfoController* storeInfoCotroller;
 @property(nonatomic,strong) UIView* specView;
 @property(nonatomic,strong) GoodsSpecController* goodsSpecController;
+@property(nonatomic,strong) UIView* goodView;
+@property(nonatomic,strong) GoodDetail* goodDetail;
 
 @property(nonatomic,strong) UIView* noticeView;
 @property(nonatomic,strong) UILabel* labelName;
@@ -85,6 +88,8 @@
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openSpecView:) name:NotificationOpenSpec object:(nil)];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openGoodDetail:) name:NotificationOpenGoodDetail object:(nil)];
+    
     // Do any additional setup after loading the view.
     UIImage *image = [UIImage imageNamed:@"lALO0RuFbcy-zQKA_640_190.png_620x10000q90g.jpg"];
     UIImageView *bgView = [[UIImageView alloc]initWithImage:image];
@@ -349,9 +354,21 @@
         [nav.navigationBar setTintColor:theme_default_color];
         [self presentViewController:nav animated:YES completion:nil];
     }
-    
-//    NSLog(@"garfunkel_log:%@",[[obj object] storeName]);
 }
+
+-(void)openGoodDetail:(NSNotification *)obj{
+    if(self.Identity.userInfo.isLogin){
+        UIView* tView = [self goodView:obj.object[@"item"]];
+        [self.navigationController.view addSubview:tView];
+    }else{
+        UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Login alloc]init]];
+        [nav.navigationBar setBackgroundColor:theme_navigation_color];
+        [nav.navigationBar setBarTintColor:theme_navigation_color];
+        [nav.navigationBar setTintColor:theme_default_color];
+        [self presentViewController:nav animated:YES completion:nil];
+    }
+}
+
 #pragma mark =====================================================  <UMSocialUIDelegate>
 -(void)didFinishGetUMSocialDataInViewController:(UMSocialResponseEntity *)response
 {
@@ -675,6 +692,15 @@
     
     return _specView;
 }
+
+-(UIView *)goodView:(MGoods *)entity{
+    GoodDetail* controller = [[GoodDetail alloc]initWithItem:entity];
+    _goodDetail = controller;
+    _goodView = controller.view;
+    
+    return _goodView;
+}
+
 -(UIView *)noticeView{
     if(!_noticeView){
         _noticeView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];

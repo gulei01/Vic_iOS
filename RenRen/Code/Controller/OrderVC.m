@@ -22,6 +22,7 @@
 #import "GroupBuy.h"
 #import "CreditPay.h"
 #import "PaySelect.h"
+#import "TrackingDeliver.h"
 
 
 @interface OrderVC ()<UITableViewDataSource,UITableViewDelegate,DZNEmptyDataSetDelegate,DZNEmptyDataSetSource,OrderCellDelegate,UIAlertViewDelegate>
@@ -201,7 +202,7 @@
     
     //NSDictionary* arg = @{@"ince":@"get_user_order",@"uid":self.Identity.userInfo.userID,@"page":[WMHelper integerConvertToString:self.netPage.pageIndex],@"status":self.orderStatus};
     NSDictionary* arg = @{@"a":@"getOrderList",@"uid":self.Identity.userInfo.userID,@"page":[WMHelper integerConvertToString:self.netPage.pageIndex],@"status":self.orderStatus};
-    
+    NSLog(@"%@",arg);
     NetRepositories* repositories = [[NetRepositories alloc]init];
     [repositories queryOrder:arg page:self.netPage complete:^(NSInteger react, NSArray *list, NSString *message) {
         if(self.netPage.pageIndex == 1){
@@ -369,6 +370,13 @@
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:Localized(@"Want_to_cancel_order") delegate:self cancelButtonTitle:Localized(@"Cancel_txt") otherButtonTitles:Localized(@"Confirm_txt"), nil];
     alert.tag = 9999;
     [alert show];
+}
+
+-(void)orderTracking:(MOrder *)item{
+    TrackingDeliver* controller = [[TrackingDeliver alloc]init];
+    controller.item = item;
+    controller.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 -(void)orderAddComment:(MOrder *)item{

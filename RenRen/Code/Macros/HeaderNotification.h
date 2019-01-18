@@ -35,6 +35,8 @@
 
 #define NotificationOpenSpec @"NotificationOpenSpec"
 
+#define NotificationOpenGoodDetail @"NotificationOpenGoodDetail"
+
 #define NotificationGoClearing @"NotificationGoClearing" //去结算 修改FirstLoad 为YES 用于刷新数据
 
 #define NotificationChangeOrderPayStatus @"NotificationChangeOrderPayStatus" //用户支付成功 修改订单状态成功调用这个方法

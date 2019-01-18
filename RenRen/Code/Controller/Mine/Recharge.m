@@ -109,13 +109,19 @@
         [self.showView addSubview:showTitle];
         NSMutableArray* list;
         int i = 1;
-        for(NSString* k in self.disList){
+        NSMutableArray *stringArray = [NSMutableArray arrayWithArray:self.disList.allKeys];
+        [stringArray sortUsingComparator: ^NSComparisonResult (NSString *str1, NSString *str2) {
+            NSNumber *number1 = [NSNumber numberWithInteger:str1.floatValue];
+            NSNumber *number2 = [NSNumber numberWithInteger:str2.floatValue];
+            return [number1 compare:number2];
+        }];
+        for(NSString* k in stringArray){
             NSLog(@"garfunkel_log:%@ - %@",k,self.disList[k]);
             [list addObject:[NSString stringWithFormat:@"%@ - %@",k,self.disList[k]]];
             UILabel* newLine = [[UILabel alloc]init];
             newLine.text = [NSString stringWithFormat:@"%@ $%@ %@ $%@",Localized(@"Deposit_txt"),k,Localized(@"Earn_txt"),self.disList[k]];
             
-            newLine.frame = CGRectMake(10, 25*i + 5, 200, 20);
+            newLine.frame = CGRectMake(10, 25*i + 5, SCREEN_WIDTH - 20, 20);
             [self.showView addSubview:newLine];
             i++;
         }
