@@ -235,7 +235,7 @@ static NSString * const reuseIdentifier = @"Cell";
 -(void)queryData{
     NSDictionary* arg = @{@"ince":@"get_index_best",@"zoneid":self.Identity.location.circleID};
     NetRepositories* response = [[NetRepositories alloc]init];
-    [response queryStore:arg complete:^(NSInteger react, NSArray *list, NSString *message) {
+    [response queryStore:arg complete:^(NSInteger react, NSArray *list, NSInteger count, NSString *message) {
         [self.arrayData removeAllObjects];
         if(react == 1){
             [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -624,7 +624,7 @@ static NSString * const reuseIdentifier = @"Cell";
             break;
     }
     if(index ==2 || index==3){
-        StoreList* controller = [[StoreList alloc]initWithCategory:categoryID];
+        StoreList* controller = [[StoreList alloc]initWithCategory:categoryID:@"店铺"];
         controller.hidesBottomBarWhenPushed = YES;
         controller.navigationItem.title = @"店铺";
         [self.navigationController pushViewController:controller animated:YES];

@@ -3824,7 +3824,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
 				PRODUCT_NAME = Tutti;
 				PROVISIONING_PROFILE = "a7495988-8939-4224-99a6-491066b804c9";
-				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Debug;
+				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Release;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 			};
@@ -4017,7 +4017,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.kavl.tutti.user;
 				PRODUCT_NAME = Tutti;
 				PROVISIONING_PROFILE = "a7495988-8939-4224-99a6-491066b804c9";
-				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Debug;
+				PROVISIONING_PROFILE_SPECIFIER = kavlUser_Release;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "arm64 armv7 armv7s";

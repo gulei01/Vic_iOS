@@ -865,6 +865,20 @@
                     }
                 }
             }
+            //判断店铺支持的支付方式
+            NSArray* pay_method = [response objectForKey:@"pay_method"];
+            if(![pay_method containsObject:@"offline"]){
+                [self hiddenPay:self.btnFacePay];
+            }
+            if(![pay_method containsObject:@"moneris"]){
+                [self hiddenPay:self.btnCredit];
+            }
+            if(![pay_method containsObject:@"weixin"]){
+                [self hiddenPay:self.btnWeXinPay];
+            }
+            if(![pay_method containsObject:@"alipay"]){
+                [self hiddenPay:self.btnAlipay];
+            }
             ///////
             
             NSMutableArray *myArray = [[NSMutableArray alloc]init];
@@ -996,6 +1010,17 @@
         [self.tableView.mj_header endRefreshing];
     }];
     
+}
+
+-(void)hiddenPay:(UIButton*)btn{
+    btn.hidden = YES;
+    btn.selected = NO;
+    for(NSLayoutConstraint* con in [btn constraints]){
+        if([con firstAttribute] == NSLayoutAttributeHeight){
+            [btn removeConstraint:con];
+            [btn addConstraint:[NSLayoutConstraint constraintWithItem:btn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:0.f]];
+        }
+    }
 }
 
 -(void)refreshDataSource{
@@ -1734,10 +1759,15 @@
                 payType = @"3";
             else if(self.btnBalance.selected)//余额支付
                 payType = @"4";
-            else //货到付款
+            else if(self.btnFacePay.selected)//货到付款
                 payType = @"0";
+            else{
+                [self alertHUD:Localized(@"SELECT_PAY_MODE")];
+                payType = @"";
+            }
             
             
+          if(![payType isEqualToString:@""]){
             AppDelegate *delegate=(AppDelegate*)[[UIApplication sharedApplication]delegate];
             MAddress* item = delegate.globalAddress;
             [self showHUD];
@@ -1793,6 +1823,7 @@
                     [self hidHUD:message];
                 }
             }];
+          }
         }
     }];
 }

@@ -55,7 +55,7 @@
 -(void)layoutConstraints{
     
     NSArray* formats = @[ @"H:|-0-[topView]-0-|", @"V:|-0-[topView(==90)][activeTableView(>=0@751)][labelLine(==15)]-0-|", @"H:|-0-[labelLine]-0-|", @"H:|-105-[activeTableView]-0-|",
-                          @"H:|-0-[photoLogo(==105)]", @"V:|-10-[photoLogo(==70)]", @"H:[photoLogo]-10-[rightView]-10-|", @"V:|-10-[rightView(photoLogo)]",
+                          @"H:|-10-[photoLogo(==90)]-10-[rightView]-10-", @"V:|-10-[photoLogo(==90)]", @"V:|-10-[rightView(photoLogo)]",
                           @"H:|-0-[labelStoreName][labelSale]-0-|",
                           @"H:|-0-[labelStatus(==60)][labelServiceTime]-0-|",
                           @"H:|-0-[labelShip][photoSender(==60)]-0-|",
@@ -260,10 +260,10 @@
 -(void)layoutConstraints{
     
     NSArray* formats = @[ @"H:|-0-[topView]-0-|", @"V:|-0-[topView(==90)][activeTableView(>=0@751)][labelLine(==15)]-0-|", @"H:|-0-[labelLine]-0-|", @"H:|-105-[activeTableView]-0-|",
-                          @"H:|-0-[photoLogo(==105)]", @"V:|-10-[photoLogo(==70)]", @"H:[photoLogo]-10-[rightView]-10-|", @"V:|-10-[rightView(photoLogo)]",
+                          @"H:|-10-[photoLogo(==90)]-10-[rightView]-10-|", @"V:|-10-[photoLogo(==70)]", @"V:|-10-[rightView(photoLogo)]",
                           @"H:|-0-[labelStoreName][labelSale]-0-|",
                           @"H:|-0-[labelStatus(==60)][labelServiceTime]-0-|",
-                          @"H:|-0-[labelShip][photoSender(==60)]-0-|",
+                          @"H:|-0-[labelShip]-0-|",
                           @"V:|-0-[labelSale]-5-[labelServiceTime(labelSale)]-7-[photoSender(==15)]-0-|",
                           @"V:|-0-[labelStoreName]-5-[labelStatus(labelStoreName)]-5-[labelShip(labelStoreName)]-0-|"
                           ];
@@ -282,20 +282,22 @@
         _entity = entity;
         [self.photoLogo sd_setImageWithURL:[NSURL URLWithString:entity.logo] placeholderImage:[UIImage imageNamed:kDefaultImage]];
         self.labelStoreName.text = entity.storeName;
-        NSInteger status = [entity.status integerValue];
-        if(status==1){//开启
+        
+        if(entity.is_close==0){//开启
             self.labelStatus.backgroundColor =theme_navigation_color;;
-            self.labelStatus.text = @"营业中";
+            self.labelStatus.text = Localized(@"In_operation");
             self.labelServiceTime.hidden = NO;
         }else{//休息
             self.labelStatus.backgroundColor =[UIColor colorWithRed:181/255.f green:181/255.f blue:181/255.f alpha:1.0];
-            self.labelStatus.text = @"休息中";
+            self.labelStatus.text = Localized(@"Resting_txt");
             self.labelServiceTime.hidden = YES;
         }
         self.labelServiceTime.text = [NSString stringWithFormat:@"营业时间:%@ - %@",entity.servicTimeBegin,entity.serviceTimerEnd];
-        self.labelSale.text = [NSString stringWithFormat:@"月售%@",entity.sale];
-        self.labelShip.text = [NSString stringWithFormat:@"起送￥%@ 配送￥%@",entity.freeShip,entity.shipFee];
-        self.photoSender.hidden = [entity.shipUnit integerValue]==1;
+        self.labelServiceTime.hidden = YES;
+        self.labelSale.text = [NSString stringWithFormat:@"%@:%@",Localized(@"Month_sale_num"),entity.sale];
+        self.labelShip.text = [NSString stringWithFormat:@"%@:$%@|%@:$%@",Localized(@"Delivery_fee"),entity.delivery_money,Localized(@"Packing_fee"),entity.pack_fee];
+        //self.photoSender.hidden = [entity.shipUnit integerValue]==1;
+        self.photoSender.hidden = YES;
         [self.activeTableView reloadData];
     }
 }
@@ -327,6 +329,10 @@
 -(UIImageView *)photoLogo{
     if(!_photoLogo){
         _photoLogo = [[UIImageView alloc]init];
+        _photoLogo.layer.borderColor = theme_line_color.CGColor;
+        _photoLogo.layer.borderWidth = 1.f;
+        _photoLogo.layer.masksToBounds = YES;
+        _photoLogo.layer.cornerRadius = 5.f;
         _photoLogo.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return _photoLogo;

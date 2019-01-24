@@ -11,6 +11,6 @@
 @interface StoreList :UIViewController // UICollectionViewController //
  
 
--(instancetype)initWithCategory:(NSInteger)categoryID;
+-(instancetype)initWithCategory:(NSInteger)categoryID :(NSString*)title;
 
 @end

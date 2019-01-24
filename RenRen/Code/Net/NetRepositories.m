@@ -52,13 +52,14 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
 
 
 @implementation NetRepositories (Store)
--(void)queryStore:(NSDictionary *)arg complete:(responseListBlock)complete{
+-(void)queryStore:(NSDictionary *)arg complete:(responseListBlockStore)complete{
     NSString* postPath = [NSString stringWithFormat:@"%@%@",AppNetSubPath,languagePara];
     [[NetClient sharedClient] POST:postPath parameters:arg progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSInteger flag = [[responseObject objectForKey:@"status"] integerValue];
         [WMHelper outPutJsonString:responseObject];
         NSString* message = nil;
         NSMutableArray* empty = nil;
+        NSInteger count = 0;
         if(flag == 1){
             message = @"";
             empty =[[NSMutableArray alloc] init];
@@ -69,13 +70,14 @@ NSString* const AppNetSubPath_Points = @"mobile/Jf/index";
                     [item setValuesForKeysWithDictionary:obj];
                     [empty addObject:item];
                 }];
+            count = [[responseObject objectForKey:@"count"] integerValue];
         }else{
             message = [responseObject objectForKey:@"fail"];
         }
-        complete(flag,empty,message);
+        complete(flag,empty,count,message);
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        complete(400,nil,@"网络异常");
+        complete(400,nil,0,@"网络异常");
     }];
     
 }

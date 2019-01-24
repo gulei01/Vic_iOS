@@ -216,3 +216,4 @@ Deposit_txt = "Deposit";
 Earn_txt = "Earn";
 Deposit_price = "Bottle Deposit";
 Tracking_txt = "Track";
+SELECT_PAY_MODE = "Choose a payement method";

@@ -65,6 +65,9 @@
 @property(nonatomic,strong) UILabel* labelNavTitle;
 @property(nonatomic,strong) UIBarButtonItem* leftBarItem;
 
+@property(nonatomic,strong) UIView* remindView;
+@property(nonatomic,strong) UIView* remindTxtView;
+
 @end
 
 @implementation Store
@@ -242,6 +245,7 @@
             self.entity.arrayActive = item.arrayActive;
             self.entity.lng = item.lng;
             self.entity.lat = item.lat;
+            self.entity.shop_remind = item.shop_remind;
             
             [self loadData:self.entity];
         }else{
@@ -282,7 +286,7 @@
 }
 
 -(void)loadData:(MStore*)item{
-      self.goodsController.storeName = item.storeName;
+    self.goodsController.storeName = item.storeName;
     self.labelNavTitle.text = item.storeName;
     [self.storeLogo sd_setImageWithURL:[NSURL URLWithString:item.logo] placeholderImage:[UIImage imageNamed:kDefStoreLogo]];
     self.labelStoreName.text = item.storeName;
@@ -339,7 +343,54 @@
         self.scrollConstraint.priority = 999;
         [self.goodsView addConstraint: self.scrollConstraint];
         
+        
+        if (![item.shop_remind isEqualToString:@""]) {
+            [self loadRemind:item.shop_remind];
+        }
     }
+}
+
+-(void)loadRemind:(NSString*)remind{
+    self.remindView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+    self.remindView.backgroundColor = [UIColor blackColor];
+    self.remindView.alpha = 0.5f;
+    
+    self.remindTxtView = [[UIView alloc] initWithFrame:CGRectMake(SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.25, SCREEN_WIDTH*0.8, SCREEN_HEIGHT*0.5)];
+    self.remindTxtView.backgroundColor = [UIColor whiteColor];
+    self.remindTxtView.layer.cornerRadius = 10.f;
+    
+    UIButton* confirmBtn = [[UIButton alloc] init];
+    confirmBtn.backgroundColor = [UIColor redColor];
+    confirmBtn.layer.cornerRadius = 2.f;
+    [confirmBtn setTitle:@"Confirm" forState:UIControlStateNormal];
+    [confirmBtn addTarget:self action:@selector(closeRemind) forControlEvents:UIControlEventTouchUpInside];
+    confirmBtn.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.remindTxtView addSubview:confirmBtn];
+    
+    [confirmBtn addConstraint:[NSLayoutConstraint constraintWithItem:confirmBtn attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:SCREEN_WIDTH*0.6]];
+    [confirmBtn addConstraint:[NSLayoutConstraint constraintWithItem:confirmBtn attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:35.f]];
+    [self.remindTxtView addConstraint:[NSLayoutConstraint constraintWithItem:confirmBtn attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.remindTxtView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:-20.f]];
+    [self.remindTxtView addConstraint:[NSLayoutConstraint constraintWithItem:confirmBtn attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.remindTxtView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:SCREEN_WIDTH*0.1]];
+    
+    UITextView* remindTextView = [[UITextView alloc] init];
+    remindTextView.text = remind;
+    remindTextView.font = [UIFont systemFontOfSize:16.f];
+    remindTextView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.remindTxtView addSubview:remindTextView];
+    
+    [remindTextView addConstraint:[NSLayoutConstraint constraintWithItem:remindTextView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:SCREEN_WIDTH*0.8-20]];
+    [remindTextView addConstraint:[NSLayoutConstraint constraintWithItem:remindTextView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:SCREEN_HEIGHT*0.5-75]];
+    [self.remindTxtView addConstraint:[NSLayoutConstraint constraintWithItem:remindTextView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.remindTxtView attribute:NSLayoutAttributeTop multiplier:1.0 constant:10.f]];
+    [self.remindTxtView addConstraint:[NSLayoutConstraint constraintWithItem:remindTextView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.remindTxtView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:10.f]];
+    
+    
+    [self.view addSubview:self.remindView];
+    [self.view addSubview:self.remindTxtView];
+}
+
+-(void)closeRemind{
+    [self.remindView removeFromSuperview];
+    [self.remindTxtView removeFromSuperview];
 }
 
 -(void)openSpecView:(NSNotification *)obj{

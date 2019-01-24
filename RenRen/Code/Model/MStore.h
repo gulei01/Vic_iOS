@@ -125,6 +125,8 @@
 //garfunkel add 店铺坐标
 @property(nonatomic,strong) NSString* lng;
 @property(nonatomic,strong) NSString* lat;
-
+@property(nonatomic,strong) NSString* shop_remind;
+@property(nonatomic,assign) NSInteger is_close;
+@property(nonatomic,strong) NSString* delivery_money;
 
 @end

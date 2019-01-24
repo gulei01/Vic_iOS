@@ -16,12 +16,14 @@
 @property(nonatomic,strong)NSDictionary* disList;
 
 @property(nonatomic,assign)BOOL isHaveDian;
+@property(nonatomic,strong) UIBarButtonItem* leftBarItem;
 @end
 
 @implementation Recharge
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //self.navigationItem.leftBarButtonItem = self.leftBarItem;
     // Do any additional setup after loading the view.
 }
 
@@ -237,5 +239,21 @@
     return YES;
 }
 
+-(UIBarButtonItem *)leftBarItem{
+    if(!_leftBarItem){
+        UIButton* btn = [[UIButton alloc]init];
+        btn.frame = CGRectMake(-200, 0, 44, 44);
+        [btn setImage:[UIImage imageNamed: @"icon-back-white"] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [btn addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+        _leftBarItem =  [[UIBarButtonItem alloc]initWithCustomView:btn];
+        
+    }
+    return _leftBarItem;
+}
+-(IBAction)goBack:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

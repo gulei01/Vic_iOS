@@ -208,6 +208,8 @@
         self.labelCount.text = entity.quantity;
         if(!([entity.spec_desc isEqualToString:@""] && [entity.proper_desc isEqualToString:@""]))
             self.labelDesc.text = [NSString stringWithFormat:@"(%@ %@)",entity.spec_desc,entity.proper_desc];
+        else
+            self.labelDesc.text = @"";
         
         self.btnSelected.selected = entity.shopCarSelected;
         

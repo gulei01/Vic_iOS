@@ -13,6 +13,7 @@
 @property(nonatomic,strong) UILabel* labelVersion;
 //@property(nonatomic,strong) UIImageView* photoQRcode;
 @property(nonatomic,strong) UILabel* labelCopyRight;
+@property(nonatomic,strong) UIBarButtonItem* leftBarItem;
 
 @end
 
@@ -20,6 +21,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //self.navigationItem.leftBarButtonItem = self.leftBarItem;
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = theme_table_bg_color;
@@ -108,6 +110,22 @@
         _labelCopyRight.lineBreakMode = NSLineBreakByCharWrapping;
     }
     return _labelCopyRight;
+}
+
+-(UIBarButtonItem *)leftBarItem{
+    if(!_leftBarItem){
+        UIButton* btn = [[UIButton alloc]init];
+        btn.frame = CGRectMake(-200, 0, 44, 44);
+        [btn setImage:[UIImage imageNamed: @"icon-back-white"] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        _leftBarItem =  [[UIBarButtonItem alloc]initWithCustomView:btn];
+        
+    }
+    return _leftBarItem;
+}
+-(IBAction)goBack:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

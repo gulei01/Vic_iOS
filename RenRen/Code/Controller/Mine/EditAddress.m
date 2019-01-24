@@ -26,6 +26,7 @@
 @property(nonatomic,strong) UITextField* txtPhone;
 
 @property(nonatomic,strong) UIButton* btnConfirm;
+@property(nonatomic,strong) UIBarButtonItem* leftBarItem;
 /**
  *  对应 AMapPOI.address
  */
@@ -61,6 +62,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //self.navigationItem.leftBarButtonItem = self.leftBarItem;
     self.firstLoad = YES;
     [self layoutUI];
     [self layoutConstraints];
@@ -374,6 +376,23 @@
     leftView.font = [UIFont systemFontOfSize:14.f];
     leftView.text = title;
     return leftView;
+}
+
+-(UIBarButtonItem *)leftBarItem{
+    if(!_leftBarItem){
+        UIButton* btn = [[UIButton alloc]init];
+        btn.frame = CGRectMake(-200, 0, 44, 44);
+        [btn setImage:[UIImage imageNamed: @"icon-back-white"] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [btn addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+        _leftBarItem =  [[UIBarButtonItem alloc]initWithCustomView:btn];
+        
+    }
+    return _leftBarItem;
+}
+-(IBAction)goBack:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

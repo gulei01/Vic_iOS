@@ -45,12 +45,15 @@
 @property(nonatomic,assign) double currTip;
 @property(nonatomic,assign) double currTotal;
 @property(nonatomic,assign) double balance;
+
+@property(nonatomic,strong) UIBarButtonItem* leftBarItem;
 @end
 
 @implementation PaySelect
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //self.navigationItem.leftBarButtonItem = self.leftBarItem;
     self.view.backgroundColor = theme_table_bg_color;
 }
 
@@ -539,6 +542,23 @@
         freeifaddrs(interfaces);
     }
     return [addresses count] ? addresses : nil;
+}
+
+-(UIBarButtonItem *)leftBarItem{
+    if(!_leftBarItem){
+        UIButton* btn = [[UIButton alloc]init];
+        btn.frame = CGRectMake(-200, 0, 44, 44);
+        [btn setImage:[UIImage imageNamed: @"icon-back-white"] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [btn addTarget:self action:@selector(goBack:) forControlEvents:UIControlEventTouchUpInside];
+        _leftBarItem =  [[UIBarButtonItem alloc]initWithCustomView:btn];
+        
+    }
+    return _leftBarItem;
+}
+-(IBAction)goBack:(id)sender{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

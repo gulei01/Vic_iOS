@@ -277,10 +277,16 @@ static NSString* const reuseSectionFooterIdentifier =  @"NewHomeSectionFooter";
     
     if(self.Identity.location.isOpen){
         if(self.arrayCategory){
-        [UIView animateWithDuration:0.3 animations:^{
-            CGFloat empty = self.collectionView.contentOffset.y/100;
-            self.currentNavigationBarBackgroundView.alpha = empty;
-        }];
+            [self layoutUI];
+            [UIView animateWithDuration:0.3 animations:^{
+                //CGFloat empty = self.collectionView.contentOffset.y/100;
+                //self.currentNavigationBarBackgroundView.alpha = empty;
+                self.currentNavigationBarBackgroundView.alpha = 1.0;
+                self.txtSearch.alpha = 0.f;
+                //_changeCity.alpha = 1.f;
+                self.btnSearch.alpha = 1.0;
+                self.btnTitle.alpha = 1.0;
+            }];
         }else{
             NSLog(@"garfunkel_log:backload");
             [self layoutUI];
@@ -669,8 +675,8 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section{
     if(section == 0){
         CGFloat topHeight = SCREEN_WIDTH*7/15;
-        CGFloat locateHeight = 0;//10
-        CGFloat categoryHeight = 0;//70
+        CGFloat locateHeight = 10;//10
+        CGFloat categoryHeight = 70;//70
         if(self.dictNotice){
             return CGSizeMake(SCREEN_WIDTH, topHeight+locateHeight+categoryHeight+30);
         }else{
@@ -798,80 +804,85 @@ self.navigationItem.leftBarButtonItem = self.leftBarItem;
 }
 //设置五个按钮的跳转
 -(void)didSelectedCategory:(NSInteger)index{
-
-    NSInteger categoryID,isSelf;
-    categoryID = 0;
-    isSelf = 0;
-    switch (index) {
-        case 0://美食
-        {
-            categoryID = 3;
-            StoreList* controller = [[StoreList alloc]initWithCategory:categoryID];
-            controller.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:controller animated:YES];
-        }
-            break;
-        case 1://超市
-        {
-           
-            categoryID = 1;
-            SupermarketAndFruit* controller = [[SupermarketAndFruit alloc]initWithCategory:categoryID];
-            controller.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:controller animated:YES];
-        }
-            break;
-        case 2://鲜果
-        {
-            
-            categoryID = 2;
-            SupermarketAndFruit* controller = [[SupermarketAndFruit alloc] initWithCategory:categoryID];
-            controller.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:controller animated:YES];
-        }
-            break;
-        case 3://鲜花
-        {
-            
-            categoryID = 4;
-            StoreList* controller = [[StoreList alloc]initWithCategory:categoryID];
-            controller.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:controller animated:YES];
-            
-        }
-            break;
-        case 4://跑腿
-        {
-//            categoryID =25;
-//            WineList* controller = [[WineList alloc]initWithCategoryID:categoryID];
+    NSInteger categoryID;
+//    categoryID = 0;
+//    isSelf = 0;
+//    switch (index) {
+//        case 0://美食
+//        {
+//            categoryID = 3;
+//            StoreList* controller = [[StoreList alloc]initWithCategory:categoryID];
 //            controller.hidesBottomBarWhenPushed = YES;
 //            [self.navigationController pushViewController:controller animated:YES];
-            
-            if(self.Identity.location.mapLat && self.Identity.location.mapLng){
-                if(self.Identity.userInfo.isLogin){
-                    categoryID =62;
-                    RandomBuy* controller = [[RandomBuy alloc]init];
-                    controller.hidesBottomBarWhenPushed = YES;
-                    [self.navigationController pushViewController:controller animated:YES];
-                }else{
-                    
-                    UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Login alloc]init]];
-                    [nav.navigationBar setBackgroundColor:theme_navigation_color];
-                    [nav.navigationBar setBarTintColor:theme_navigation_color];
-                    [nav.navigationBar setTintColor:theme_default_color];
-                    [self presentViewController:nav animated:YES completion:nil];
-                    
-                }
-                
-            }else{
-                [self selectLocation:nil];
-            }
-            
-        }
-            break;
-        default:
-            break;
-    }
+//        }
+//            break;
+//        case 1://超市
+//        {
+//
+//            categoryID = 1;
+//            SupermarketAndFruit* controller = [[SupermarketAndFruit alloc]initWithCategory:categoryID];
+//            controller.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:controller animated:YES];
+//        }
+//            break;
+//        case 2://鲜果
+//        {
+//
+//            categoryID = 2;
+//            SupermarketAndFruit* controller = [[SupermarketAndFruit alloc] initWithCategory:categoryID];
+//            controller.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:controller animated:YES];
+//        }
+//            break;
+//        case 3://鲜花
+//        {
+//
+//            categoryID = 4;
+//            StoreList* controller = [[StoreList alloc]initWithCategory:categoryID];
+//            controller.hidesBottomBarWhenPushed = YES;
+//            [self.navigationController pushViewController:controller animated:YES];
+//
+//        }
+//            break;
+//        case 4://跑腿
+//        {
+////            categoryID =25;
+////            WineList* controller = [[WineList alloc]initWithCategoryID:categoryID];
+////            controller.hidesBottomBarWhenPushed = YES;
+////            [self.navigationController pushViewController:controller animated:YES];
+//
+//            if(self.Identity.location.mapLat && self.Identity.location.mapLng){
+//                if(self.Identity.userInfo.isLogin){
+//                    categoryID =62;
+//                    RandomBuy* controller = [[RandomBuy alloc]init];
+//                    controller.hidesBottomBarWhenPushed = YES;
+//                    [self.navigationController pushViewController:controller animated:YES];
+//                }else{
+//
+//                    UINavigationController* nav = [[UINavigationController alloc]initWithRootViewController:[[Login alloc]init]];
+//                    [nav.navigationBar setBackgroundColor:theme_navigation_color];
+//                    [nav.navigationBar setBarTintColor:theme_navigation_color];
+//                    [nav.navigationBar setTintColor:theme_default_color];
+//                    [self presentViewController:nav animated:YES completion:nil];
+//
+//                }
+//
+//            }else{
+//                [self selectLocation:nil];
+//            }
+//
+//        }
+//            break;
+//        default:
+//            break;
+//    }
  
+    categoryID = [[self.arrayCategory[index] objectForKey:@"id"] integerValue];
+    NSString* title = [self.arrayCategory[index] objectForKey:@"title"];
+    StoreList* controller = [[StoreList alloc]initWithCategory:categoryID:title];
+    controller.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:controller animated:YES];
+    
     [self cancelEdit];
     [self currentNavigationBarBackgroundView].alpha = 1.0;
 }

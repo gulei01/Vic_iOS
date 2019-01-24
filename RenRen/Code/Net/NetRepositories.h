@@ -23,7 +23,7 @@ typedef void(^responseListBlock)(NSInteger react, NSArray* list, NSString* messa
 
 typedef void(^responseListBlockXiaolong)(NSInteger react, NSArray* list, NSString* message,NSArray *groupArray);
 
-
+typedef void(^responseListBlockStore)(NSInteger react, NSArray* list,NSInteger count, NSString* message);
 /**
  数据请求响应结果集 block
 
@@ -61,7 +61,7 @@ FOUNDATION_EXTERN NSString* const AppNetSubPath_Points;
  */
 @interface NetRepositories (Store)
 
--(void)queryStore:(NSDictionary*)arg complete:(responseListBlock)complete;
+-(void)queryStore:(NSDictionary*)arg complete:(responseListBlockStore)complete;
 -(void)queryStore:(NSDictionary*)arg page:(NetPage*)page complete:(responseListBlock)complete;
 -(void)searchStore:(NSDictionary*)arg complete:(responseItemBlock)complete;
 

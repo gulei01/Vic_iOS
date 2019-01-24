@@ -50,8 +50,8 @@ static NSString* const cellIdentifier =  @"HomeCategoryCell";
 -(void)layoutUI{
     
     topHeight = SCREEN_WIDTH*7/15;
-    locationHeight = 0;//10
-    categoryHeight = 0;//70
+    locationHeight = 10;//10
+    categoryHeight = 70;//70
     self.bannerView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 20, SCREEN_WIDTH, topHeight) imageURLStringsGroup:nil];
     self.bannerView.pageControlAliment = SDCycleScrollViewPageContolAlimentRight;
     [self.bannerView setAutoScrollTimeInterval:3.5f];
@@ -105,7 +105,8 @@ static NSString* const cellIdentifier =  @"HomeCategoryCell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     if(self.arrayCategory){
-        return 5;
+        //return 5;
+        return self.arrayCategory.count;
     }
     return 0;
 }
@@ -127,7 +128,7 @@ static NSString* const cellIdentifier =  @"HomeCategoryCell";
 #pragma mark =====================================================  <UICollectionViewDelegateFlowLayout>
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    return CGSizeMake((SCREEN_WIDTH-21)/5, 70);
+    return CGSizeMake((SCREEN_WIDTH-21)/4, 70);
 }
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
